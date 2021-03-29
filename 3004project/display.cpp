@@ -1,23 +1,22 @@
 #include "display.h"
-#include <vector>
 
 Display::Display()
 {
-    menu = new vector<string>();
-    menu->push_back("Programmed");
-    menu->push_back("Frequency");
-    menu->push_back("History");
+    menu = new QStringList();
+    menu->append("Programmed");
+    menu->append("Frequency");
+    menu->append("History");
 
-    programmed = new vector<string>();
-    programmed->push_back("Throat");
-    programmed->push_back("Joint");
-    programmed->push_back("Bloating");
-    programmed->push_back("Pain");
+    programmed = new QStringList();
+    programmed->append("Throat");
+    programmed->append("Joint");
+    programmed->append("Bloating");
+    programmed->append("Pain");
 
-    frequency = new vector<string>();
-    frequency->push_back("1.0-9.9 Hz");
-    frequency->push_back("10 Hz");
-    frequency->push_back("20 Hz");
-    frequency->push_back("60 Hz");
+    frequency = new QStringList();
+    frequency->append("1.0-9.9 Hz");
+    frequency->append("10 Hz");
+    frequency->append("20 Hz");
+    frequency->append("60 Hz");
 
 }

@@ -11,7 +11,7 @@ Device::Device()
     maxPowerLevel = 100; // constant?
 }
 
-vector<string>* Device::receive(int request)
+QStringList* Device::receive(int request)
 {
     if (request == -1){
         return display->menu;

@@ -1,15 +1,14 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
-#include <string>
-#include <vector>
+#include <QStringList>
 
 using namespace std;
 class Display
 {
 public:
-    vector<string> *programmed;
-    vector<string> *frequency;
-    vector<string> *menu;
+    QStringList *programmed;
+    QStringList *frequency;
+    QStringList *menu;
 
     Display() ;
 

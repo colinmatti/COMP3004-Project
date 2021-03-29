@@ -10,7 +10,7 @@ public:
     Device();
     ~Device();
     bool poweredOn;
-    vector<string>* receive(int request);
+    QStringList* receive(int request);
     int increasePower();
     int decreasePower();
 private:

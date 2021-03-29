@@ -9,12 +9,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     stringList = new QStringList();
     empty = new QStringList();
     model = new QStringListModel(*stringList, NULL);
     currentIndex = model->index(0,0);
-    //ui->listView->setModel(model);
+    ui->listView->setModel(model);
 }
 
 MainWindow::~MainWindow()
@@ -25,13 +24,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_okButton_clicked()
 {
-    stringList = empty;
-    vector<string> *listOne = device.receive(ui->listView->currentIndex().row());
-
-    for(string str : *listOne){
-        QString qstr = QString::fromStdString(str);
-        stringList->append(qstr);
-    }
+    stringList = device.receive(ui->listView->currentIndex().row());
 
     model->setStringList(*stringList);
     currentIndex = model->index(0,0);
@@ -40,23 +33,13 @@ void MainWindow::on_okButton_clicked()
 void MainWindow::on_powerButton_clicked()
 {
     if (device.poweredOn == false){
-        ui->listView->setModel(model);
-
-        vector<string> *listOne = device.receive(-1);
-
-        cout << "list size " << listOne->size() << endl;
-        for(string str : *listOne){
-            QString qstr = QString::fromStdString(str);
-            stringList->append(qstr);
-        }
-
+        stringList = device.receive(-1);
         model->setStringList(*stringList);
         ui->listView->setCurrentIndex(currentIndex);
         device.poweredOn = true;
     } else {
-        model->setStringList(*empty);
         device.poweredOn = false;
-        // TURN OFF
+        model->setStringList(*empty);
     }
 }
 
@@ -91,4 +74,3 @@ void MainWindow::on_leftButton_clicked()
     QString power = QString::number(device.decreasePower());
     ui->powerLabel->setText(power);
 }
-
