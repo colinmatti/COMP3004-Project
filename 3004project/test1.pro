@@ -17,7 +17,8 @@ SOURCES += \
 HEADERS += \
     device.h \
     display.h \
-    mainwindow.h
+    mainwindow.h \
+    therapy.h
 
 FORMS += \
     mainwindow.ui
