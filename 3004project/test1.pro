@@ -18,6 +18,7 @@ HEADERS += \
     device.h \
     display.h \
     mainwindow.h \
+    program.h \
     therapy.h
 
 FORMS += \
