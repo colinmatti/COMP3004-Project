@@ -74,3 +74,13 @@ void MainWindow::on_leftButton_clicked()
     QString power = QString::number(device.decreasePower());
     ui->powerLabel->setText(power);
 }
+
+void MainWindow::on_goBackButton_clicked()
+{
+
+}
+
+void MainWindow::on_menuButton_clicked()
+{
+
+}

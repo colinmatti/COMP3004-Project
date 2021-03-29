@@ -30,6 +30,10 @@ private slots:
 
     void on_leftButton_clicked();
 
+    void on_goBackButton_clicked();
+
+    void on_menuButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QStringList *stringList;

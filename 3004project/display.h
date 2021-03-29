@@ -10,9 +10,11 @@ public:
     QStringList *frequency;
     QStringList *menu;
 
-    Display() ;
+    Display();
 
 private:
+
+
 
 };
 
