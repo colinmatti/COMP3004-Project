@@ -13,6 +13,7 @@ public:
     QStringList* receive(int request);
     int increasePower();
     int decreasePower();
+
 private:
     Display *display = new Display;
     int powerLevel;
