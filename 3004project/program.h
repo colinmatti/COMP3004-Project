@@ -2,8 +2,6 @@
 #define PROGRAM_H
 
 #include <QString>
-
-#include <string>
 #include "therapy.h"
 
 using namespace std;
