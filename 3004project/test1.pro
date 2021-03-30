@@ -19,6 +19,7 @@ HEADERS += \
     display.h \
     frequency.h \
     mainwindow.h \
+    program.h \
     therapy.h
 
 FORMS += \
