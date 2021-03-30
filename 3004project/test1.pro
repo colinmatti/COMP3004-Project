@@ -17,6 +17,7 @@ SOURCES += \
 HEADERS += \
     device.h \
     display.h \
+    frequency.h \
     mainwindow.h \
     therapy.h
 
