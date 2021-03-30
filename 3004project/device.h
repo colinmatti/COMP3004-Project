@@ -2,6 +2,7 @@
 #define DEVICE_H
 #include "display.h"
 #include <string>
+#include "battery.h"
 
 class Device
 {
@@ -14,7 +15,8 @@ public:
     int increasePower();
     int decreasePower();
 private:
-    Display *display = new Display;
+    Battery *battery;
+    Display *display;
     int powerLevel;
     bool onSkin;
     int minPowerLevel;

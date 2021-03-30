@@ -5,6 +5,8 @@
 
 Device::Device()
 {
+    battery = new Battery();
+    display = new Display();
     poweredOn = false;
     powerLevel = 0;
     minPowerLevel = 0; // constant?
