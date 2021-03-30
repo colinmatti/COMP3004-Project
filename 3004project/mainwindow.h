@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStringListModel>
 #include "device.h"
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,7 +35,7 @@ private slots:
 
     void on_menuButton_clicked();
 
-    void on_onSkin_stateChanged(int arg1);
+    void on_timer_start();
 
 private:
     Ui::MainWindow *ui;
@@ -43,5 +44,8 @@ private:
     QStringListModel *model;
     QModelIndex currentIndex;
     Device device;
+    QTimer *timer;
+    // REPLACED WITH THERAPY TIMER
+    int countdown;
 };
 #endif // MAINWINDOW_H

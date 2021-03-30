@@ -13,11 +13,11 @@ public:
     QStringList* receive(int request);
     int increasePower();
     int decreasePower();
-    bool onSkin;
 
 private:
     Display *display = new Display;
     int powerLevel;
+    bool onSkin;
     int minPowerLevel;
     int maxPowerLevel;
     void updateBattery();

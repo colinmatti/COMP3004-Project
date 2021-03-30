@@ -14,6 +14,11 @@ MainWindow::MainWindow(QWidget *parent)
     model = new QStringListModel(*stringList, NULL);
     currentIndex = model->index(0,0);
     ui->listView->setModel(model);
+
+    // REPLACE WITH THERAPY TIMER
+    countdown = 10;
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_start()));
 }
 
 MainWindow::~MainWindow()
@@ -28,6 +33,10 @@ void MainWindow::on_okButton_clicked()
 
     model->setStringList(*stringList);
     currentIndex = model->index(0,0);
+
+    ui->timer->setVisible(true);
+    // For every second
+    timer->start(1000);
 }
 
 void MainWindow::on_powerButton_clicked()
@@ -85,14 +94,15 @@ void MainWindow::on_menuButton_clicked()
 
 }
 
-void MainWindow::on_onSkin_stateChanged(int arg1)
+void MainWindow::on_timer_start()
 {
-    cout << "arg1" << arg1 << endl;
-        if (arg1 == 2){
-            device.onSkin = true;
-            cout <<  "SKIN ON" << endl;
-        } else {
-            device.onSkin = false;
-            cout << "SKIN OFF" << endl;
-        }
+    // countdown will be taken from device.therapy.timer
+    if (countdown < 0)
+    {
+        timer->stop();
+    } else {
+        ui->timer->display(countdown);
+        countdown--;
+    }
+
 }
