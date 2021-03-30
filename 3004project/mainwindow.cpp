@@ -84,3 +84,15 @@ void MainWindow::on_menuButton_clicked()
 {
 
 }
+
+void MainWindow::on_onSkin_stateChanged(int arg1)
+{
+    cout << "arg1" << arg1 << endl;
+        if (arg1 == 2){
+            device.onSkin = true;
+            cout <<  "SKIN ON" << endl;
+        } else {
+            device.onSkin = false;
+            cout << "SKIN OFF" << endl;
+        }
+}

@@ -34,6 +34,8 @@ private slots:
 
     void on_menuButton_clicked();
 
+    void on_onSkin_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     QStringList *stringList;

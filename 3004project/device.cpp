@@ -7,6 +7,7 @@ Device::Device()
 {
     poweredOn = false;
     powerLevel = 0;
+    onSkin = false;
     minPowerLevel = 0; // constant?
     maxPowerLevel = 100; // constant?
 }
