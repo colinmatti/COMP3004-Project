@@ -3,11 +3,10 @@
 
 class Therapy
 {
-
 public:
     virtual ~Therapy();
 
-private:
+protected:
     int timer;
     int powerLevel;
     int status;
