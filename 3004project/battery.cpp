@@ -17,8 +17,8 @@ bool Battery::isLow()
 
 void Battery::decreaseLevel(int amnt)
 {
-    if (batteryLevel - amnt <= 0) {
-        cout << "Battery level too low" << std::endl;
+    if (batteryLevel - amnt < 0) {
+        batteryLevel = 0;
         return;
     }
     batteryLevel -= amnt;

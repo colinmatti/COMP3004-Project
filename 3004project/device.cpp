@@ -10,9 +10,7 @@ Device::Device()
     battery = new Battery();
     display = new Display();
     poweredOn = false;
-    powerLevel = 0;
-    minPowerLevel = 0;
-    maxPowerLevel = 100;
+    powerLevel = 1;
 
     // Instantiate all preset therapies.
     programs = new QList<Program>();
@@ -59,7 +57,7 @@ QList<Therapy>* Device::receive(int request)
 
 int Device::increasePower()
 {
-    if (powerLevel >= maxPowerLevel){
+    if (powerLevel >= MAXPOWERLEVEL){
         return powerLevel;
     }
     powerLevel += 1;
@@ -68,7 +66,7 @@ int Device::increasePower()
 
 int Device::decreasePower()
 {
-    if (powerLevel <= minPowerLevel){
+    if (powerLevel <= MINPOWERLEVEL){
         return powerLevel;
     }
     powerLevel -= 1;
@@ -78,3 +76,11 @@ int Device::decreasePower()
 Device::~Device()
 {
 }
+
+void Device::updateBattery(int currPwrLvl, int time)
+{
+    if (time > 0) {
+        battery->decreaseLevel(currPwrLvl*time);
+    }
+}
+

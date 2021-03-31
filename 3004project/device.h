@@ -9,6 +9,10 @@
 #include "therapy.h"
 #include <QStringList>
 
+#define MINPOWERLEVEL 1
+#define MAXPOWERLEVEL 100
+
+
 class Device
 {
 public:
@@ -24,13 +28,11 @@ private:
     Display *display;
     int powerLevel;
     bool onSkin;
-    int minPowerLevel;
-    int maxPowerLevel;
     QList<Program> *programs;
     QList<Frequency> *frequencies;
-
-    void updateBattery();
-    void runTreatment();
+    
+    void updateBattery(int currPwrLvl, int time);
+    int runTreatment(); //returns time elapsed in therapy
 };
 
 
