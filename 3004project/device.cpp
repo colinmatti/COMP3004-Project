@@ -58,7 +58,7 @@ QList<Therapy>* Device::receive(int request)
 int Device::increasePower()
 {
     if (powerLevel >= MAXPOWERLEVEL){
-        return powerLevel;
+        return MAXPOWERLEVEL;
     }
     powerLevel += 1;
     return powerLevel;
@@ -67,7 +67,7 @@ int Device::increasePower()
 int Device::decreasePower()
 {
     if (powerLevel <= MINPOWERLEVEL){
-        return powerLevel;
+        return MINPOWERLEVEL;
     }
     powerLevel -= 1;
     return powerLevel;
@@ -84,5 +84,5 @@ void Device::updateBattery(int currPwrLvl, int time)
     }
 }
 
-int Device::runTreatment () {}
+int Device::runTreatment () {return 0;}
 
