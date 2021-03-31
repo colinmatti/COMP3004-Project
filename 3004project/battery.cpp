@@ -3,16 +3,9 @@
 #include <iostream>
 using namespace std;
 
-Battery::Battery(int batLevel, int max, int min) :
-    batteryLevel(batLevel), maxLevel(max), minLevel(min)
-{
+Battery::Battery(int batLevel, int max, int min) : batteryLevel(batLevel), maxLevel(max), minLevel(min) {}
 
-}
-
-Battery::~Battery()
-{
-
-}
+Battery::~Battery() {}
 
 bool Battery::isLow()
 {
