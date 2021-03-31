@@ -1,20 +1,22 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "device.h"
+
+#include <iostream>
+#include <string>
+#include <QApplication>
 #include <QMainWindow>
 #include <QStringListModel>
-#include "device.h"
 #include <QTimer>
-#include <string>
-#include <iostream>
-#include <QApplication>
+
+using namespace std;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -53,4 +55,5 @@ private:
     // REPLACED WITH THERAPY TIMER
     int countdown;
 };
+
 #endif // MAINWINDOW_H

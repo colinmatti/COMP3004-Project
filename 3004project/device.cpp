@@ -36,15 +36,16 @@ Device::Device() {
     frequencies->append(twenty);
 
     // Instantiate empty therapy history.
-    treatmentHistory = new QList<PreviousTreatment>();
+    treatmentHistory = new QList<PreviousTreatment*>();
 
     display = new Display(frequencies, programs);
 }
 
 Device::~Device() {
-    qDeleteAll(programs);
-    qDeleteAll(frequencies);
-    qDeleteAll(treatmentHistory);
+    
+    qDeleteAll(*programs);
+    qDeleteAll(*frequencies);
+    qDeleteAll(*treatmentHistory);
   
     delete display;
     delete battery;
@@ -58,7 +59,6 @@ Device::~Device() {
  * @param request: request made by main window.
  * @return a string...
  */
-
 QStringList Device::receive(QString request)
 {
     int page = display->updateDisplay(request);
@@ -79,9 +79,9 @@ QStringList Device::receive(QString request)
         // runTreatment(request) could be the below stuff!!
         if (display->frequency->contains(request)){
             for (int i = 0; i < frequencies->size(); i++){
-                if (frequencies->at(i).frequency == request.toInt()){
-                    float f = frequencies->at(i).frequency;
-                    int t = frequencies->at(i).timer;
+                if (frequencies->at(i)->frequency == request.toInt()){
+                    float f = frequencies->at(i)->frequency;
+                    int t = frequencies->at(i)->timer;
                     return (QStringList() << "timer" << QString::number(f) << QString::number(t)); // and data of treatment
                 }
             }
@@ -90,9 +90,9 @@ QStringList Device::receive(QString request)
         }
         if (display->program->contains(request)){
             for (int i = 0; i < programs->size(); i++){
-                if (programs->at(i).name == request){
-                    QString n = programs->at(i).name;
-                    int t = frequencies->at(i).timer;
+                if (programs->at(i)->name == request){
+                    QString n = programs->at(i)->name;
+                    int t = frequencies->at(i)->timer;
                     return (QStringList() << "timer" << n << QString::number(t)); // and data of treatment
                 }
             }
@@ -105,12 +105,12 @@ QStringList Device::receive(QString request)
     return QStringList();
 }
 
+
 /**
  * @brief Increases the power level of the treatment by one, unless power is at max.
  * @return The current power level.
  */
-int Device::increasePower()
-{
+int Device::increasePower() {
     // If treatment is running
     if (powerLevel == MAXPOWERLEVEL){
         return MAXPOWERLEVEL;
@@ -123,8 +123,7 @@ int Device::increasePower()
  * @brief Decreases the power level of the treatment by one, unless power is at min.
  * @return The current power level.
  */
-int Device::decreasePower()
-{
+int Device::decreasePower() {
     //If treatment is running
     if (powerLevel == MINPOWERLEVEL){
         return MINPOWERLEVEL;
@@ -147,8 +146,7 @@ void Device::runTreatment()
  * @brief Adds a given therapy to treatment history.
  * @param The therapy to be added to treatment history.
  */
-void Device::addToHistory(Therapy* therapy)
-{
+void Device::addToHistory(Therapy* therapy) {
     PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
 }
