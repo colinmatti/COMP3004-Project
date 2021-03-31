@@ -1,12 +1,11 @@
 #include "program.h"
 #include <vector>
 
-Program::Program(QString n, int f, int t, int p, int s)
+Program::Program(QString n, float f, int t, int p)
 {
     name = n;
     frequency = f;
     timer = t;
     powerLevel = p;
-    status = s;
 }
 

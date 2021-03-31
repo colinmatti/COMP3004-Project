@@ -9,7 +9,7 @@ public:
 protected:
     int timer;
     int powerLevel;
-    int status;
+    float frequency;
 };
 
 #endif // THERAPY_H
