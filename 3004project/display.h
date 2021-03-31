@@ -2,6 +2,7 @@
 #define DISPLAY_H
 
 #include <QStringList>
+#include <QStringList>
 
 using namespace std;
 

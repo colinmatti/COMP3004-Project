@@ -1,7 +1,5 @@
 #include "display.h"
 
-#include <QStringList>
-
 Display::Display()
 {
     menu = new QStringList();
