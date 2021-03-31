@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete empty;
+    delete model;
     delete ui;
 }
 
@@ -126,6 +128,7 @@ void MainWindow::on_timer_start()
     if (countdown < 0)
     {
         timer->stop();
+        device.endTreatment();
     } else {
         ui->timer->display(countdown);
         countdown--;
@@ -142,6 +145,13 @@ void MainWindow::on_onSkin_stateChanged(int checked)
         cout <<  "SKIN DETECTED" << endl;
     } else {
         device.applyOnSkin();
+        // If status!=NULL then warning!
         cout << "SKIN NOT DETECTED" << endl;
     }
+}
+
+void MainWindow::on_addButton_clicked()
+{
+    // If treatment is running
+    device.receive("add");
 }

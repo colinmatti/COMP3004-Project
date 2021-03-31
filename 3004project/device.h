@@ -28,6 +28,7 @@ public:
     QStringList receive(QString request);
     int increasePower();
     int decreasePower();
+    void endTreatment();
 
 private:
     int powerLevel;
@@ -40,6 +41,7 @@ private:
     void runTreatment();
     QList<PreviousTreatment*> *treatmentHistory;
     void addToHistory(Therapy* therapy);
+    Therapy* status;
 };
 
 #endif // DEVICE_H
