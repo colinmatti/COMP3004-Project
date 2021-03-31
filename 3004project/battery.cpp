@@ -9,13 +9,16 @@ bool Battery::isLow() {
 }
 
 /**
- * @brief Decreases the battery level by the amount passed in.
- * @param amnt: the amount by which to decrease the battery level.
+ * @brief Decreases the battery level by the the device's current powerlevel and the time elapsed for the treatment.
+ * @param currPwrLvl: the power level of the device.
+ *        timePassed: the time elapsed in a therapy treatment.
  */
-void Battery::decreaseLevel(int amnt) {
-    if (batteryLevel - amnt < 0) {
-        batteryLevel = 0;
-        return;
+void Battery::decreaseLevel(int currPwrLvl, int timePassed) {
+    if (timePassed > 0) {
+        if (batteryLevel - currPwrLvl*timePassed < 0) {
+            batteryLevel = 0;
+            return;
+        }
+        batteryLevel -= currPwrLvl*timePassed ;
     }
-    batteryLevel -= amnt;
 }

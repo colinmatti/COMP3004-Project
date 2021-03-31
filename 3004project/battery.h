@@ -13,7 +13,7 @@ public:
     Battery(int b = 100) : batteryLevel(b) {};
 
     bool isLow();
-    void decreaseLevel(int amnt);
+    void decreaseLevel(int currPwrLvl, int timePassed);
 
 private:
     int batteryLevel;

@@ -42,10 +42,13 @@ Device::Device() {
 }
 
 Device::~Device() {
+    
     qDeleteAll(*programs);
     qDeleteAll(*frequencies);
     qDeleteAll(*treatmentHistory);
-
+  
+    delete display;
+    delete battery;
     delete programs;
     delete frequencies;
     delete treatmentHistory;
@@ -56,8 +59,7 @@ Device::~Device() {
  * @param request: request made by main window.
  * @return a string...
  */
-QStringList Device::receive(QString request)
-{
+QStringList Device::receive(QString request) {
     int page = display->updateDisplay(request);
     cout << "page" << page << endl;
     if (page == 0){
@@ -109,7 +111,7 @@ QStringList Device::receive(QString request)
  */
 int Device::increasePower() {
     // If treatment is running
-    if (powerLevel >= MAXPOWERLEVEL){
+    if (powerLevel == MAXPOWERLEVEL){
         return MAXPOWERLEVEL;
     }
     powerLevel += 1;
@@ -122,11 +124,20 @@ int Device::increasePower() {
  */
 int Device::decreasePower() {
     //If treatment is running
-    if (powerLevel <= MINPOWERLEVEL){
+    if (powerLevel == MINPOWERLEVEL){
         return MINPOWERLEVEL;
     }
     powerLevel -= 1;
     return powerLevel;
+}
+
+/**
+ * @brief performs a treatment.
+ * @param none.
+ */
+void Device::runTreatment() {
+    int timePassed = 1;
+    battery->decreaseLevel(powerLevel,timePassed);
 }
 
 /**
@@ -137,11 +148,3 @@ void Device::addToHistory(Therapy* therapy) {
     PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
 }
-
-void Device::updateBattery(int currPwrLvl, int time) {
-    if (time > 0) {
-        battery->decreaseLevel(currPwrLvl*time);
-    }
-}
-
-int Device::runTreatment () {return 0;}

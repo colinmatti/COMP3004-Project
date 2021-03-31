@@ -34,10 +34,9 @@ private:
     Display *display;
     QList<Program*> *programs;
     QList<Frequency*> *frequencies;
+    //void updateBattery(int currPwrLvl, int time);
+    void runTreatment(); 
     QList<PreviousTreatment*> *treatmentHistory;
-
-    void updateBattery(int currPwrLvl, int time);
-    int runTreatment();
     void addToHistory(Therapy* therapy);
 };
 
