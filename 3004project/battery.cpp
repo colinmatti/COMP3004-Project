@@ -16,7 +16,7 @@ Battery::~Battery()
 
 bool Battery::isLow()
 {
-    if (batteryLevel <= 10) {
+    return batteryLevel <= 10
         return true;
     }
     return false;
