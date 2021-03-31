@@ -10,8 +10,7 @@ class Program : public Therapy
 {
 public:
     Program(QString n, float f, int t, int p);
-    ~Program();
-private:
+    //~Program();
     QString name;
 };
 

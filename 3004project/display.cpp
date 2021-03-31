@@ -2,24 +2,22 @@
 
 #include <QStringList>
 
-Display::Display()
+Display::Display(QList<Frequency> *frequencies, QList<Program> *programs)
 {
     menu = new QStringList();
-    menu->append("Programmed");
+    menu->append("Programs");
     menu->append("Frequency");
     menu->append("History");
 
-    programmed = new QStringList();
-    programmed->append("Throat");
-    programmed->append("Joint");
-    programmed->append("Bloating");
-    programmed->append("Pain");
-
     frequency = new QStringList();
-    frequency->append("1.0-9.9 Hz");
-    frequency->append("10 Hz");
-    frequency->append("20 Hz");
-    frequency->append("60 Hz");
+    for (int i = 0; i < frequencies->size(); i++){
+        frequency->append(QString::number(frequencies->at(i).frequency));
+    }
+
+    program = new QStringList();
+    for (int i = 0; i < programs->size(); i++){
+        program->append(programs->at(i).name);
+    }
 
     currentDisplay = 0;
 }
@@ -46,7 +44,7 @@ int Display::updateDisplay(QString request)
         currentDisplay = 2;
     } else if (request == "History"){
         currentDisplay = 3;
-    } else if (programmed->contains(request) || frequency->contains(request)){
+    } else if (program->contains(request) || frequency->contains(request)){
         currentDisplay = 4;
     }
     return currentDisplay;

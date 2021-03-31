@@ -8,7 +8,6 @@
 Device::Device()
 {
     battery = new Battery();
-    display = new Display();
     poweredOn = false;
     powerLevel = 0;
     minPowerLevel = 0;
@@ -46,6 +45,8 @@ Device::Device()
 
     // Instantiate empty therapy history.
     treatmentHistory = new QList<PreviousTreatment>();
+
+    display = new Display(frequencies, programs);
 }
 
 QStringList Device::receive(QString request)
@@ -57,7 +58,7 @@ QStringList Device::receive(QString request)
     } else if (page == 1){
         return *display->frequency;
     } else if (page == 2){
-        return *display->programmed;
+        return *display->program;
     } else if (page == 3){
         //create a QStringList of the history, and return it
         //return treatmentHistory;
