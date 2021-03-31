@@ -1,10 +1,5 @@
 #include "device.h"
 
-#include <string>
-#include <iostream>
-#include <array>
-#include <QList>
-
 Device::Device()
 {
     battery = new Battery();
@@ -41,6 +36,9 @@ Device::Device()
 
     Frequency twenty = Frequency(20, 300, 50);
     frequencies->append(twenty);
+
+    // Instantiate empty therapy history.
+    treatmentHistory = new QList<PreviousTreatment>();
 }
 
 Device::~Device()
@@ -48,6 +46,12 @@ Device::~Device()
     delete display;
     delete battery;
 }
+
+/**
+ * @brief Handles a request made by the main window requesting information about the device.
+ * @param request: request made by main window.
+ * @return a string...
+ */
 
 QList<Therapy>* Device::receive(int request)
 {
@@ -61,31 +65,48 @@ QList<Therapy>* Device::receive(int request)
     }
 }
 
+/**
+ * @brief Increases the power level of the treatment by one, unless power is at max.
+ * @return The current power level.
+ */
 int Device::increasePower()
 {
-    if (powerLevel >= MAXPOWERLEVEL){
-        return powerLevel;
+    if (powerLevel == MAXPOWERLEVEL){
+        return MAXPOWERLEVEL;
     }
     powerLevel += 1;
     return powerLevel;
 }
 
+/**
+ * @brief Decreases the power level of the treatment by one, unless power is at min.
+ * @return The current power level.
+ */
 int Device::decreasePower()
 {
-    if (powerLevel <= MINPOWERLEVEL){
-        return powerLevel;
+    if (powerLevel == MINPOWERLEVEL){
+        return MINPOWERLEVEL;
     }
     powerLevel -= 1;
     return powerLevel;
 }
 
+/**
+ * @brief performs a treatment.
+ * @param none.
+ */
 void Device::runTreatment()
 {
     int timePassed = 1;
     battery->decreaseLevel(powerLevel,timePassed);
 }
 
-
-
-
-
+/**
+ * @brief Adds a given therapy to treatment history.
+ * @param The therapy to be added to treatment history.
+ */
+void Device::addToHistory(Therapy* therapy)
+{
+    PreviousTreatment newTreatment = PreviousTreatment(therapy);
+    treatmentHistory->append(newTreatment);
+}

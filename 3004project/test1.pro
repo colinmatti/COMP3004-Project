@@ -15,6 +15,7 @@ SOURCES += \
     frequency.cpp \
     main.cpp \
     mainwindow.cpp \
+    previoustreatment.cpp \
     program.cpp
 
 HEADERS += \
@@ -23,6 +24,7 @@ HEADERS += \
     display.h \
     frequency.h \
     mainwindow.h \
+    previoustreatment.h \
     program.h \
     therapy.h
 

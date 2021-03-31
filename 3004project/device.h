@@ -7,7 +7,12 @@
 #include "program.h"
 #include "frequency.h"
 #include "therapy.h"
+#include "previoustreatment.h"
+
 #include <QStringList>
+#include <iostream>
+#include <array>
+#include <QList>
 
 #define MINPOWERLEVEL 1
 #define MAXPOWERLEVEL 100
@@ -30,9 +35,10 @@ private:
     bool onSkin;
     QList<Program> *programs;
     QList<Frequency> *frequencies;
-    
     //void updateBattery(int currPwrLvl, int time);
     void runTreatment();
+    QList<PreviousTreatment> *treatmentHistory;
+    void addToHistory(Therapy* therapy);
 };
 
 
