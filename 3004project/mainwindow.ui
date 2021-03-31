@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>600</height>
+    <width>633</width>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,11 +40,20 @@ QPushButton:disabled {
 	font-size: 20px;
 }
 
-#listView{
-background-color: white;
-color: black;
+#powerLabel{
+	color: #485ca8;
 }
 
+#listView{
+	background-color: white;
+	font-size: 15px;
+	color: black;
+}
+
+#adminLabel, #label, #powerLabel {
+	color: black;
+	font-size: 20px;
+}
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -124,7 +133,7 @@ color: black;
      <rect>
       <x>40</x>
       <y>240</y>
-      <width>91</width>
+      <width>131</width>
       <height>16</height>
      </rect>
     </property>
@@ -135,14 +144,14 @@ color: black;
    <widget class="QLabel" name="powerLabel">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>160</x>
       <y>240</y>
       <width>60</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>0</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="menuButton">
@@ -161,8 +170,8 @@ color: black;
    <widget class="QLCDNumber" name="timer">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>80</y>
+      <x>60</x>
+      <y>110</y>
       <width>181</width>
       <height>91</height>
      </rect>
@@ -171,14 +180,40 @@ color: black;
    <widget class="QCheckBox" name="onSkin">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>260</y>
+      <x>480</x>
+      <y>100</y>
       <width>86</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>SKIN ON</string>
+     <string>ON SKIN</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="adminLabel">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>40</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ADMIN CONSOLE</string>
+    </property>
+   </widget>
+   <widget class="Line" name="DeviceDivider">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>-50</y>
+      <width>20</width>
+      <height>651</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="addButton">
@@ -200,7 +235,7 @@ color: black;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>519</width>
+     <width>633</width>
      <height>24</height>
     </rect>
    </property>
