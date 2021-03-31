@@ -40,8 +40,14 @@ QPushButton:disabled {
 	font-size: 20px;
 }
 
+#powerLabel{
+	color: #485ca8;
+}
+
 #listView{
-background-color: white;
+	background-color: white;
+	font-size: 15px;
+	color: black;
 }
 
 #adminLabel, #label, #powerLabel {
@@ -164,8 +170,8 @@ background-color: white;
    <widget class="QLCDNumber" name="timer">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>80</y>
+      <x>60</x>
+      <y>110</y>
       <width>181</width>
       <height>91</height>
      </rect>
@@ -217,7 +223,7 @@ background-color: white;
      <x>0</x>
      <y>0</y>
      <width>633</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

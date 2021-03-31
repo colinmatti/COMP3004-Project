@@ -53,6 +53,8 @@ void MainWindow::on_okButton_clicked()
 void MainWindow::on_powerButton_clicked()
 {
     if (device.isPoweredOn() == false){
+        ui->powerLabel->setVisible(true);
+        ui->powerLabel->setText("1");
         ui->listView->setVisible(true);
         *currentMenu = device.receive("on");
         model->setStringList(*currentMenu);
@@ -66,6 +68,7 @@ void MainWindow::on_powerButton_clicked()
         ui->listView->setVisible(false);
         ui->timer->setVisible(false);
         timer->stop();
+        ui->powerLabel->setVisible(false);
     }
 }
 
@@ -91,19 +94,37 @@ void MainWindow::on_upButton_clicked()
 
 void MainWindow::on_rightButton_clicked()
 {
-    QString power = QString::number(device.increasePower());
-    ui->powerLabel->setText(power);
+    if (device.isPoweredOn() == false){
+        return;
+    }
+    else {
+        QString power = QString::number(device.increasePower());
+        ui->powerLabel->setText(power);
+    }
 }
 
 void MainWindow::on_leftButton_clicked()
 {
-    QString power = QString::number(device.decreasePower());
-    ui->powerLabel->setText(power);
+    if (device.isPoweredOn() == false){
+        return;
+    }
+    else {
+        QString power = QString::number(device.decreasePower());
+        ui->powerLabel->setText(power);
+    }
 }
 
 void MainWindow::on_goBackButton_clicked()
 {
-    // TODO: when treatment is running, send warning
+    if (device.isPoweredOn() == true){
+        model->setStringList(*empty);
+        *currentMenu = device.receive("menu");
+        model->setStringList(*currentMenu);
+        ui->listView->setCurrentIndex(currentIndex);
+        ui->listView->setVisible(true);
+        ui->timer->setVisible(false);
+        // TODO: when treatment is running, send warning
+    }
 }
 
 void MainWindow::on_menuButton_clicked()
@@ -131,7 +152,6 @@ void MainWindow::on_timer_start()
         countdown--;
     }
 }
-
 
 
 void MainWindow::on_onSkin_stateChanged(int checked)
