@@ -24,7 +24,8 @@ public:
     Device();
     ~Device();
     bool poweredOn;
-    QList<Therapy>* receive(int request);
+    QStringList receive(QString request);
+    bool onSkin;
     int increasePower();
     int decreasePower();
 
@@ -32,7 +33,6 @@ private:
     Battery *battery;
     Display *display;
     int powerLevel;
-    bool onSkin;
     QList<Program> *programs;
     QList<Frequency> *frequencies;
     void updateBattery(int currPwrLvl, int time);
