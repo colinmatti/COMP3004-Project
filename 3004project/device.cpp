@@ -43,6 +43,12 @@ Device::Device()
     frequencies->append(twenty);
 }
 
+Device::~Device()
+{
+    delete display;
+    delete battery;
+}
+
 QList<Therapy>* Device::receive(int request)
 {
     if (request == -1){
@@ -73,14 +79,13 @@ int Device::decreasePower()
     return powerLevel;
 }
 
-Device::~Device()
+void Device::runTreatment()
 {
+    int timePassed = 1;
+    battery->decreaseLevel(powerLevel,timePassed);
 }
 
-void Device::updateBattery(int currPwrLvl, int time)
-{
-    if (time > 0) {
-        battery->decreaseLevel(currPwrLvl*time);
-    }
-}
+
+
+
 

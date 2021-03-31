@@ -9,17 +9,16 @@ Battery::~Battery() {}
 
 bool Battery::isLow()
 {
-    return batteryLevel <= 10
-        return true;
-    }
-    return false;
+    return batteryLevel <= 10;
 }
 
-void Battery::decreaseLevel(int amnt)
+void Battery::decreaseLevel(int currPwrLvl, int timePassed)
 {
-    if (batteryLevel - amnt < 0) {
-        batteryLevel = 0;
-        return;
+    if (timePassed > 0) {
+        if (batteryLevel - currPwrLvl*timePassed < 0) {
+            batteryLevel = 0;
+            return;
+        }
+        batteryLevel -= currPwrLvl*timePassed ;
     }
-    batteryLevel -= amnt;
 }

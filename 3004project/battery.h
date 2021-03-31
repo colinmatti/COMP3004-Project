@@ -9,7 +9,7 @@ public:
     Battery(int batteryLevel=100, int maxLevel=100, int minLevel=0);
     ~Battery();
     bool isLow();
-    void decreaseLevel(int amnt);
+    void decreaseLevel(int currPwrLvl, int timePassed);
 
 private:
     int batteryLevel;

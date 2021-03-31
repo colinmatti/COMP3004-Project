@@ -31,8 +31,8 @@ private:
     QList<Program> *programs;
     QList<Frequency> *frequencies;
     
-    void updateBattery(int currPwrLvl, int time);
-    int runTreatment(); //returns time elapsed in therapy
+    //void updateBattery(int currPwrLvl, int time);
+    void runTreatment();
 };
 
 
