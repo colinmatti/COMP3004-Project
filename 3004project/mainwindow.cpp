@@ -118,7 +118,7 @@ void MainWindow::on_goBackButton_clicked()
 {
     if (device.isPoweredOn() == true){
         model->setStringList(*empty);
-        *currentMenu = device.receive("menu");
+        *currentMenu = device.receive("back");
         model->setStringList(*currentMenu);
         ui->listView->setCurrentIndex(currentIndex);
         ui->listView->setVisible(true);
