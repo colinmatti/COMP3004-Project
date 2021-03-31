@@ -30,7 +30,6 @@ private:
     Battery *battery;
     Display *display;
     int powerLevel;
-    bool onSkin;
     QList<Program> *programs;
     QList<Frequency> *frequencies;
     void updateBattery(int currPwrLvl, int time);

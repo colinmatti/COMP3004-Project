@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->timer->setVisible(false);
 
     // REPLACE WITH THERAPY TIMER
-    countdown = 10;
+    //countdown = 10;
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_start()));
 }
@@ -38,6 +38,8 @@ void MainWindow::on_okButton_clicked()
         if (currentMenu->contains("timer")){
             ui->listView->setVisible(false);
             ui->timer->setVisible(true);
+            QString name = currentMenu->at(1);
+            countdown = currentMenu->at(2).toInt();
             // For every second
             timer->start(1000);
         } else {

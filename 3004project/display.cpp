@@ -40,7 +40,7 @@ int Display::updateDisplay(QString request)
         }
     } else if (request == "Frequency"){
         currentDisplay = 1;
-    } else if (request == "Programmed"){
+    } else if (request == "Programs"){
         currentDisplay = 2;
     } else if (request == "History"){
         currentDisplay = 3;

@@ -58,11 +58,35 @@ QStringList Device::receive(QString request)
     } else if (page == 2){
         return *display->program;
     } else if (page == 3){
-        //create a QStringList of the history, and return it
-        //return treatmentHistory;
+        QStringList *history = new QStringList();
+        for (int i = 0; i < treatmentHistory->size(); i++){
+            //history->append(treatmentHistory->at(i).therapy.frequency); // append how we want output to look
+        }
+        return *history;
     } else if (page == 4){
-        // runTreatment(request)
-        return (QStringList() << "timer"); // and data of treatment
+        // runTreatment(request) could be the below stuff!!
+        if (display->frequency->contains(request)){
+            for (int i = 0; i < frequencies->size(); i++){
+                if (frequencies->at(i).frequency == request.toInt()){
+                    float f = frequencies->at(i).frequency;
+                    int t = frequencies->at(i).timer;
+                    return (QStringList() << "timer" << QString::number(f) << QString::number(t)); // and data of treatment
+                }
+            }
+            //float f = frequencies->at(request.toInt()).frequency;
+            //int t = frequencies->at(request.toInt()).timer;
+        }
+        if (display->program->contains(request)){
+            for (int i = 0; i < programs->size(); i++){
+                if (programs->at(i).name == request){
+                    QString n = programs->at(i).name;
+                    int t = frequencies->at(i).timer;
+                    return (QStringList() << "timer" << n << QString::number(t)); // and data of treatment
+                }
+            }
+            //QString n = programs->at(request.toInt()).name;
+            //int t = programs->at(request.toInt()).timer;
+        }
     } /*else if (page == 5){
         return (QStringList() << "power" << QString::number(powerLevel));
     }*/
