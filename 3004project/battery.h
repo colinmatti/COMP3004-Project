@@ -3,21 +3,20 @@
 
 #include <iostream>
 
+#define MINBATTERYLEVEL = 0
+#define MAXBATTERYLEVEL = 100
+
 using namespace std;
 
-class Battery
-{
+class Battery {
 public:
-    Battery(int batteryLevel=100, int maxLevel=100, int minLevel=0);
-    ~Battery();
+    Battery(int b = 100) : batteryLevel(b) {};
+
     bool isLow();
     void decreaseLevel(int amnt);
 
 private:
     int batteryLevel;
-    int maxLevel;
-    int minLevel;
-
 };
 
 #endif // BATTERY_H

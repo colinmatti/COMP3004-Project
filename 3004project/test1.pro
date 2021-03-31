@@ -12,11 +12,8 @@ SOURCES += \
     battery.cpp \
     device.cpp \
     display.cpp \
-    frequency.cpp \
     main.cpp \
-    mainwindow.cpp \
-    previoustreatment.cpp \
-    program.cpp
+    mainwindow.cpp
 
 HEADERS += \
     battery.h \
