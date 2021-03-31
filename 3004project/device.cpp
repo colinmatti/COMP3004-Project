@@ -9,12 +9,38 @@ Device::Device()
 {
     poweredOn = false;
     powerLevel = 0;
-    minPowerLevel = 0; // constant?
-    maxPowerLevel = 100; // constant?
+    minPowerLevel = 0;
+    maxPowerLevel = 100;
 
     // Instantiate all preset therapies.
     programs = new QList<Program>();
     frequencies = new QList<Frequency>();
+
+    // Create and append programs.
+    Program throat = Program(QString("Throat"), 10, 600, 30);
+    programs->append(throat);
+
+    Program nausea = Program(QString("Nausea"), 15, 240, 10);
+    programs->append(nausea);
+
+    Program chlamydia = Program(QString("Chlamydia"), 25, 1200, 80);
+    programs->append(chlamydia);
+
+    Program diarrhea = Program(QString("Diarrhea"), 5, 120, 65);
+    programs->append(diarrhea);
+
+    // Create and append frequencies.
+    Frequency five = Frequency(5, 300, 50);
+    frequencies->append(five);
+
+    Frequency ten = Frequency(10, 300, 50);
+    frequencies->append(ten);
+
+    Frequency fifteen = Frequency(15, 300, 50);
+    frequencies->append(fifteen);
+
+    Frequency twenty = Frequency(20, 300, 50);
+    frequencies->append(twenty);
 }
 
 QList<Therapy>* Device::receive(int request)
