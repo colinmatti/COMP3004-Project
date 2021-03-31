@@ -5,6 +5,9 @@
 #include <QStringListModel>
 #include "device.h"
 #include <QTimer>
+#include <string>
+#include <iostream>
+#include <QApplication>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

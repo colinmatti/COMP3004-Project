@@ -1,5 +1,4 @@
 #include "frequency.h"
-#include <vector>
 
 Frequency::Frequency(float f, int t, int p)
 {
