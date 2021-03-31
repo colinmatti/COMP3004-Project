@@ -38,11 +38,11 @@ Device::Device() {
     // Instantiate empty therapy history.
     treatmentHistory = new QList<PreviousTreatment*>();
 
+    // Instantiate the display.
     display = new Display(frequencies, programs);
 }
 
 Device::~Device() {
-    
     qDeleteAll(*programs);
     qDeleteAll(*frequencies);
     qDeleteAll(*treatmentHistory);
@@ -78,9 +78,9 @@ QStringList Device::receive(QString request) {
         // runTreatment(request) could be the below stuff!!
         if (display->frequency->contains(request)){
             for (int i = 0; i < frequencies->size(); i++){
-                if (frequencies->at(i)->frequency == request.toInt()){
-                    float f = frequencies->at(i)->frequency;
-                    int t = frequencies->at(i)->timer;
+                if (frequencies->at(i)->getFrequency() == request.toInt()){
+                    float f = frequencies->at(i)->getFrequency();
+                    int t = frequencies->at(i)->getTimer();
                     return (QStringList() << "timer" << QString::number(f) << QString::number(t)); // and data of treatment
                 }
             }
@@ -89,9 +89,9 @@ QStringList Device::receive(QString request) {
         }
         if (display->program->contains(request)){
             for (int i = 0; i < programs->size(); i++){
-                if (programs->at(i)->name == request){
-                    QString n = programs->at(i)->name;
-                    int t = frequencies->at(i)->timer;
+                if (programs->at(i)->getName() == request){
+                    QString n = programs->at(i)->getName();
+                    int t = frequencies->at(i)->getTimer();
                     return (QStringList() << "timer" << n << QString::number(t)); // and data of treatment
                 }
             }

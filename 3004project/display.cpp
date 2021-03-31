@@ -8,12 +8,12 @@ Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
 
     frequency = new QStringList();
     for (int i = 0; i < frequencies->size(); i++){
-        frequency->append(QString::number(frequencies->at(i)->frequency));
+        frequency->append(QString::number(frequencies->at(i)->getFrequency()));
     }
 
     program = new QStringList();
     for (int i = 0; i < programs->size(); i++){
-        program->append(programs->at(i)->name);
+        program->append(programs->at(i)->getName());
     }
 
     currentDisplay = 0;
