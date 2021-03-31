@@ -109,6 +109,10 @@ QStringList Device::receive(QString request) {
     return QStringList();
 }
 
+Therapy* Device::getStatus(){
+    return status;
+}
+
 
 /**
  * @brief Increases the power level of the treatment by one, unless power is at max.

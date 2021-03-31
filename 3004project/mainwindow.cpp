@@ -67,6 +67,7 @@ void MainWindow::on_powerButton_clicked()
         device.receive("off");
         ui->listView->setVisible(false);
         ui->timer->setVisible(false);
+        device.endTreatment();
         timer->stop();
     }
 }
@@ -152,6 +153,7 @@ void MainWindow::on_onSkin_stateChanged(int checked)
 
 void MainWindow::on_addButton_clicked()
 {
-    // If treatment is running
-    device.receive("add");
+    if (device.getStatus() != NULL){
+        device.receive("add");
+    }
 }

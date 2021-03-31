@@ -29,6 +29,7 @@ public:
     int increasePower();
     int decreasePower();
     void endTreatment();
+    Therapy* getStatus();
 
 private:
     int powerLevel;
