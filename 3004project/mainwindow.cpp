@@ -15,8 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->listView->setVisible(false);
     ui->timer->setVisible(false);
 
-    // REPLACE WITH THERAPY TIMER
-    //countdown = 10;
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_start()));
 }
