@@ -7,7 +7,8 @@ class Frequency : public Therapy
 {
 public:
     Frequency(float f, int t, int p);
-    ~Frequency();
+    //~Frequency();
+    int frequency;
 };
 
 #endif // FREQUENCY_H

@@ -1,18 +1,10 @@
 #include "device.h"
 
-#include <string>
-#include <iostream>
-#include <array>
-#include <QList>
-
 Device::Device()
 {
     battery = new Battery();
-    display = new Display();
     poweredOn = false;
-    powerLevel = 0;
-    minPowerLevel = 0;
-    maxPowerLevel = 100;
+    powerLevel = 1;
 
     // Instantiate all preset therapies.
     programs = new QList<Program>();
@@ -43,38 +35,109 @@ Device::Device()
 
     Frequency twenty = Frequency(20, 300, 50);
     frequencies->append(twenty);
+
+    // Instantiate empty therapy history.
+    treatmentHistory = new QList<PreviousTreatment>();
+
+    display = new Display(frequencies, programs);
 }
 
-QList<Therapy>* Device::receive(int request)
+Device::~Device() {}
+
+/**
+ * @brief Handles a request made by the main window requesting information about the device.
+ * @param request: request made by main window.
+ * @return a string...
+ */
+QStringList Device::receive(QString request)
 {
-    if (request == -1){
-        return display->menu;
-    }
-    else if (request == 0){
-        return programs;
-    } else if (request == 1){
-        return frequencies;
-    }
+    int page = display->updateDisplay(request);
+    cout << "page" << page << endl;
+    if (page == 0){
+        return *display->menu;
+    } else if (page == 1){
+        return *display->frequency;
+    } else if (page == 2){
+        return *display->program;
+    } else if (page == 3){
+        QStringList *history = new QStringList();
+        for (int i = 0; i < treatmentHistory->size(); i++){
+            //history->append(treatmentHistory->at(i).therapy.frequency); // append how we want output to look
+        }
+        return *history;
+    } else if (page == 4){
+        // runTreatment(request) could be the below stuff!!
+        if (display->frequency->contains(request)){
+            for (int i = 0; i < frequencies->size(); i++){
+                if (frequencies->at(i).frequency == request.toInt()){
+                    float f = frequencies->at(i).frequency;
+                    int t = frequencies->at(i).timer;
+                    return (QStringList() << "timer" << QString::number(f) << QString::number(t)); // and data of treatment
+                }
+            }
+            //float f = frequencies->at(request.toInt()).frequency;
+            //int t = frequencies->at(request.toInt()).timer;
+        }
+        if (display->program->contains(request)){
+            for (int i = 0; i < programs->size(); i++){
+                if (programs->at(i).name == request){
+                    QString n = programs->at(i).name;
+                    int t = frequencies->at(i).timer;
+                    return (QStringList() << "timer" << n << QString::number(t)); // and data of treatment
+                }
+            }
+            //QString n = programs->at(request.toInt()).name;
+            //int t = programs->at(request.toInt()).timer;
+        }
+    } /*else if (page == 5){
+        return (QStringList() << "power" << QString::number(powerLevel));
+    }*/
+    return QStringList();
 }
 
+/**
+ * @brief Increases the power level of the treatment by one, unless power is at max.
+ * @return The current power level.
+ */
 int Device::increasePower()
 {
-    if (powerLevel >= maxPowerLevel){
-        return powerLevel;
+    // If treatment is running
+    if (powerLevel >= MAXPOWERLEVEL){
+        return MAXPOWERLEVEL;
     }
     powerLevel += 1;
     return powerLevel;
 }
 
+/**
+ * @brief Decreases the power level of the treatment by one, unless power is at min.
+ * @return The current power level.
+ */
 int Device::decreasePower()
 {
-    if (powerLevel <= minPowerLevel){
-        return powerLevel;
+    //If treatment is running
+    if (powerLevel <= MINPOWERLEVEL){
+        return MINPOWERLEVEL;
     }
     powerLevel -= 1;
     return powerLevel;
 }
 
-Device::~Device()
+/**
+ * @brief Adds a given therapy to treatment history.
+ * @param The therapy to be added to treatment history.
+ */
+void Device::addToHistory(Therapy* therapy)
 {
+    PreviousTreatment newTreatment = PreviousTreatment(therapy);
+    treatmentHistory->append(newTreatment);
 }
+
+void Device::updateBattery(int currPwrLvl, int time)
+{
+    if (time > 0) {
+        battery->decreaseLevel(currPwrLvl*time);
+    }
+}
+
+int Device::runTreatment () {return 0;}

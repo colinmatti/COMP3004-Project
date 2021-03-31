@@ -12,11 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
     currentMenu = new QStringList();
     empty = new QStringList();
     model = new QStringListModel(*currentMenu, NULL);
+
     currentIndex = model->index(0,0);
     ui->listView->setModel(model);
+    ui->listView->setVisible(false);
+    ui->timer->setVisible(false);
 
     // REPLACE WITH THERAPY TIMER
-    countdown = 10;
+    //countdown = 10;
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_start()));
 }
@@ -29,26 +32,43 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_okButton_clicked()
 {
-    currentMenu = device.receive(ui->listView->currentIndex().row());
-
-    model->setStringList(*currentMenu);
-    currentIndex = model->index(0,0);
-
-    ui->timer->setVisible(true);
-    // For every second
-    timer->start(1000);
+    cout  << "index" << ui->listView->currentIndex().row() << endl;
+    if (device.poweredOn){
+        *currentMenu = device.receive(ui->listView->currentIndex().data(Qt::DisplayRole).toString());
+        if (currentMenu->contains("timer")){
+            ui->listView->setVisible(false);
+            ui->timer->setVisible(true);
+            QString name = currentMenu->at(1);
+            countdown = currentMenu->at(2).toInt();
+            // For every second
+            timer->start(1000);
+        } else {
+            //listview
+            ui->listView->setVisible(true);
+            ui->timer->setVisible(false);
+            model->setStringList(*currentMenu);
+            currentIndex = model->index(0,0);
+            ui->listView->setCurrentIndex(currentIndex);
+        }
+    }
 }
 
 void MainWindow::on_powerButton_clicked()
 {
     if (device.poweredOn == false){
-        currentMenu = device.receive(-1);
+        ui->listView->setVisible(true);
+        *currentMenu = device.receive("on");
         model->setStringList(*currentMenu);
+        currentIndex = model->index(0,0);
         ui->listView->setCurrentIndex(currentIndex);
         device.poweredOn = true;
     } else {
         device.poweredOn = false;
         model->setStringList(*empty);
+        device.receive("off");
+        ui->listView->setVisible(false);
+        ui->timer->setVisible(false);
+        timer->stop();
     }
 }
 
@@ -67,7 +87,7 @@ void MainWindow::on_upButton_clicked()
     if (currentIndex.row() <= 0) {
         currentIndex = model->index(currentMenu->size()-1,0);
     } else {
-        currentIndex  = model->index(currentIndex.row()-1,0);
+        currentIndex = model->index(currentIndex.row()-1,0);
     }
     ui->listView->setCurrentIndex(currentIndex);
 }
@@ -86,16 +106,19 @@ void MainWindow::on_leftButton_clicked()
 
 void MainWindow::on_goBackButton_clicked()
 {
-
+    // TODO: when treatment is running, send warning
 }
 
 void MainWindow::on_menuButton_clicked()
 {
     if (device.poweredOn == true){
         model->setStringList(*empty);
-        currentMenu = device.receive(-1);
+        *currentMenu = device.receive("menu");
         model->setStringList(*currentMenu);
         ui->listView->setCurrentIndex(currentIndex);
+        ui->listView->setVisible(true);
+        ui->timer->setVisible(false);
+        // TODO: when treatment is running, send warning
     }
 
 }
@@ -110,5 +133,18 @@ void MainWindow::on_timer_start()
         ui->timer->display(countdown);
         countdown--;
     }
+}
 
+
+
+void MainWindow::on_onSkin_stateChanged(int checked)
+{
+    cout << "arg1" << checked << endl;
+    if (checked == 2){
+        device.onSkin = true;
+        cout <<  "SKIN DETECTED" << endl;
+    } else {
+        device.onSkin = false;
+        cout << "SKIN NOT DETECTED" << endl;
+    }
 }

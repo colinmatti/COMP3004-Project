@@ -1,5 +1,4 @@
 #include "frequency.h"
-#include <vector>
 
 Frequency::Frequency(float f, int t, int p)
 {
@@ -7,3 +6,4 @@ Frequency::Frequency(float f, int t, int p)
     timer = t;
     powerLevel = p;
 }
+

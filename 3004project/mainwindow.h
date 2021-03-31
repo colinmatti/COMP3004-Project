@@ -5,6 +5,9 @@
 #include <QStringListModel>
 #include "device.h"
 #include <QTimer>
+#include <string>
+#include <iostream>
+#include <QApplication>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,6 +39,8 @@ private slots:
     void on_menuButton_clicked();
 
     void on_timer_start();
+
+    void on_onSkin_stateChanged(int checked);
 
 private:
     Ui::MainWindow *ui;

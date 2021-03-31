@@ -1,5 +1,4 @@
 #include "program.h"
-#include <vector>
 
 Program::Program(QString n, float f, int t, int p)
 {
@@ -8,3 +7,4 @@ Program::Program(QString n, float f, int t, int p)
     timer = t;
     powerLevel = p;
 }
+

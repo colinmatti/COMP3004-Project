@@ -7,7 +7,16 @@
 #include "program.h"
 #include "frequency.h"
 #include "therapy.h"
+#include "previoustreatment.h"
+
 #include <QStringList>
+#include <iostream>
+#include <array>
+#include <QList>
+
+#define MINPOWERLEVEL 1
+#define MAXPOWERLEVEL 100
+
 
 class Device
 {
@@ -15,7 +24,8 @@ public:
     Device();
     ~Device();
     bool poweredOn;
-    QList<Therapy>* receive(int request);
+    QStringList receive(QString request);
+    bool onSkin;
     int increasePower();
     int decreasePower();
 
@@ -23,14 +33,12 @@ private:
     Battery *battery;
     Display *display;
     int powerLevel;
-    bool onSkin;
-    int minPowerLevel;
-    int maxPowerLevel;
     QList<Program> *programs;
     QList<Frequency> *frequencies;
-
-    void updateBattery();
-    void runTreatment();
+    void updateBattery(int currPwrLvl, int time);
+    int runTreatment(); //returns time elapsed in therapy
+    QList<PreviousTreatment> *treatmentHistory;
+    void addToHistory(Therapy* therapy);
 };
 
 
