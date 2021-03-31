@@ -1,8 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <string>
-#include <iostream>
-using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -33,7 +30,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_okButton_clicked()
 {
     cout  << "index" << ui->listView->currentIndex().row() << endl;
-    if (device.poweredOn){
+    if (device.isPoweredOn()){
         *currentMenu = device.receive(ui->listView->currentIndex().data(Qt::DisplayRole).toString());
         if (currentMenu->contains("timer")){
             ui->listView->setVisible(false);
@@ -55,15 +52,15 @@ void MainWindow::on_okButton_clicked()
 
 void MainWindow::on_powerButton_clicked()
 {
-    if (device.poweredOn == false){
+    if (device.isPoweredOn() == false){
         ui->listView->setVisible(true);
         *currentMenu = device.receive("on");
         model->setStringList(*currentMenu);
         currentIndex = model->index(0,0);
         ui->listView->setCurrentIndex(currentIndex);
-        device.poweredOn = true;
+        device.power();
     } else {
-        device.poweredOn = false;
+        device.power();
         model->setStringList(*empty);
         device.receive("off");
         ui->listView->setVisible(false);
@@ -111,7 +108,7 @@ void MainWindow::on_goBackButton_clicked()
 
 void MainWindow::on_menuButton_clicked()
 {
-    if (device.poweredOn == true){
+    if (device.isPoweredOn() == true){
         model->setStringList(*empty);
         *currentMenu = device.receive("menu");
         model->setStringList(*currentMenu);
@@ -141,10 +138,10 @@ void MainWindow::on_onSkin_stateChanged(int checked)
 {
     cout << "arg1" << checked << endl;
     if (checked == 2){
-        device.onSkin = true;
+        device.applyOnSkin();
         cout <<  "SKIN DETECTED" << endl;
     } else {
-        device.onSkin = false;
+        device.applyOnSkin();
         cout << "SKIN NOT DETECTED" << endl;
     }
 }

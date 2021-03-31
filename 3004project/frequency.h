@@ -3,12 +3,9 @@
 
 #include "therapy.h"
 
-class Frequency : public Therapy
-{
+class Frequency : public Therapy {
 public:
-    Frequency(float f, int t, int p);
-    //~Frequency();
-    int frequency;
+    Frequency(float f, int t, int p) : Therapy(f, t, p) {};
 };
 
 #endif // FREQUENCY_H

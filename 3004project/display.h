@@ -1,20 +1,23 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <QStringList>
 #include "frequency.h"
 #include "program.h"
 
+#include <QStringList>
+
 using namespace std;
 
-class Display
-{
+class Display {
 public:
-    Display(QList <Frequency> *frequencies, QList<Program> *programs);
+    Display(QList<Frequency*>* frequencies, QList<Program*>* programs);
+
     QStringList *program;
     QStringList *frequency;
     QStringList *menu;
+
     int updateDisplay(QString request);
+
 private:
     int currentDisplay;
 };

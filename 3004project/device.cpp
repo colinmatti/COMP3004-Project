@@ -36,16 +36,19 @@ Device::Device() {
     frequencies->append(twenty);
 
     // Instantiate empty therapy history.
-    treatmentHistory = new QList<PreviousTreatment>();
+    treatmentHistory = new QList<PreviousTreatment*>();
 
+    // Instantiate the display.
     display = new Display(frequencies, programs);
 }
 
 Device::~Device() {
-    qDeleteAll(programs);
-    qDeleteAll(frequencies);
-    qDeleteAll(treatmentHistory);
-
+    qDeleteAll(*programs);
+    qDeleteAll(*frequencies);
+    qDeleteAll(*treatmentHistory);
+  
+    delete display;
+    delete battery;
     delete programs;
     delete frequencies;
     delete treatmentHistory;
@@ -56,8 +59,7 @@ Device::~Device() {
  * @param request: request made by main window.
  * @return a string...
  */
-QStringList Device::receive(QString request)
-{
+QStringList Device::receive(QString request) {
     int page = display->updateDisplay(request);
     cout << "page" << page << endl;
     if (page == 0){
@@ -76,9 +78,9 @@ QStringList Device::receive(QString request)
         // runTreatment(request) could be the below stuff!!
         if (display->frequency->contains(request)){
             for (int i = 0; i < frequencies->size(); i++){
-                if (frequencies->at(i).frequency == request.toInt()){
-                    float f = frequencies->at(i).frequency;
-                    int t = frequencies->at(i).timer;
+                if (frequencies->at(i)->getFrequency() == request.toInt()){
+                    float f = frequencies->at(i)->getFrequency();
+                    int t = frequencies->at(i)->getTimer();
                     return (QStringList() << "timer" << QString::number(f) << QString::number(t)); // and data of treatment
                 }
             }
@@ -87,9 +89,9 @@ QStringList Device::receive(QString request)
         }
         if (display->program->contains(request)){
             for (int i = 0; i < programs->size(); i++){
-                if (programs->at(i).name == request){
-                    QString n = programs->at(i).name;
-                    int t = frequencies->at(i).timer;
+                if (programs->at(i)->getName() == request){
+                    QString n = programs->at(i)->getName();
+                    int t = frequencies->at(i)->getTimer();
                     return (QStringList() << "timer" << n << QString::number(t)); // and data of treatment
                 }
             }
@@ -102,14 +104,14 @@ QStringList Device::receive(QString request)
     return QStringList();
 }
 
+
 /**
  * @brief Increases the power level of the treatment by one, unless power is at max.
  * @return The current power level.
  */
-int Device::increasePower()
-{
+int Device::increasePower() {
     // If treatment is running
-    if (powerLevel >= MAXPOWERLEVEL){
+    if (powerLevel == MAXPOWERLEVEL){
         return MAXPOWERLEVEL;
     }
     powerLevel += 1;
@@ -120,10 +122,9 @@ int Device::increasePower()
  * @brief Decreases the power level of the treatment by one, unless power is at min.
  * @return The current power level.
  */
-int Device::decreasePower()
-{
+int Device::decreasePower() {
     //If treatment is running
-    if (powerLevel <= MINPOWERLEVEL){
+    if (powerLevel == MINPOWERLEVEL){
         return MINPOWERLEVEL;
     }
     powerLevel -= 1;
@@ -131,20 +132,44 @@ int Device::decreasePower()
 }
 
 /**
+ * @brief performs a treatment.
+ * @param none.
+ */
+void Device::runTreatment() {
+    int timePassed = 1;
+    battery->decreaseLevel(powerLevel,timePassed);
+}
+
+/**
  * @brief Adds a given therapy to treatment history.
  * @param The therapy to be added to treatment history.
  */
-void Device::addToHistory(Therapy* therapy)
-{
+void Device::addToHistory(Therapy* therapy) {
     PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
 }
 
-void Device::updateBattery(int currPwrLvl, int time)
-{
-    if (time > 0) {
-        battery->decreaseLevel(currPwrLvl*time);
-    }
+/**
+ * @brief Gets whether the device is currently powered on.
+ * @return True if powered on, False otherwise.
+ */
+bool Device::isPoweredOn() { return poweredOn; }
+
+/**
+ * @brief Gets whether the device is currently on the skin.
+ * @return True if on skin, False otherwise.
+ */
+bool Device::isOnSkin() { return onSkin; }
+
+/**
+ * @brief Powers on the device if powered off, otherwise powers on.
+ */
+void Device::power() {
+    poweredOn = !poweredOn;
+    powerLevel = 1;
 }
 
-int Device::runTreatment () {return 0;}
+/**
+ * @brief Applies device to skin if off skin, otherwise removes from skin.
+ */
+void Device::applyOnSkin() { onSkin = !onSkin; }

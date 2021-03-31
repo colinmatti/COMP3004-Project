@@ -1,15 +1,18 @@
 #ifndef THERAPY_H
 #define THERAPY_H
 
-class Therapy
-{
+class Therapy {
 public:
-    //virtual ~Therapy();
+    float getFrequency() { return frequency; };
+    int getTimer() { return timer; };
+    int getPowerLevel() { return powerLevel; };
 
-public:
+protected:
+    Therapy(int t, int p, int f): frequency(f), timer(t), powerLevel(p) {};
+
+    float frequency;
     int timer;
     int powerLevel;
-    float frequency;
 };
 
 #endif // THERAPY_H
