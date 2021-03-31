@@ -21,21 +21,23 @@ public:
     Device();
     ~Device();
 
-    bool poweredOn;
-    bool onSkin;
-
+    bool isPoweredOn();
+    bool isOnSkin();
+    void power();
+    void applyOnSkin();
     QStringList receive(QString request);
     int increasePower();
     int decreasePower();
 
 private:
     int powerLevel;
+    bool poweredOn;
+    bool onSkin;
     Battery *battery;
     Display *display;
     QList<Program*> *programs;
     QList<Frequency*> *frequencies;
-    //void updateBattery(int currPwrLvl, int time);
-    void runTreatment(); 
+    void runTreatment();
     QList<PreviousTreatment*> *treatmentHistory;
     void addToHistory(Therapy* therapy);
 };

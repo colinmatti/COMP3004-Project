@@ -148,3 +148,25 @@ void Device::addToHistory(Therapy* therapy) {
     PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
 }
+
+/**
+ * @brief Gets whether the device is currently powered on.
+ * @return True if powered on, False otherwise.
+ */
+bool Device::isPoweredOn() { return poweredOn; }
+
+/**
+ * @brief Gets whether the device is currently on the skin.
+ * @return True if on skin, False otherwise.
+ */
+bool Device::isOnSkin() { return onSkin; }
+
+/**
+ * @brief Powers on the device if powered off, otherwise powers on.
+ */
+void Device::power() { poweredOn = !poweredOn; }
+
+/**
+ * @brief Applies device to skin if off skin, otherwise removes from skin.
+ */
+void Device::applyOnSkin() { onSkin = !onSkin; }
