@@ -1,39 +1,38 @@
 #include "device.h"
 
-Device::Device()
-{
+Device::Device() {
     battery = new Battery();
     poweredOn = false;
     powerLevel = 1;
 
     // Instantiate all preset therapies.
-    programs = new QList<Program>();
-    frequencies = new QList<Frequency>();
+    programs = new QList<Program*>();
+    frequencies = new QList<Frequency*>();
 
     // Create and append programs.
-    Program throat = Program(QString("Throat"), 10, 600, 30);
+    Program* throat = new Program(QString("Throat"), 10, 600, 30);
     programs->append(throat);
 
-    Program nausea = Program(QString("Nausea"), 15, 240, 10);
+    Program* nausea = new Program(QString("Nausea"), 15, 240, 10);
     programs->append(nausea);
 
-    Program chlamydia = Program(QString("Chlamydia"), 25, 1200, 80);
+    Program* chlamydia = new Program(QString("Chlamydia"), 25, 1200, 80);
     programs->append(chlamydia);
 
-    Program diarrhea = Program(QString("Diarrhea"), 5, 120, 65);
+    Program* diarrhea = new Program(QString("Diarrhea"), 5, 120, 65);
     programs->append(diarrhea);
 
     // Create and append frequencies.
-    Frequency five = Frequency(5, 300, 50);
+    Frequency* five = new Frequency(5, 300, 50);
     frequencies->append(five);
 
-    Frequency ten = Frequency(10, 300, 50);
+    Frequency* ten = new Frequency(10, 300, 50);
     frequencies->append(ten);
 
-    Frequency fifteen = Frequency(15, 300, 50);
+    Frequency* fifteen = new Frequency(15, 300, 50);
     frequencies->append(fifteen);
 
-    Frequency twenty = Frequency(20, 300, 50);
+    Frequency* twenty = new Frequency(20, 300, 50);
     frequencies->append(twenty);
 
     // Instantiate empty therapy history.
@@ -42,10 +41,16 @@ Device::Device()
     display = new Display(frequencies, programs);
 }
 
-Device::~Device()
-{
+Device::~Device() {
+    qDeleteAll(programs);
+    qDeleteAll(frequencies);
+    qDeleteAll(treatmentHistory);
+  
     delete display;
     delete battery;
+    delete programs;
+    delete frequencies;
+    delete treatmentHistory;
 }
 
 /**
@@ -145,6 +150,6 @@ void Device::runTreatment()
  */
 void Device::addToHistory(Therapy* therapy)
 {
-    PreviousTreatment newTreatment = PreviousTreatment(therapy);
+    PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
 }

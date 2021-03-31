@@ -33,11 +33,11 @@ private:
     Battery *battery;
     Display *display;
     int powerLevel;
-    QList<Program> *programs;
-    QList<Frequency> *frequencies;
+    QList<Program*> *programs;
+    QList<Frequency*> *frequencies;
     //void updateBattery(int currPwrLvl, int time);
-    void runTreatment();
-    QList<PreviousTreatment> *treatmentHistory;
+    void runTreatment(); 
+    QList<PreviousTreatment*> *treatmentHistory;
     void addToHistory(Therapy* therapy);
 };
 
