@@ -6,10 +6,8 @@
 class Frequency : public Therapy
 {
 public:
-    Frequency(int f, int t, int p, int s);
+    Frequency(float f, int t, int p);
     ~Frequency();
-private:
-    int frequency;
 };
 
 #endif // FREQUENCY_H
