@@ -60,7 +60,6 @@ Device::~Device() {
  */
 
 QStringList Device::receive(QString request)
-
 {
     int page = display->updateDisplay(request);
     cout << "page" << page << endl;
