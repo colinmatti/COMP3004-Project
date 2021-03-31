@@ -10,6 +10,9 @@
 #include "previoustreatment.h"
 
 #include <QStringList>
+#include <iostream>
+#include <array>
+#include <QList>
 
 #define MINPOWERLEVEL 1
 #define MAXPOWERLEVEL 100

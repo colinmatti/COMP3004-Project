@@ -1,10 +1,5 @@
 #include "device.h"
 
-#include <string>
-#include <iostream>
-#include <array>
-#include <QList>
-
 Device::Device()
 {
     battery = new Battery();
@@ -47,6 +42,13 @@ Device::Device()
     display = new Display(frequencies, programs);
 }
 
+Device::~Device() {}
+
+/**
+ * @brief Handles a request made by the main window requesting information about the device.
+ * @param request: request made by main window.
+ * @return a string...
+ */
 QStringList Device::receive(QString request)
 {
     int page = display->updateDisplay(request);
@@ -93,6 +95,10 @@ QStringList Device::receive(QString request)
     return QStringList();
 }
 
+/**
+ * @brief Increases the power level of the treatment by one, unless power is at max.
+ * @return The current power level.
+ */
 int Device::increasePower()
 {
     // If treatment is running
@@ -103,6 +109,10 @@ int Device::increasePower()
     return powerLevel;
 }
 
+/**
+ * @brief Decreases the power level of the treatment by one, unless power is at min.
+ * @return The current power level.
+ */
 int Device::decreasePower()
 {
     //If treatment is running
@@ -113,14 +123,14 @@ int Device::decreasePower()
     return powerLevel;
 }
 
+/**
+ * @brief Adds a given therapy to treatment history.
+ * @param The therapy to be added to treatment history.
+ */
 void Device::addToHistory(Therapy* therapy)
 {
     PreviousTreatment newTreatment = PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
-}
-
-Device::~Device()
-{
 }
 
 void Device::updateBattery(int currPwrLvl, int time)
@@ -131,4 +141,3 @@ void Device::updateBattery(int currPwrLvl, int time)
 }
 
 int Device::runTreatment () {return 0;}
-
