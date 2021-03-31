@@ -43,6 +43,9 @@ Device::Device()
 
     Frequency twenty = Frequency(20, 300, 50);
     frequencies->append(twenty);
+
+    // Instantiate empty therapy history.
+    treatmentHistory = new QList<PreviousTreatment>();
 }
 
 QStringList Device::receive(QString request)
@@ -85,6 +88,12 @@ int Device::decreasePower()
     }
     powerLevel -= 1;
     return powerLevel;
+}
+
+void Device::addToHistory(Therapy* therapy)
+{
+    PreviousTreatment newTreatment = PreviousTreatment(therapy);
+    treatmentHistory->append(newTreatment);
 }
 
 Device::~Device()

@@ -7,6 +7,8 @@
 #include "program.h"
 #include "frequency.h"
 #include "therapy.h"
+#include "previoustreatment.h"
+
 #include <QStringList>
 
 class Device
@@ -28,9 +30,11 @@ private:
     int maxPowerLevel;
     QList<Program> *programs;
     QList<Frequency> *frequencies;
+    QList<PreviousTreatment> *treatmentHistory;
 
     void updateBattery();
     void runTreatment();
+    void addToHistory(Therapy* therapy);
 };
 
 
