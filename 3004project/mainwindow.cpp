@@ -9,9 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    stringList = new QStringList();
+    currentMenu = new QStringList();
     empty = new QStringList();
-    model = new QStringListModel(*stringList, NULL);
+    model = new QStringListModel(*currentMenu, NULL);
     currentIndex = model->index(0,0);
     ui->listView->setModel(model);
 }
@@ -24,17 +24,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_okButton_clicked()
 {
-    stringList = device.receive(ui->listView->currentIndex().row());
+    currentMenu = device.receive(ui->listView->currentIndex().row());
 
-    model->setStringList(*stringList);
+    model->setStringList(*currentMenu);
     currentIndex = model->index(0,0);
 }
 
 void MainWindow::on_powerButton_clicked()
 {
     if (device.poweredOn == false){
-        stringList = device.receive(-1);
-        model->setStringList(*stringList);
+        currentMenu = device.receive(-1);
+        model->setStringList(*currentMenu);
         ui->listView->setCurrentIndex(currentIndex);
         device.poweredOn = true;
     } else {
@@ -45,7 +45,7 @@ void MainWindow::on_powerButton_clicked()
 
 void MainWindow::on_downButton_clicked()
 {
-    if (currentIndex.row() >= stringList->size()-1) {
+    if (currentIndex.row() >= currentMenu->size()-1) {
         currentIndex  = model->index(0,0);
     } else {
         currentIndex  = model->index(currentIndex.row()+1,0);
@@ -56,7 +56,7 @@ void MainWindow::on_downButton_clicked()
 void MainWindow::on_upButton_clicked()
 {
     if (currentIndex.row() <= 0) {
-        currentIndex = model->index(stringList->size()-1,0);
+        currentIndex = model->index(currentMenu->size()-1,0);
     } else {
         currentIndex  = model->index(currentIndex.row()-1,0);
     }
@@ -82,5 +82,11 @@ void MainWindow::on_goBackButton_clicked()
 
 void MainWindow::on_menuButton_clicked()
 {
+    if (device.poweredOn == true){
+        model->setStringList(*empty);
+        currentMenu = device.receive(-1);
+        model->setStringList(*currentMenu);
+        ui->listView->setCurrentIndex(currentIndex);
+    }
 
 }

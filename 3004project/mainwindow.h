@@ -36,7 +36,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QStringList *stringList;
+    QStringList *currentMenu;
     QStringList *empty;
     QStringListModel *model;
     QModelIndex currentIndex;
