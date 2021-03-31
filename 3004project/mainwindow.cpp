@@ -36,7 +36,6 @@ void MainWindow::on_okButton_clicked()
     if (device.poweredOn){
         *currentMenu = device.receive(ui->listView->currentIndex().data(Qt::DisplayRole).toString());
         if (currentMenu->contains("timer")){
-            cout << "There is timer" << endl;
             ui->listView->setVisible(false);
             ui->timer->setVisible(true);
             // For every second
@@ -46,7 +45,6 @@ void MainWindow::on_okButton_clicked()
             ui->listView->setVisible(true);
             ui->timer->setVisible(false);
             model->setStringList(*currentMenu);
-            cout << "currentMenu" << currentMenu << endl;
             currentIndex = model->index(0,0);
             ui->listView->setCurrentIndex(currentIndex);
         }
@@ -58,7 +56,6 @@ void MainWindow::on_powerButton_clicked()
     if (device.poweredOn == false){
         ui->listView->setVisible(true);
         *currentMenu = device.receive("on");
-        cout << "currentMenu" << currentMenu << endl;
         model->setStringList(*currentMenu);
         currentIndex = model->index(0,0);
         ui->listView->setCurrentIndex(currentIndex);
@@ -115,7 +112,6 @@ void MainWindow::on_menuButton_clicked()
     if (device.poweredOn == true){
         model->setStringList(*empty);
         *currentMenu = device.receive("menu");
-        cout << "currentMenu" << currentMenu << endl;
         model->setStringList(*currentMenu);
         ui->listView->setCurrentIndex(currentIndex);
         ui->listView->setVisible(true);
