@@ -29,6 +29,7 @@ QStringList Device::receive(QString request)
     } else if (page == 2){
         return *display->programmed;
     } else if (page == 3){
+        //create a QStringList of the history, and return it
         //return treatmentHistory;
     } else if (page == 4){
         // runTreatment(request)
@@ -41,6 +42,7 @@ QStringList Device::receive(QString request)
 
 int Device::increasePower()
 {
+    // If treatment is running
     if (powerLevel >= maxPowerLevel){
         return powerLevel;
     }
@@ -50,6 +52,7 @@ int Device::increasePower()
 
 int Device::decreasePower()
 {
+    //If treatment is running
     if (powerLevel <= minPowerLevel){
         return powerLevel;
     }
