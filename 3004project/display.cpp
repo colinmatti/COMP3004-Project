@@ -29,12 +29,8 @@ Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
 
 int Display::updateDisplay(QString request)
 {
-    if (request == "off" || request == "on" || request == "menu"){
+    if (request == "off" || request == "on" || request == "menu" || request == "back"){
         currentDisplay = 0;
-    } else if (request == "back"){
-        if (currentDisplay > 0){
-            currentDisplay--;
-        }
     } else if (request == "Frequency"){
         currentDisplay = 1;
     } else if (request == "Programs"){
@@ -46,3 +42,4 @@ int Display::updateDisplay(QString request)
     }
     return currentDisplay;
 }
+
