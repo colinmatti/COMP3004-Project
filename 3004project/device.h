@@ -2,10 +2,11 @@
 #define DEVICE_H
 
 #include "display.h"
+#include <string>
+#include "battery.h"
 #include "program.h"
 #include "frequency.h"
 #include "therapy.h"
-
 #include <QStringList>
 
 class Device
@@ -19,7 +20,8 @@ public:
     int decreasePower();
 
 private:
-    Display *display = new Display;
+    Battery *battery;
+    Display *display;
     int powerLevel;
     bool onSkin;
     int minPowerLevel;

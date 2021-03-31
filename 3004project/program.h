@@ -9,11 +9,10 @@ using namespace std;
 class Program : public Therapy
 {
 public:
-    Program(QString n, int f, int t, int p, int s);
+    Program(QString n, float f, int t, int p);
     ~Program();
 private:
     QString name;
-    int frequency;
 };
 
 #endif // PROGRAM_H
