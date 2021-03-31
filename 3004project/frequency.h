@@ -6,7 +6,7 @@
 class Frequency : public Therapy
 {
 public:
-    Frequency();
+    Frequency(int f, int t, int p, int s);
     ~Frequency();
 private:
     int frequency;
