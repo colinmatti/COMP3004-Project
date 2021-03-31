@@ -7,6 +7,8 @@
 #include "program.h"
 #include "frequency.h"
 #include "therapy.h"
+#include "previoustreatment.h"
+
 #include <QStringList>
 
 #define MINPOWERLEVEL 1
@@ -30,9 +32,10 @@ private:
     bool onSkin;
     QList<Program> *programs;
     QList<Frequency> *frequencies;
-    
     void updateBattery(int currPwrLvl, int time);
     int runTreatment(); //returns time elapsed in therapy
+    QList<PreviousTreatment> *treatmentHistory;
+    void addToHistory(Therapy* therapy);
 };
 
 

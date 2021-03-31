@@ -7,12 +7,8 @@ Battery::Battery(int batLevel, int max, int min) : batteryLevel(batLevel), maxLe
 
 Battery::~Battery() {}
 
-bool Battery::isLow()
-{
-    return batteryLevel <= 10
-        return true;
-    }
-    return false;
+bool Battery::isLow() {
+    return batteryLevel <= 10;
 }
 
 void Battery::decreaseLevel(int amnt)
