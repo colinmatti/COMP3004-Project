@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>600</height>
+    <width>633</width>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,6 +44,10 @@ QPushButton:disabled {
 background-color: white;
 }
 
+#adminLabel, #label, #powerLabel {
+	color: black;
+	font-size: 20px;
+}
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -123,7 +127,7 @@ background-color: white;
      <rect>
       <x>40</x>
       <y>240</y>
-      <width>91</width>
+      <width>131</width>
       <height>16</height>
      </rect>
     </property>
@@ -134,14 +138,14 @@ background-color: white;
    <widget class="QLabel" name="powerLabel">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>160</x>
       <y>240</y>
       <width>60</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>0</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="menuButton">
@@ -170,14 +174,40 @@ background-color: white;
    <widget class="QCheckBox" name="onSkin">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>260</y>
+      <x>480</x>
+      <y>100</y>
       <width>86</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>SKIN ON</string>
+     <string>ON SKIN</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="adminLabel">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>40</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ADMIN CONSOLE</string>
+    </property>
+   </widget>
+   <widget class="Line" name="DeviceDivider">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>-50</y>
+      <width>20</width>
+      <height>651</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
     </property>
    </widget>
   </widget>
@@ -186,8 +216,8 @@ background-color: white;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>519</width>
-     <height>24</height>
+     <width>633</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
