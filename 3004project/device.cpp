@@ -84,3 +84,5 @@ void Device::updateBattery(int currPwrLvl, int time)
     }
 }
 
+int Device::runTreatment () {}
+
