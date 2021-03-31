@@ -71,7 +71,10 @@ QStringList Device::receive(QString request) {
     } else if (page == 3){
         QStringList *history = new QStringList();
         for (int i = 0; i < treatmentHistory->size(); i++){
-            //history->append(treatmentHistory->at(i).therapy.frequency); // append how we want output to look
+            QString str = treatmentHistory->at(i)->date.toString("yyyy/MM/dd");
+            str.append("---");
+            str.append(QString::number(treatmentHistory->at(i)->therapy->getFrequency()));
+            history->append(str);
         }
         return *history;
     } else if (page == 4){
@@ -81,27 +84,33 @@ QStringList Device::receive(QString request) {
                 if (frequencies->at(i)->getFrequency() == request.toInt()){
                     float f = frequencies->at(i)->getFrequency();
                     int t = frequencies->at(i)->getTimer();
+                    status = frequencies->at(i);
                     return (QStringList() << "timer" << QString::number(f) << QString::number(t)); // and data of treatment
                 }
             }
-            //float f = frequencies->at(request.toInt()).frequency;
-            //int t = frequencies->at(request.toInt()).timer;
         }
         if (display->program->contains(request)){
             for (int i = 0; i < programs->size(); i++){
                 if (programs->at(i)->getName() == request){
                     QString n = programs->at(i)->getName();
                     int t = frequencies->at(i)->getTimer();
+                    status = programs->at(i);
                     return (QStringList() << "timer" << n << QString::number(t)); // and data of treatment
                 }
             }
-            //QString n = programs->at(request.toInt()).name;
-            //int t = programs->at(request.toInt()).timer;
         }
-    } /*else if (page == 5){
-        return (QStringList() << "power" << QString::number(powerLevel));
-    }*/
+    }
+    if (request == "add"){
+        if (status != NULL){
+            cout << "adding to history" << endl;
+            addToHistory(status);
+        }
+    }
     return QStringList();
+}
+
+Therapy* Device::getStatus(){
+    return status;
 }
 
 
@@ -138,6 +147,14 @@ int Device::decreasePower() {
 void Device::runTreatment() {
     int timePassed = 1;
     battery->decreaseLevel(powerLevel,timePassed);
+}
+
+/**
+ * @brief treatment has ended.
+ * @param none.
+ */
+void Device::endTreatment() {
+    status = NULL;
 }
 
 /**

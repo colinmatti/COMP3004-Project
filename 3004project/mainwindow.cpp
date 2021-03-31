@@ -15,14 +15,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->listView->setVisible(false);
     ui->timer->setVisible(false);
 
-    // REPLACE WITH THERAPY TIMER
-    //countdown = 10;
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_start()));
 }
 
 MainWindow::~MainWindow()
 {
+    delete empty;
+    delete model;
     delete ui;
 }
 
@@ -67,6 +67,7 @@ void MainWindow::on_powerButton_clicked()
         device.receive("off");
         ui->listView->setVisible(false);
         ui->timer->setVisible(false);
+        device.endTreatment();
         timer->stop();
         ui->powerLabel->setVisible(false);
     }
@@ -147,6 +148,7 @@ void MainWindow::on_timer_start()
     if (countdown < 0)
     {
         timer->stop();
+        device.endTreatment();
     } else {
         ui->timer->display(countdown);
         countdown--;
@@ -162,6 +164,14 @@ void MainWindow::on_onSkin_stateChanged(int checked)
         cout <<  "SKIN DETECTED" << endl;
     } else {
         device.applyOnSkin();
+        // If status!=NULL then warning!
         cout << "SKIN NOT DETECTED" << endl;
+    }
+}
+
+void MainWindow::on_addButton_clicked()
+{
+    if (device.getStatus() != NULL){
+        device.receive("add");
     }
 }
