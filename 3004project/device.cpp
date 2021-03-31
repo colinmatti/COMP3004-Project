@@ -164,7 +164,10 @@ bool Device::isOnSkin() { return onSkin; }
 /**
  * @brief Powers on the device if powered off, otherwise powers on.
  */
-void Device::power() { poweredOn = !poweredOn; }
+void Device::power() {
+    poweredOn = !poweredOn;
+    powerLevel = 1;
+}
 
 /**
  * @brief Applies device to skin if off skin, otherwise removes from skin.
