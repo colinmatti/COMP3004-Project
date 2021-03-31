@@ -4,8 +4,7 @@
  * @brief Determines whether the current battery level of the device is low.
  * @return boolean
  */
-bool Battery::isLow()
-{
+bool Battery::isLow() {
     return batteryLevel <= 10;
 }
 
