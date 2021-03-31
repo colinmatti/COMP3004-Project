@@ -6,3 +6,4 @@ Frequency::Frequency(float f, int t, int p)
     timer = t;
     powerLevel = p;
 }
+

@@ -4,9 +4,9 @@
 class Therapy
 {
 public:
-    virtual ~Therapy();
+    //virtual ~Therapy();
 
-protected:
+public:
     int timer;
     int powerLevel;
     float frequency;

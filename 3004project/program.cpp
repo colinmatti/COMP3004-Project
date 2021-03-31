@@ -7,3 +7,4 @@ Program::Program(QString n, float f, int t, int p)
     timer = t;
     powerLevel = p;
 }
+
