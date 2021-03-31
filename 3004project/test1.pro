@@ -11,8 +11,10 @@ CONFIG += c++11
 SOURCES += \
     device.cpp \
     display.cpp \
+    frequency.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    program.cpp
 
 HEADERS += \
     device.h \

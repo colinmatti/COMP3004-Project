@@ -2,8 +2,6 @@
 #define PROGRAM_H
 
 #include <QString>
-
-#include <string>
 #include "therapy.h"
 
 using namespace std;
@@ -11,7 +9,7 @@ using namespace std;
 class Program : public Therapy
 {
 public:
-    Program();
+    Program(QString n, int f, int t, int p, int s);
     ~Program();
 private:
     QString name;
