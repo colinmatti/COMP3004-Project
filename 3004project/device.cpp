@@ -11,22 +11,32 @@ Device::Device()
     powerLevel = 0;
     minPowerLevel = 0; // constant?
     maxPowerLevel = 100; // constant?
+    display = new Display();
 
     // Instantiate all preset therapies.
     programs = new QList<Program>();
     frequencies = new QList<Frequency>();
 }
 
-QList<Therapy>* Device::receive(int request)
+QStringList Device::receive(QString request)
 {
-    if (request == -1){
-        return display->menu;
-    }
-    else if (request == 0){
-        return programs;
-    } else if (request == 1){
-        return frequencies;
-    }
+    int page = display->updateDisplay(request);
+    cout << "page" << page << endl;
+    if (page == 0){
+        return *display->menu;
+    } else if (page == 1){
+        return *display->frequency;
+    } else if (page == 2){
+        return *display->programmed;
+    } else if (page == 3){
+        //return treatmentHistory;
+    } else if (page == 4){
+        // runTreatment(request)
+        return (QStringList() << "timer"); // and data of treatment
+    } /*else if (page == 5){
+        return (QStringList() << "power" << QString::number(powerLevel));
+    }*/
+    return QStringList();
 }
 
 int Device::increasePower()

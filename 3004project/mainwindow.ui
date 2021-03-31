@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
+    <width>519</width>
     <height>600</height>
    </rect>
   </property>
@@ -134,13 +134,26 @@
      </rect>
     </property>
    </widget>
+   <widget class="QCheckBox" name="onSkin">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>260</y>
+      <width>86</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SKIN ON</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>415</width>
+     <width>519</width>
      <height>24</height>
     </rect>
    </property>

@@ -37,6 +37,8 @@ private slots:
 
     void on_timer_start();
 
+    void on_onSkin_stateChanged(int checked);
+
 private:
     Ui::MainWindow *ui;
     QStringList *currentMenu;

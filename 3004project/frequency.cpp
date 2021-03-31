@@ -8,3 +8,4 @@ Frequency::Frequency(int f, int t, int p, int s)
     powerLevel = p;
     status = s;
 }
+

@@ -4,7 +4,7 @@
 class Therapy
 {
 public:
-    virtual ~Therapy();
+    //virtual ~Therapy();
 
 protected:
     int timer;

@@ -14,14 +14,14 @@ public:
     Device();
     ~Device();
     bool poweredOn;
-    QList<Therapy>* receive(int request);
+    QStringList receive(QString request);
+    bool onSkin;
     int increasePower();
     int decreasePower();
 
 private:
     Display *display = new Display;
     int powerLevel;
-    bool onSkin;
     int minPowerLevel;
     int maxPowerLevel;
     QList<Program> *programs;
