@@ -12,14 +12,19 @@ SOURCES += \
     battery.cpp \
     device.cpp \
     display.cpp \
+    frequency.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    program.cpp
 
 HEADERS += \
     battery.h \
     device.h \
     display.h \
-    mainwindow.h
+    frequency.h \
+    mainwindow.h \
+    program.h \
+    therapy.h
 
 FORMS += \
     mainwindow.ui

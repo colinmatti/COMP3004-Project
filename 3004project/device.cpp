@@ -1,7 +1,9 @@
 #include "device.h"
+
 #include <string>
 #include <iostream>
 #include <array>
+#include <QList>
 
 Device::Device()
 {
@@ -11,17 +13,21 @@ Device::Device()
     powerLevel = 0;
     minPowerLevel = 0; // constant?
     maxPowerLevel = 100; // constant?
+
+    // Instantiate all preset therapies.
+    programs = new QList<Program>();
+    frequencies = new QList<Frequency>();
 }
 
-vector<string>* Device::receive(int request)
+QList<Therapy>* Device::receive(int request)
 {
     if (request == -1){
         return display->menu;
     }
     else if (request == 0){
-        return display->programmed;
+        return programs;
     } else if (request == 1){
-        return display->frequency;
+        return frequencies;
     }
 }
 

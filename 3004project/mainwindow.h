@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStringListModel>
 #include "device.h"
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,12 +31,21 @@ private slots:
 
     void on_leftButton_clicked();
 
+    void on_goBackButton_clicked();
+
+    void on_menuButton_clicked();
+
+    void on_timer_start();
+
 private:
     Ui::MainWindow *ui;
-    QStringList *stringList;
+    QStringList *currentMenu;
     QStringList *empty;
     QStringListModel *model;
     QModelIndex currentIndex;
     Device device;
+    QTimer *timer;
+    // REPLACED WITH THERAPY TIMER
+    int countdown;
 };
 #endif // MAINWINDOW_H
