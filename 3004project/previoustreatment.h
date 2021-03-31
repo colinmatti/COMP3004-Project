@@ -1,13 +1,14 @@
 #ifndef PREVIOUSTREATMENT_H
 #define PREVIOUSTREATMENT_H
 
-#include <QDate>
 #include "therapy.h"
 
-class PreviousTreatment
-{
+#include <QDate>
+
+class PreviousTreatment {
 public:
-    PreviousTreatment(Therapy* t);
+    PreviousTreatment(Therapy* t) : date(QDate::currentDate()), therapy(t) {}
+
     QDate date;
     Therapy* therapy;
 };

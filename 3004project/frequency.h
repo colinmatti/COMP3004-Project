@@ -3,11 +3,11 @@
 
 #include "therapy.h"
 
-class Frequency : public Therapy
-{
+class Frequency : public Therapy {
 public:
-    Frequency(float f, int t, int p);
-    //~Frequency();
+    Frequency(float f, int t, int p) : Therapy(f, t, p) {};
+
+    // MAKE PROTECTED
     int frequency;
 };
 
