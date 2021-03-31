@@ -13,6 +13,39 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton:pressed {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))
+}
+QWidget{
+     background-color: #a9b4db;
+}
+QPushButton {
+     background-color:#485ca8; 
+	border: 1px solid #485ca8;
+     border-radius: 5px;
+	font-size: 12px;
+	font-family: Arial;
+	color: rgb(255, 255, 255);
+}
+
+QPushButton:disabled {
+    background-color: rgb(170, 170, 127)
+}
+
+#powerButton,  #menuButton{
+	background-color: #010f42;
+	border: 1px solid #010f42;
+	color: white;
+	font-size: 20px;
+}
+
+#listView{
+background-color: white;
+}
+
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
