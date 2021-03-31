@@ -3,14 +3,16 @@
 
 class Therapy {
 public:
-    // virtual ~Therapy();
-    // MAKE PROTECTED
-    int timer;
-    int powerLevel;
+    float getFrequency() { return frequency; };
+    int getTimer() { return timer; };
+    int getPowerLevel() { return powerLevel; };
 
 protected:
-    Therapy(int t, int p, int f): timer(t), powerLevel(p), frequency(f) {};
+    Therapy(int t, int p, int f): frequency(f), timer(t), powerLevel(p) {};
+
     float frequency;
+    int timer;
+    int powerLevel;
 };
 
 #endif // THERAPY_H

@@ -6,9 +6,6 @@
 class Frequency : public Therapy {
 public:
     Frequency(float f, int t, int p) : Therapy(f, t, p) {};
-
-    // MAKE PROTECTED
-    int frequency;
 };
 
 #endif // FREQUENCY_H

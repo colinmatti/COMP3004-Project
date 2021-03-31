@@ -10,7 +10,10 @@ using namespace std;
 class Program : public Therapy {
 public:
     Program(QString n, float f, int t, int p) : Therapy(f, t, p), name(n) {}
-    QString name; // MAKE PROTECTED
+    QString getName() { return name; };
+
+private:
+    QString name;
 };
 
 #endif // PROGRAM_H
