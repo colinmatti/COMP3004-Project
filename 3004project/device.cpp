@@ -59,8 +59,7 @@ Device::~Device() {
  * @param request: request made by main window.
  * @return a string...
  */
-QStringList Device::receive(QString request)
-{
+QStringList Device::receive(QString request) {
     int page = display->updateDisplay(request);
     cout << "page" << page << endl;
     if (page == 0){
@@ -136,8 +135,7 @@ int Device::decreasePower() {
  * @brief performs a treatment.
  * @param none.
  */
-void Device::runTreatment()
-{
+void Device::runTreatment() {
     int timePassed = 1;
     battery->decreaseLevel(powerLevel,timePassed);
 }
