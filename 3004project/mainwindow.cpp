@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     empty = new QStringList();
     model = new QStringListModel(*currentMenu, NULL);
 
+    ui->warningLabel->setWordWrap(true);
     ui->listView->setModel(model);
     on();
 
@@ -33,10 +34,15 @@ void MainWindow::on_okButton_clicked()
         if (currentMenu->contains("timer")){
             QString name = currentMenu->at(1);
             countdown = currentMenu->at(2).toInt();
+            cout << "Starting treatment" << endl;
             // For every second
             timer->start(1000);
             onTreatment();
+        } else if (currentMenu->contains("error")){
+            cout << "Detected error" << endl;
+            ui->warningLabel->setText(ERRSKIN);
         } else {
+            cout << "options" << endl;
             model->setStringList(*currentMenu);
             on();
         }
@@ -99,22 +105,28 @@ void MainWindow::on_leftButton_clicked()
 void MainWindow::on_goBackButton_clicked()
 {
     if (device.isPoweredOn() == true){
-        model->setStringList(*empty);
-        *currentMenu = device.receive("back");
-        model->setStringList(*currentMenu);
-        on();
-        // TODO: when treatment is running, send warning
+        if (device.getStatus() != NULL){
+            ui->warningLabel->setText(ERRTREATMENTRUNNING);
+        } else {
+            model->setStringList(*empty);
+            *currentMenu = device.receive("back");
+            model->setStringList(*currentMenu);
+            on();
+        }
     }
 }
 
 void MainWindow::on_menuButton_clicked()
 {
     if (device.isPoweredOn() == true){
-        model->setStringList(*empty);
-        *currentMenu = device.receive("menu");
-        model->setStringList(*currentMenu);
-        on();
-        // TODO: when treatment is running, send warning
+        if (device.getStatus() != NULL){
+            ui->warningLabel->setText(ERRTREATMENTRUNNING);
+        } else {
+            model->setStringList(*empty);
+            *currentMenu = device.receive("menu");
+            model->setStringList(*currentMenu);
+            on();
+        }
     }
 
 }
@@ -137,10 +149,17 @@ void MainWindow::on_onSkin_stateChanged(int checked)
     cout << "arg1" << checked << endl;
     if (checked == 2){
         device.applyOnSkin();
+        if (device.getStatus() !=  NULL){
+            timer->start();
+        }
+        ui->warningLabel->setText("No Error");
         cout <<  "SKIN DETECTED" << endl;
     } else {
         device.applyOnSkin();
-        // If status!=NULL then warning!
+        if (device.getStatus() !=  NULL){
+            ui->warningLabel->setText(ERRSKIN);
+            timer->stop();
+        }
         cout << "SKIN NOT DETECTED" << endl;
     }
 }
@@ -155,6 +174,7 @@ void MainWindow::off(){
     ui->powerLevelLabel->setVisible(false);
     ui->timer->setVisible(false);
     ui->listView->setVisible(false);
+    ui->warningLabel->setText(NOERR);
 }
 
 void MainWindow::onTreatment(){
@@ -162,6 +182,7 @@ void MainWindow::onTreatment(){
     ui->powerLevelLabel->setVisible(true);
     ui->timer->setVisible(true);
     ui->listView->setVisible(false);
+    ui->warningLabel->setText(NOERR);
 }
 
 void MainWindow::on(){
@@ -171,4 +192,5 @@ void MainWindow::on(){
     ui->powerLevelLabel->setVisible(false);
     ui->timer->setVisible(false);
     ui->listView->setVisible(true);
+    ui->warningLabel->setText(NOERR);
 }

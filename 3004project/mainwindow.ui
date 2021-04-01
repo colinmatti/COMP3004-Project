@@ -249,6 +249,19 @@ QPushButton:disabled {
      <string>Power Level:</string>
     </property>
    </widget>
+   <widget class="QLabel" name="warningLabel">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>160</y>
+      <width>121</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>WARNING!</string>
+    </property>
+   </widget>
    <zorder>frame</zorder>
    <zorder>gridLayoutWidget</zorder>
    <zorder>menuButton</zorder>
@@ -258,6 +271,7 @@ QPushButton:disabled {
    <zorder>addButton</zorder>
    <zorder>powerLevelLabel</zorder>
    <zorder>powerLabel</zorder>
+   <zorder>warningLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -68,9 +68,12 @@ QStringList Device::receive(QString request) {
         return *display->program;
     } else if (request == "History"){
         QStringList *history = new QStringList();
+        if (treatmentHistory->size() ==  0){
+            return QStringList() << "No history";
+        }
+        history->append("Date --- Frequency");
         for (int i = 0; i < treatmentHistory->size(); i++){
-            QString str = "Date --- Frequency";
-            str.append(treatmentHistory->at(i)->date.toString("yyyy/MM/dd"));
+            QString str = treatmentHistory->at(i)->date.toString("yyyy/MM/dd");
             str.append("---");
             str.append(QString::number(treatmentHistory->at(i)->therapy->getFrequency()));
             history->append(str);
@@ -80,8 +83,10 @@ QStringList Device::receive(QString request) {
         cout << "adding to history" << endl;
         addToHistory(status);
     }else {
-        return runTreatment(request);
-
+        if (onSkin == true){
+            return runTreatment(request);
+        }
+        return QStringList() << "error" << "no skin detected";
     }
     return QStringList();
 }
