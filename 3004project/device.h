@@ -39,7 +39,7 @@ private:
     Display *display;
     QList<Program*> *programs;
     QList<Frequency*> *frequencies;
-    void runTreatment();
+    QStringList runTreatment(QString request);
     QList<PreviousTreatment*> *treatmentHistory;
     void addToHistory(Therapy* therapy);
     Therapy* status;
