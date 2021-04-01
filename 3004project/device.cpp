@@ -1,10 +1,6 @@
 #include "device.h"
 
-Device::Device() {
-    battery = new Battery();
-    poweredOn = false;
-    powerLevel = 1;
-
+Device::Device() : powerLevel(1), poweredOn(true), battery(new Battery()) {
     // Instantiate all preset therapies.
     programs = new QList<Program*>();
     frequencies = new QList<Frequency*>();
@@ -54,42 +50,7 @@ Device::~Device() {
     delete treatmentHistory;
 }
 
-/**
- * @brief Handles a request made by the main window requesting information about the device.
- * @param request: request made by main window.
- * @return a string...
- */
-QStringList Device::receive(QString request) {
-    if (request == "menu" || request == "on" || request == "off" || request == "back"){
-        return *display->menu;
-    } else if (request == "Frequency"){
-        return *display->frequency;
-    } else if (request == "Programs"){
-        return *display->program;
-    } else if (request == "History"){
-        QStringList *history = new QStringList();
-        for (int i = 0; i < treatmentHistory->size(); i++){
-            QString str = "Date --- Frequency";
-            str.append(treatmentHistory->at(i)->date.toString("yyyy/MM/dd"));
-            str.append("---");
-            str.append(QString::number(treatmentHistory->at(i)->therapy->getFrequency()));
-            history->append(str);
-        }
-        return *history;
-    } else if (request == "add" && status != NULL) {
-        cout << "adding to history" << endl;
-        addToHistory(status);
-    }else {
-        return runTreatment(request);
-
-    }
-    return QStringList();
-}
-
-Therapy* Device::getStatus(){
-    return status;
-}
-
+View* Device::mainMenu() { return display->mainMenu; }
 
 /**
  * @brief Increases the power level of the treatment by one, unless power is at max.
@@ -118,50 +79,13 @@ int Device::decreasePower() {
 }
 
 /**
- * @brief performs a treatment.
- * @param none.
- */
-QStringList Device::runTreatment(QString request) {
-    int timePassed = 1;
-    battery->decreaseLevel(powerLevel,timePassed);
-    if (display->frequency->contains(request)){
-        for (int i = 0; i < frequencies->size(); i++){
-            if (frequencies->at(i)->getFrequency() == request.toInt()){
-                float f = frequencies->at(i)->getFrequency();
-                int t = frequencies->at(i)->getTimer();
-                status = frequencies->at(i);
-                return (QStringList() << "timer" << QString::number(f) << QString::number(t)); // and data of treatment
-            }
-        }
-    }
-    if (display->program->contains(request)){
-        for (int i = 0; i < programs->size(); i++){
-            if (programs->at(i)->getName() == request){
-                QString n = programs->at(i)->getName();
-                int t = frequencies->at(i)->getTimer();
-                status = programs->at(i);
-                return (QStringList() << "timer" << n << QString::number(t)); // and data of treatment
-            }
-        }
-    }
-    return QStringList();
-}
-
-/**
- * @brief treatment has ended.
- * @param none.
- */
-void Device::endTreatment() {
-    status = NULL;
-}
-
-/**
  * @brief Adds a given therapy to treatment history.
  * @param The therapy to be added to treatment history.
  */
 void Device::addToHistory(Therapy* therapy) {
     PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
+    display->addHistoryToNavigation(therapy);
 }
 
 /**

@@ -22,43 +22,36 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void on();
-    void off();
-    void onTreatment();
 
 private slots:
     void on_okButton_clicked();
-
     void on_powerButton_clicked();
-
     void on_downButton_clicked();
-
     void on_upButton_clicked();
-
     void on_rightButton_clicked();
-
     void on_leftButton_clicked();
-
     void on_goBackButton_clicked();
-
     void on_menuButton_clicked();
-
     void on_timer_start();
-
     void on_onSkin_stateChanged(int checked);
-
     void on_addButton_clicked();
 
 private:
-    Ui::MainWindow *ui;
-    QStringList *currentMenu;
-    QStringList *empty;
-    QStringListModel *model;
-    QModelIndex currentIndex;
-    Device device;
-    QTimer *timer;
-    // REPLACED WITH THERAPY TIMER
     int countdown;
+    Device device;
+    QModelIndex currentSelectionIndex;
+    View* currentView;
+    QStringListModel* model;
+    QTimer *timer;
+    Ui::MainWindow *ui;
+
+    void powerOnDevice();
+    void powerOffDevice();
+    void displayMainMenu();
+
+    void menuVisibility();
+    void offVisibility();
+    void treatmentVisibility();
 };
 
 #endif // MAINWINDOW_H
