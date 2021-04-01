@@ -10,10 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     empty = new QStringList();
     model = new QStringListModel(*currentMenu, NULL);
 
-    currentIndex = model->index(0,0);
     ui->listView->setModel(model);
-    ui->listView->setVisible(false);
-    ui->timer->setVisible(false);
+    on();
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_start()));
@@ -23,9 +21,9 @@ MainWindow::~MainWindow()
 {
     delete empty;
     delete model;
+    delete timer;
     delete ui;
 }
-
 
 void MainWindow::on_okButton_clicked()
 {
@@ -33,19 +31,14 @@ void MainWindow::on_okButton_clicked()
     if (device.isPoweredOn()){
         *currentMenu = device.receive(ui->listView->currentIndex().data(Qt::DisplayRole).toString());
         if (currentMenu->contains("timer")){
-            ui->listView->setVisible(false);
-            ui->timer->setVisible(true);
             QString name = currentMenu->at(1);
             countdown = currentMenu->at(2).toInt();
             // For every second
             timer->start(1000);
+            onTreatment();
         } else {
-            //listview
-            ui->listView->setVisible(true);
-            ui->timer->setVisible(false);
             model->setStringList(*currentMenu);
-            currentIndex = model->index(0,0);
-            ui->listView->setCurrentIndex(currentIndex);
+            on();
         }
     }
 }
@@ -53,23 +46,17 @@ void MainWindow::on_okButton_clicked()
 void MainWindow::on_powerButton_clicked()
 {
     if (device.isPoweredOn() == false){
-        ui->powerLabel->setVisible(true);
-        ui->powerLabel->setText("1");
-        ui->listView->setVisible(true);
         *currentMenu = device.receive("on");
         model->setStringList(*currentMenu);
-        currentIndex = model->index(0,0);
-        ui->listView->setCurrentIndex(currentIndex);
         device.power();
+        on();
     } else {
         device.power();
         model->setStringList(*empty);
         device.receive("off");
-        ui->listView->setVisible(false);
-        ui->timer->setVisible(false);
         device.endTreatment();
         timer->stop();
-        ui->powerLabel->setVisible(false);
+        off();
     }
 }
 
@@ -95,10 +82,7 @@ void MainWindow::on_upButton_clicked()
 
 void MainWindow::on_rightButton_clicked()
 {
-    if (device.isPoweredOn() == false){
-        return;
-    }
-    else {
+    if (device.isPoweredOn() && device.getStatus() != NULL){
         QString power = QString::number(device.increasePower());
         ui->powerLabel->setText(power);
     }
@@ -106,10 +90,7 @@ void MainWindow::on_rightButton_clicked()
 
 void MainWindow::on_leftButton_clicked()
 {
-    if (device.isPoweredOn() == false){
-        return;
-    }
-    else {
+    if (device.isPoweredOn() && device.getStatus() != NULL){
         QString power = QString::number(device.decreasePower());
         ui->powerLabel->setText(power);
     }
@@ -121,9 +102,7 @@ void MainWindow::on_goBackButton_clicked()
         model->setStringList(*empty);
         *currentMenu = device.receive("back");
         model->setStringList(*currentMenu);
-        ui->listView->setCurrentIndex(currentIndex);
-        ui->listView->setVisible(true);
-        ui->timer->setVisible(false);
+        on();
         // TODO: when treatment is running, send warning
     }
 }
@@ -134,9 +113,7 @@ void MainWindow::on_menuButton_clicked()
         model->setStringList(*empty);
         *currentMenu = device.receive("menu");
         model->setStringList(*currentMenu);
-        ui->listView->setCurrentIndex(currentIndex);
-        ui->listView->setVisible(true);
-        ui->timer->setVisible(false);
+        on();
         // TODO: when treatment is running, send warning
     }
 
@@ -144,11 +121,10 @@ void MainWindow::on_menuButton_clicked()
 
 void MainWindow::on_timer_start()
 {
-    // countdown will be taken from device.therapy.timer
-    if (countdown < 0)
-    {
+    if (countdown < 0) {
         timer->stop();
         device.endTreatment();
+        on();
     } else {
         ui->timer->display(countdown);
         countdown--;
@@ -171,7 +147,28 @@ void MainWindow::on_onSkin_stateChanged(int checked)
 
 void MainWindow::on_addButton_clicked()
 {
-    if (device.getStatus() != NULL){
-        device.receive("add");
-    }
+    device.receive("add");
+}
+
+void MainWindow::off(){
+    ui->powerLabel->setVisible(false);
+    ui->powerLevelLabel->setVisible(false);
+    ui->timer->setVisible(false);
+    ui->listView->setVisible(false);
+}
+
+void MainWindow::onTreatment(){
+    ui->powerLabel->setVisible(true);
+    ui->powerLevelLabel->setVisible(true);
+    ui->timer->setVisible(true);
+    ui->listView->setVisible(false);
+}
+
+void MainWindow::on(){
+    currentIndex = model->index(0,0);
+    ui->listView->setCurrentIndex(currentIndex);
+    ui->powerLabel->setVisible(false);
+    ui->powerLevelLabel->setVisible(false);
+    ui->timer->setVisible(false);
+    ui->listView->setVisible(true);
 }

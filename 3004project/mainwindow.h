@@ -22,6 +22,9 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void on();
+    void off();
+    void onTreatment();
 
 private slots:
     void on_okButton_clicked();
