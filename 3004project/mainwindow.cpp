@@ -124,7 +124,6 @@ void MainWindow::on_leftButton_clicked() {
  * If previous screen does not exist, do nothing.
  */
 void MainWindow::on_goBackButton_clicked() {
-    // TODO: when treatment is running, send warning
     if (currentView->type() == "TreatmentView") {
         ui->warningLabel->setText(ERROR_TREATMENT_RUNNING);
         return;
@@ -141,7 +140,6 @@ void MainWindow::on_goBackButton_clicked() {
  * @brief Returns view to reflect being on the main menu of the device.
  */
 void MainWindow::on_menuButton_clicked() {
-    // TODO: when treatment is running, send warning
     if (!device.isPoweredOn()) { return; }
     if (currentView->type() == "TreatmentView") {
         ui->warningLabel->setText(ERROR_TREATMENT_RUNNING);
