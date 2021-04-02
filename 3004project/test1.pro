@@ -13,7 +13,8 @@ SOURCES += \
     device.cpp \
     display.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    menuview.cpp
 
 HEADERS += \
     battery.h \
@@ -21,9 +22,12 @@ HEADERS += \
     display.h \
     frequency.h \
     mainwindow.h \
+    menuView.h \
     previoustreatment.h \
     program.h \
-    therapy.h
+    therapy.h \
+    treatmentView.h \
+    view.h
 
 FORMS += \
     mainwindow.ui

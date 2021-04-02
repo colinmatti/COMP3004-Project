@@ -1,25 +1,22 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include "menuView.h"
+#include "treatmentView.h"
 #include "frequency.h"
+#include "previoustreatment.h"
 #include "program.h"
-
-#include <QStringList>
 
 using namespace std;
 
 class Display {
 public:
     Display(QList<Frequency*>* frequencies, QList<Program*>* programs);
+    // TODO: destructor.
+    MenuView* mainMenu;
+    MenuView* historyMenu;
 
-    QStringList *program;
-    QStringList *frequency;
-    QStringList *menu;
-
-    int updateDisplay(QString request);
-
-private:
-    int currentDisplay;
+    void addHistoryToNavigation(Therapy* therapy);
 };
 
 #endif // DISPLAY_H
