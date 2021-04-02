@@ -1,6 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define NO_ERROR "***No error detected***"
+#define ERROR_NO_SKIN "***ERROR: No skin detected***"
+#define WARNING_LOW_BATT "***WARNING: Battery is low***"
+#define WARNING_TREATMENT_RUNNING "***WARNING: treatment is currently running***"
+
 #include "device.h"
 
 #include <iostream>
@@ -32,7 +37,7 @@ private slots:
     void on_leftButton_clicked();
     void on_goBackButton_clicked();
     void on_menuButton_clicked();
-    void on_timer_start();
+    void on_timerStart();
     void on_onSkin_stateChanged(int checked);
     void on_addButton_clicked();
 
