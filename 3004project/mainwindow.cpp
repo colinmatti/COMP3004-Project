@@ -174,7 +174,7 @@ void MainWindow::on_onSkin_stateChanged(int checked) {
     } else {
         device.applyOnSkin();
         if (currentView->type() == "TreatmentView") {
-            ui->warningLabel->setText(NO_ERROR);
+            ui->warningLabel->setText(ERROR_NO_SKIN);
             timer->stop();
         }
         cout << "SKIN NOT DETECTED" << endl;
