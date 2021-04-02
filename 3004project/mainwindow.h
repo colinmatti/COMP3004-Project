@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#define NO_ERROR "***No error detected"
+#define NO_ERROR "***No error detected***"
 #define ERROR_NO_SKIN "***ERROR: No skin detected***"
 #define WARNING_LOW_BATT "***WARNING: Battery is low***"
 #define ERROR_TREATMENT_RUNNING "***ERROR: treatment is currently running***"
