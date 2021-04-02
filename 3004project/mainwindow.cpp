@@ -41,7 +41,7 @@ void MainWindow::on_okButton_clicked() {
         ui->therapyLabel->setText("Frequency: " + QString::number(currentView->getTherapy()->getFrequency()) + "Hz");
         timer->start(1000);
     } else if  (currentView->type() == "TreatmentView" && !device.isOnSkin()){
-        ui->warningLabel->setText(ERRNOSKIN);
+        ui->warningLabel->setText(ERROR_NO_SKIN);
         currentView = currentView->parent;
     }
     else if (currentView->type() == "MenuView") {
@@ -126,7 +126,7 @@ void MainWindow::on_leftButton_clicked() {
 void MainWindow::on_goBackButton_clicked() {
     // TODO: when treatment is running, send warning
     if (currentView->type() == "TreatmentView") {
-        ui->warningLabel->setText(ERRTREATMENTRUNNING);
+        ui->warningLabel->setText(ERROR_TREATMENT_RUNNING);
         return;
     }
     View* parent = currentView->getParent();
@@ -144,7 +144,7 @@ void MainWindow::on_menuButton_clicked() {
     // TODO: when treatment is running, send warning
     if (!device.isPoweredOn()) { return; }
     if (currentView->type() == "TreatmentView") {
-        ui->warningLabel->setText(ERRTREATMENTRUNNING);
+        ui->warningLabel->setText(ERROR_TREATMENT_RUNNING);
         return;
     }
     displayMainMenu();
@@ -156,6 +156,9 @@ void MainWindow::on_menuButton_clicked() {
 void MainWindow::on_timerStart() {
     if (countdown < 0) {
         timer->stop();
+        // Return to menu screen after treatment ends
+        currentView = currentView->getParent();
+        menuVisibility();
     } else {
         ui->timer->display(countdown);
         countdown--;
@@ -166,14 +169,14 @@ void MainWindow::on_onSkin_stateChanged(int checked) {
     if (checked == 2){
         device.applyOnSkin();
         if (currentView->type() == "TreatmentView") {
-            ui->warningLabel->setText(NOERR);
+            ui->warningLabel->setText(NO_ERROR);
             timer->start();
         }
         cout <<  "SKIN DETECTED" << endl;
     } else {
         device.applyOnSkin();
         if (currentView->type() == "TreatmentView") {
-            ui->warningLabel->setText(ERRNOSKIN);
+            ui->warningLabel->setText(NO_ERROR);
             timer->stop();
         }
         cout << "SKIN NOT DETECTED" << endl;
@@ -216,7 +219,7 @@ void MainWindow::menuVisibility() {
     model->setStringList(currentView->constructMenu());
     currentSelectionIndex = model->index(0);
     ui->listView->setCurrentIndex(currentSelectionIndex);
-    ui->warningLabel->setText(NOERR);
+    ui->warningLabel->setText(NO_ERROR);
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);

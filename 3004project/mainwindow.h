@@ -1,10 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#define NOERR "no error detected"
-#define ERRNOSKIN "error: no skin detected"
-#define ERRLOW "battery is low"
-#define ERRTREATMENTRUNNING "error: treatment is currently running"
+#define NO_ERROR "***No error detected"
+#define ERROR_NO_SKIN "***ERROR: No skin detected***"
+#define WARNING_LOW_BATT "***WARNING: Battery is low***"
+#define ERROR_TREATMENT_RUNNING "***ERROR: treatment is currently running***"
 
 #include "device.h"
 
