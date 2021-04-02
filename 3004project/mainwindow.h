@@ -1,6 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define NOERR "no error detected"
+#define ERRNOSKIN "error: no skin detected"
+#define ERRLOW "battery is low"
+#define ERRTREATMENTRUNNING "error: treatment is currently running"
+
 #include "device.h"
 
 #include <iostream>
@@ -32,7 +37,7 @@ private slots:
     void on_leftButton_clicked();
     void on_goBackButton_clicked();
     void on_menuButton_clicked();
-    void on_timer_start();
+    void on_timerStart();
     void on_onSkin_stateChanged(int checked);
     void on_addButton_clicked();
 

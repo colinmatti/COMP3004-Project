@@ -4,13 +4,14 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     model = new QStringListModel();
+    ui->warningLabel->setWordWrap(true);
 
     // Fetch view graph from device.
     currentView = device.mainMenu();
 
     // Instantiate timer.
     timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_start()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(on_timerStart()));
 
     powerOffDevice();
 }
@@ -34,11 +35,16 @@ void MainWindow::on_okButton_clicked() {
     MenuView* menuView = dynamic_cast<MenuView*>(currentView);
     currentView = menuView->children->at(currentSelectionIndex.row());
 
-    if (currentView->type() == "TreatmentView") {
+    if (currentView->type() == "TreatmentView" && device.isOnSkin()) {
         treatmentVisibility();
         countdown = currentView->getTherapy()->getTimer();
+        ui->therapyLabel->setText("Frequency: " + QString::number(currentView->getTherapy()->getFrequency()) + "Hz");
         timer->start(1000);
-    } else if (currentView->type() == "MenuView") {
+    } else if  (currentView->type() == "TreatmentView" && !device.isOnSkin()){
+        ui->warningLabel->setText(ERRNOSKIN);
+        currentView = currentView->parent;
+    }
+    else if (currentView->type() == "MenuView") {
         menuVisibility();
     }
 }
@@ -119,11 +125,14 @@ void MainWindow::on_leftButton_clicked() {
  */
 void MainWindow::on_goBackButton_clicked() {
     // TODO: when treatment is running, send warning
+    if (currentView->type() == "TreatmentView") {
+        ui->warningLabel->setText(ERRTREATMENTRUNNING);
+        return;
+    }
     View* parent = currentView->getParent();
 
     // If the parent does not exist, do nothing.
     if (parent == nullptr) { return; }
-
     currentView = parent;
     menuVisibility();
 }
@@ -134,13 +143,17 @@ void MainWindow::on_goBackButton_clicked() {
 void MainWindow::on_menuButton_clicked() {
     // TODO: when treatment is running, send warning
     if (!device.isPoweredOn()) { return; }
+    if (currentView->type() == "TreatmentView") {
+        ui->warningLabel->setText(ERRTREATMENTRUNNING);
+        return;
+    }
     displayMainMenu();
 }
 
 /**
  * @brief Display and decrease countdown until countdown reaches zero.
  */
-void MainWindow::on_timer_start() {
+void MainWindow::on_timerStart() {
     if (countdown < 0) {
         timer->stop();
     } else {
@@ -152,10 +165,17 @@ void MainWindow::on_timer_start() {
 void MainWindow::on_onSkin_stateChanged(int checked) {
     if (checked == 2){
         device.applyOnSkin();
+        if (currentView->type() == "TreatmentView") {
+            ui->warningLabel->setText(NOERR);
+            timer->start();
+        }
         cout <<  "SKIN DETECTED" << endl;
     } else {
         device.applyOnSkin();
-        // If status!=NULL then warning!
+        if (currentView->type() == "TreatmentView") {
+            ui->warningLabel->setText(ERRNOSKIN);
+            timer->stop();
+        }
         cout << "SKIN NOT DETECTED" << endl;
     }
 }
@@ -196,11 +216,13 @@ void MainWindow::menuVisibility() {
     model->setStringList(currentView->constructMenu());
     currentSelectionIndex = model->index(0);
     ui->listView->setCurrentIndex(currentSelectionIndex);
+    ui->warningLabel->setText(NOERR);
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);
     ui->powerLabel->setVisible(false);
     ui->powerLevelLabel->setVisible(false);
+    ui->therapyLabel->setVisible(false);
 }
 
 /**
@@ -211,6 +233,7 @@ void MainWindow::offVisibility() {
     ui->timer->setVisible(false);
     ui->powerLabel->setVisible(false);
     ui->powerLevelLabel->setVisible(false);
+    ui->therapyLabel->setVisible(false);
 }
 
 /**
@@ -219,6 +242,7 @@ void MainWindow::offVisibility() {
 void MainWindow::treatmentVisibility() {
     ui->powerLabel->setVisible(true);
     ui->powerLevelLabel->setVisible(true);
+    ui->therapyLabel->setVisible(true);
     ui->timer->setVisible(true);
     ui->listView->setVisible(false);
 }
