@@ -124,8 +124,8 @@ void MainWindow::on_leftButton_clicked() {
  * If previous screen does not exist, do nothing.
  */
 void MainWindow::on_goBackButton_clicked() {
-    if (currentView->type() == "TreatmentView") {
-        ui->warningLabel->setText(ERROR_TREATMENT_RUNNING);
+    if (currentView->type() == "TreatmentView" && ui->warningLabel->text() != WARNING_TREATMENT_RUNNING) {
+        ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
         return;
     }
     View* parent = currentView->getParent();
@@ -141,10 +141,11 @@ void MainWindow::on_goBackButton_clicked() {
  */
 void MainWindow::on_menuButton_clicked() {
     if (!device.isPoweredOn()) { return; }
-    if (currentView->type() == "TreatmentView") {
-        ui->warningLabel->setText(ERROR_TREATMENT_RUNNING);
+    if (currentView->type() == "TreatmentView" && ui->warningLabel->text() != WARNING_TREATMENT_RUNNING) {
+        ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
         return;
     }
+    // Stop timer?
     displayMainMenu();
 }
 
