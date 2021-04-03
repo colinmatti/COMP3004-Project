@@ -16,7 +16,7 @@ Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
     }
 
     for (Frequency* frequency : *frequencies) {
-        TreatmentView* therapy = new TreatmentView(QString::number(frequency->getFrequency()), programsMenu, frequency);
+        TreatmentView* therapy = new TreatmentView(QString::number(frequency->getFrequency()), frequenciesMenu, frequency);
         frequenciesMenu->children->append(therapy);
     }
 

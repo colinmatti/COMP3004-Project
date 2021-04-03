@@ -42,7 +42,7 @@ void MainWindow::on_okButton_clicked() {
         timer->start(1000);
     } else if  (currentView->type() == "TreatmentView" && !device.isOnSkin()){
         ui->warningLabel->setText(ERROR_NO_SKIN);
-        currentView = currentView->parent;
+        currentView = currentView->getParent();
     }
     else if (currentView->type() == "MenuView") {
         menuVisibility();
