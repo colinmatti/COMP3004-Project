@@ -57,7 +57,6 @@ View* Device::mainMenu() { return display->mainMenu; }
  * @return The current power level.
  */
 int Device::increasePower() {
-    // If treatment is running
     if (powerLevel == MAXPOWERLEVEL){
         return MAXPOWERLEVEL;
     }
@@ -70,11 +69,14 @@ int Device::increasePower() {
  * @return The current power level.
  */
 int Device::decreasePower() {
-    //If treatment is running
     if (powerLevel == MINPOWERLEVEL){
         return MINPOWERLEVEL;
     }
     powerLevel -= 1;
+    return powerLevel;
+}
+int Device::resetPower() {
+    powerLevel = MINPOWERLEVEL;
     return powerLevel;
 }
 

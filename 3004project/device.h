@@ -28,9 +28,8 @@ public:
     void applyOnSkin();
     int increasePower();
     int decreasePower();
-    void endTreatment();
+    int resetPower();
     void addToHistory(Therapy* therapy);
-//    Therapy* getStatus();
     View* mainMenu();
 
 private:
@@ -43,7 +42,6 @@ private:
     QList<Frequency*> *frequencies;
     QStringList runTreatment(QString request);
     QList<PreviousTreatment*> *treatmentHistory;
-//    Therapy* status;
 };
 
 #endif // DEVICE_H
