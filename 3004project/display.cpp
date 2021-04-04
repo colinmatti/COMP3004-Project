@@ -1,45 +1,38 @@
 #include "display.h"
 
 Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
-    menu = new QStringList();
-    menu->append("Programs");
-    menu->append("Frequency");
-    menu->append("History");
+    // Create main menu node.
+    mainMenu = new MenuView("Main Menu", NULL);
 
-    frequency = new QStringList();
-    for (int i = 0; i < frequencies->size(); i++){
-        frequency->append(QString::number(frequencies->at(i)->getFrequency()));
+    // Create other menu nodes.
+    MenuView* programsMenu = new MenuView("Programs", mainMenu);
+    MenuView* frequenciesMenu = new MenuView("Frequencies", mainMenu);
+    historyMenu = new MenuView("History", mainMenu);
+
+    // Populate menues with therapies.
+    for (Program* program : *programs) {
+        TreatmentView* therapy = new TreatmentView(program->getName(), programsMenu, program);
+        programsMenu->children->append(therapy);
     }
 
-    program = new QStringList();
-    for (int i = 0; i < programs->size(); i++){
-        program->append(programs->at(i)->getName());
+    for (Frequency* frequency : *frequencies) {
+        TreatmentView* therapy = new TreatmentView(QString::number(frequency->getFrequency()), frequenciesMenu, frequency);
+        frequenciesMenu->children->append(therapy);
     }
 
-    currentDisplay = 0;
+    // Add menues to children of main menu.
+    mainMenu->children->append(programsMenu);
+    mainMenu->children->append(frequenciesMenu);
+    mainMenu->children->append(historyMenu);
 }
 
-// Current Display
-// 0: menu
-// 1: frequency
-// 2: programmed
-// 3: history
-// 4: timer (specific therapy)
-// 5: power level????
+// TODO: destructor.
 
-int Display::updateDisplay(QString request)
-{
-    if (request == "off" || request == "on" || request == "menu" || request == "back"){
-        currentDisplay = 0;
-    } else if (request == "Frequency"){
-        currentDisplay = 1;
-    } else if (request == "Programs"){
-        currentDisplay = 2;
-    } else if (request == "History"){
-        currentDisplay = 3;
-    } else if (program->contains(request) || frequency->contains(request)){
-        currentDisplay = 4;
-    }
-    return currentDisplay;
+/**
+ * @brief Adds given previous treatment to navigation graph.
+ * @param therapy: the therapy to be added to the navigation graph.
+ */
+void Display::addHistoryToNavigation(Therapy* therapy) {
+    TreatmentView* treatmentView = new TreatmentView(therapy->getName(), historyMenu, therapy);
+    historyMenu->children->append(treatmentView);
 }
-

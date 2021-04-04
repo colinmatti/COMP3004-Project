@@ -7,6 +7,7 @@
 #include "previoustreatment.h"
 #include "program.h"
 #include "therapy.h"
+#include "view.h"
 
 #include <array>
 #include <iostream>
@@ -25,11 +26,11 @@ public:
     bool isOnSkin();
     void power();
     void applyOnSkin();
-    QStringList receive(QString request);
     int increasePower();
     int decreasePower();
-    void endTreatment();
-    Therapy* getStatus();
+    int resetPower();
+    void addToHistory(Therapy* therapy);
+    View* mainMenu();
 
 private:
     int powerLevel;
@@ -39,10 +40,8 @@ private:
     Display *display;
     QList<Program*> *programs;
     QList<Frequency*> *frequencies;
-    void runTreatment();
+    QStringList runTreatment(QString request);
     QList<PreviousTreatment*> *treatmentHistory;
-    void addToHistory(Therapy* therapy);
-    Therapy* status;
 };
 
 #endif // DEVICE_H

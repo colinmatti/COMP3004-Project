@@ -54,6 +54,10 @@ QPushButton:disabled {
 	color: black;
 	font-size: 20px;
 }
+
+#frame{
+	background-color: white;
+}
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -118,42 +122,6 @@ QPushButton:disabled {
      </item>
     </layout>
    </widget>
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>30</y>
-      <width>351</width>
-      <height>171</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>240</y>
-      <width>131</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Power Level:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="powerLabel">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>240</y>
-      <width>60</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QPushButton" name="menuButton">
     <property name="geometry">
      <rect>
@@ -165,16 +133,6 @@ QPushButton:disabled {
     </property>
     <property name="text">
      <string>MENU</string>
-    </property>
-   </widget>
-   <widget class="QLCDNumber" name="timer">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>110</y>
-      <width>181</width>
-      <height>91</height>
-     </rect>
     </property>
    </widget>
    <widget class="QCheckBox" name="onSkin">
@@ -229,6 +187,104 @@ QPushButton:disabled {
      <string>Add</string>
     </property>
    </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>351</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QListView" name="listView">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>351</width>
+       <height>171</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLCDNumber" name="timer">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>40</y>
+       <width>181</width>
+       <height>91</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="therapyLabel">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="powerLabel">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>170</y>
+      <width>60</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="powerLevelLabel">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>170</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Power Level:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="warningLabel">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>180</y>
+      <width>141</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>menuButton</zorder>
+   <zorder>onSkin</zorder>
+   <zorder>adminLabel</zorder>
+   <zorder>DeviceDivider</zorder>
+   <zorder>addButton</zorder>
+   <zorder>powerLevelLabel</zorder>
+   <zorder>powerLabel</zorder>
+   <zorder>warningLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
