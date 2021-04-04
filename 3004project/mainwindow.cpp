@@ -39,6 +39,7 @@ void MainWindow::on_okButton_clicked() {
         treatmentVisibility();
         countdown = currentView->getTherapy()->getTimer();
         ui->therapyLabel->setText("Frequency: " + QString::number(currentView->getTherapy()->getFrequency()) + "Hz");
+        ui->powerLabel->setText(QString::number(device.resetPower()));
         timer->start(1000);
     } else if  (currentView->type() == "TreatmentView" && !device.isOnSkin()){
         ui->warningLabel->setText(ERROR_NO_SKIN);
