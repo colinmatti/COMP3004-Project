@@ -248,4 +248,5 @@ void MainWindow::treatmentVisibility() {
     ui->therapyLabel->setVisible(true);
     ui->timer->setVisible(true);
     ui->listView->setVisible(false);
+    ui->warningLabel->setText(NO_ERROR);
 }
