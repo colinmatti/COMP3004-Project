@@ -14,6 +14,7 @@ public:
 
     bool isLow();
     void decreaseLevel(int currPwrLvl, int timePassed);
+    int getBatteryLevel();
 
 private:
     int batteryLevel;

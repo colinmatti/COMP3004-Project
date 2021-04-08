@@ -22,3 +22,8 @@ void Battery::decreaseLevel(int currPwrLvl, int timePassed) {
         batteryLevel -= currPwrLvl*timePassed ;
     }
 }
+
+int Battery::getBatteryLevel() {
+    return batteryLevel;
+}
+
