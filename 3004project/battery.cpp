@@ -23,6 +23,10 @@ void Battery::decreaseLevel(int currPwrLvl, int timePassed) {
     }
 }
 
+/**
+ * @brief Returns the current battery level.
+ * @return integer batteryLevel.
+ */
 int Battery::getBatteryLevel() {
     return batteryLevel;
 }

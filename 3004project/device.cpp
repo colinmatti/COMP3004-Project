@@ -114,3 +114,9 @@ void Device::power() {
  * @brief Applies device to skin if off skin, otherwise removes from skin.
  */
 void Device::applyOnSkin() { onSkin = !onSkin; }
+
+/**
+ * @brief Gets the battery level.
+ * @return integer value of the battery's level.
+ */
+int Device::batteryLevel() { battery->getBatteryLevel(); }

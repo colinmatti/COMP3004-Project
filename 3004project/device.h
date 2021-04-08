@@ -31,6 +31,7 @@ public:
     int resetPower();
     void addToHistory(Therapy* therapy);
     View* mainMenu();
+    int batteryLevel();
 
 private:
     int powerLevel;
