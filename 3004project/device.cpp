@@ -99,6 +99,11 @@ void Device::removeFromHistory(HistoryView* historyView) {
     display->removeHistoryFromNavigation(historyView);
 }
 
+void Device::clearHistory() {
+    display->clearHistoryNavigation();
+    treatmentHistory->clear();
+}
+
 /**
  * @brief Gets whether the device is currently powered on.
  * @return True if powered on, False otherwise.

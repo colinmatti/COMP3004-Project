@@ -31,6 +31,7 @@ public:
     int resetPower();
     void addToHistory(Therapy* therapy);
     void removeFromHistory(HistoryView* historyView);
+    void clearHistory();
     View* mainMenu();
 
 private:
