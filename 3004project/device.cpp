@@ -122,6 +122,9 @@ bool Device::isOnSkin() { return onSkin; }
 void Device::power() {
     poweredOn = !poweredOn;
     powerLevel = 1;
+
+    // Clear therapy history when device powers off.
+    if (!poweredOn) { clearHistory(); }
 }
 
 /**
