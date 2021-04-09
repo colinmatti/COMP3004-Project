@@ -32,7 +32,19 @@ Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
  * @brief Adds given previous treatment to navigation graph.
  * @param therapy: the therapy to be added to the navigation graph.
  */
-void Display::addHistoryToNavigation(Therapy* therapy) {
-    TreatmentView* treatmentView = new TreatmentView(therapy->getName(), historyMenu, therapy);
-    historyMenu->children->append(treatmentView);
+void Display::addHistoryToNavigation(PreviousTreatment* previousTreatment) {
+    HistoryView* historyView = new HistoryView(previousTreatment->therapy->getName(), historyMenu, previousTreatment);
+    historyMenu->children->append(historyView);
+}
+
+/**
+ * @brief Removes view containing given previous treatment from history navigation.
+ * @param previousTreatment: the previous treatment to be removed from the graph.
+ */
+void Display::removeHistoryFromNavigation(HistoryView* historyView) {
+    historyMenu->children->removeOne(historyView);
+}
+
+void Display::clearHistoryNavigation() {
+    historyMenu->children->clear();
 }

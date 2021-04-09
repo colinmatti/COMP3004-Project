@@ -42,12 +42,13 @@ void MainWindow::on_okButton_clicked() {
         ui->therapyLabel->setText("Frequency: " + QString::number(currentView->getTherapy()->getFrequency()) + "Hz");
         ui->powerLabel->setText(QString::number(device.resetPower()));
         timer->start(1000);
-    } else if  (currentView->type() == "TreatmentView" && !device.isOnSkin()){
+    } else if (currentView->type() == "TreatmentView" && !device.isOnSkin()){
         ui->warningLabel->setText(ERROR_NO_SKIN);
         currentView = currentView->getParent();
-    }
-    else if (currentView->type() == "MenuView") {
+    } else if (currentView->type() == "MenuView") {
         menuVisibility();
+    } else if (currentView->type() == "HistoryView") {
+        currentView = currentView->getParent();
     }
 }
 
