@@ -49,10 +49,12 @@ private:
     QStringListModel* model;
     QTimer *timer;
     Ui::MainWindow *ui;
+    bool addHistory;
 
     void powerOnDevice();
     void powerOffDevice();
     void displayMainMenu();
+    void treatmentEnded();
 
     void menuVisibility();
     void offVisibility();
