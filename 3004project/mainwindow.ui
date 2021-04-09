@@ -375,14 +375,14 @@ QPushButton:disabled {
    <widget class="QLabel" name="deviceLabel">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>120</x>
       <y>480</y>
-      <width>161</width>
+      <width>121</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>FOR TREATMENTS ONLY</string>
+     <string>FOR HISTORY ONLY</string>
     </property>
    </widget>
    <zorder>frame</zorder>
@@ -404,7 +404,7 @@ QPushButton:disabled {
      <x>0</x>
      <y>0</y>
      <width>727</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
