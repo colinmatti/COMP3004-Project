@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     model = new QStringListModel();
     ui->warningLabel->setWordWrap(true);
     ui->batteryLabel->setWordWrap(true);
+    addHistory = false;
 
     // Fetch view graph from device.
     currentView = device.mainMenu();
@@ -73,7 +74,7 @@ void MainWindow::powerOnDevice() {
 void MainWindow::powerOffDevice() {
     offVisibility();
     device.power();
-    timer->stop();
+    treatmentEnded();
 }
 
 /**
@@ -131,6 +132,7 @@ void MainWindow::on_goBackButton_clicked() {
         ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
         return;
     }
+    treatmentEnded();
     View* parent = currentView->getParent();
 
     // If the parent does not exist, do nothing.
@@ -148,7 +150,7 @@ void MainWindow::on_menuButton_clicked() {
         ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
         return;
     }
-    // Stop timer?
+    treatmentEnded();
     displayMainMenu();
 }
 
@@ -157,9 +159,9 @@ void MainWindow::on_menuButton_clicked() {
  */
 void MainWindow::on_timerStart() {
     if (countdown < 0) {
-        timer->stop();
         // Return to menu screen after treatment ends
         currentView = currentView->getParent();
+        treatmentEnded();
         menuVisibility();
     } else {
         ui->timer->display(countdown);
@@ -196,8 +198,15 @@ void MainWindow::on_onSkin_stateChanged(int checked) {
 void MainWindow::on_addButton_clicked() {
     // If the device is not currently running a treatment, do nothing.
     if (currentView->type() != "TreatmentView") { return; }
+    addHistory = true;
+}
 
-    device.addToHistory(currentView->getTherapy());
+void MainWindow::treatmentEnded(){
+    if (addHistory) {
+        device.addToHistory(currentView->getTherapy());
+        addHistory = false;
+    }
+    timer->stop();
 }
 
 /**
