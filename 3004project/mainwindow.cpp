@@ -213,9 +213,6 @@ void MainWindow::displayMainMenu() {
     // Reset menu option index to 0.
     currentSelectionIndex = model->index(0);
     ui->listView->setCurrentIndex(currentSelectionIndex);
-    ui->batteryLabel->setVisible(true);
-    ui->warningLabel->setVisible(true);
-
 
     menuVisibility();
 }
@@ -235,6 +232,8 @@ void MainWindow::menuVisibility() {
     ui->powerLabel->setVisible(false);
     ui->powerLevelLabel->setVisible(false);
     ui->therapyLabel->setVisible(false);
+    ui->batteryLabel->setVisible(true);
+    ui->warningLabel->setVisible(true);
 }
 
 /**
@@ -248,7 +247,6 @@ void MainWindow::offVisibility() {
     ui->therapyLabel->setVisible(false);
     ui->batteryLabel->setVisible(false);
     ui->warningLabel->setVisible(false);
-
 }
 
 /**
