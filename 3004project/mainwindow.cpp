@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     model = new QStringListModel();
     ui->warningLabel->setWordWrap(true);
+    ui->batteryLabel->setWordWrap(true);
 
     // Fetch view graph from device.
     currentView = device.mainMenu();
@@ -165,6 +166,10 @@ void MainWindow::on_timerStart() {
     }
 }
 
+/**
+ * @brief Checks if the device is on the skin or off (currently simulated on admin console)
+ * @param checked:int (if 2, it means it's checked, so there's no error, else, there's an error "no skin")
+ */
 void MainWindow::on_onSkin_stateChanged(int checked) {
     if (checked == 2){
         device.applyOnSkin();
@@ -220,12 +225,15 @@ void MainWindow::menuVisibility() {
     currentSelectionIndex = model->index(0);
     ui->listView->setCurrentIndex(currentSelectionIndex);
     ui->warningLabel->setText(NO_ERROR);
+    ui->batteryLabel->setText("FULL BATTERY");
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);
     ui->powerLabel->setVisible(false);
     ui->powerLevelLabel->setVisible(false);
     ui->therapyLabel->setVisible(false);
+    ui->batteryLabel->setVisible(true);
+    ui->warningLabel->setVisible(true);
 }
 
 /**
@@ -237,6 +245,8 @@ void MainWindow::offVisibility() {
     ui->powerLabel->setVisible(false);
     ui->powerLevelLabel->setVisible(false);
     ui->therapyLabel->setVisible(false);
+    ui->batteryLabel->setVisible(false);
+    ui->warningLabel->setVisible(false);
 }
 
 /**

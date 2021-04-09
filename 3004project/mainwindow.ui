@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>633</width>
+    <width>727</width>
     <height>564</height>
    </rect>
   </property>
@@ -50,14 +50,40 @@ QPushButton:disabled {
 	color: black;
 }
 
-#adminLabel, #label, #powerLabel {
+#label, #powerLabel {
 	color: black;
 	font-size: 20px;
+}
+
+#adminLabel{
+	color: black;
+	font-size: 30px;
 }
 
 #frame{
 	background-color: white;
 }
+
+#warningLabel{
+	color: #a6190f;
+	font-size:15px;
+	font-family: Arial;
+}
+
+#adminLabel_2, #adminLabel_3{
+	color: black;
+	font-size: 16px;
+}
+
+#onSkin{
+	color: black;
+	font-size: 16px;
+}
+
+#batteryLabel{
+	color: #010f42;
+}
+
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -138,8 +164,8 @@ QPushButton:disabled {
    <widget class="QCheckBox" name="onSkin">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>100</y>
+      <x>530</x>
+      <y>70</y>
       <width>86</width>
       <height>20</height>
      </rect>
@@ -152,8 +178,8 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>40</y>
-      <width>161</width>
+      <y>0</y>
+      <width>241</width>
       <height>51</height>
      </rect>
     </property>
@@ -227,7 +253,7 @@ QPushButton:disabled {
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>181</width>
+       <width>121</width>
        <height>16</height>
       </rect>
      </property>
@@ -241,7 +267,7 @@ QPushButton:disabled {
      <rect>
       <x>140</x>
       <y>170</y>
-      <width>60</width>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
@@ -254,7 +280,7 @@ QPushButton:disabled {
      <rect>
       <x>50</x>
       <y>170</y>
-      <width>131</width>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
@@ -267,8 +293,47 @@ QPushButton:disabled {
      <rect>
       <x>460</x>
       <y>180</y>
-      <width>141</width>
-      <height>51</height>
+      <width>231</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="adminLabel_2">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>130</y>
+      <width>241</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>WARNING/ERROR messages:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="adminLabel_3">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>290</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>BATTERY LEVEL:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="batteryLabel">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>290</y>
+      <width>121</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -285,13 +350,16 @@ QPushButton:disabled {
    <zorder>powerLevelLabel</zorder>
    <zorder>powerLabel</zorder>
    <zorder>warningLabel</zorder>
+   <zorder>adminLabel_2</zorder>
+   <zorder>adminLabel_3</zorder>
+   <zorder>batteryLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>633</width>
+     <width>727</width>
      <height>24</height>
     </rect>
    </property>
