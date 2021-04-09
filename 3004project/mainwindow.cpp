@@ -201,6 +201,26 @@ void MainWindow::on_addButton_clicked() {
 }
 
 /**
+ * @brief Clears the entire history
+ */
+void MainWindow::on_clearButton_clicked(){
+    if (currentView->getName() != "History") { return; }
+
+    device.clearHistory();
+    menuVisibility();
+}
+
+/**
+ * @brief Deletes a single treatment history
+ */
+void MainWindow::on_deleteButton_clicked(){
+    if (currentView->type() != "HistoryView") { return; }
+//    history = currentView->getTherapy();
+
+//    device.removeFromHistory(history);
+}
+
+/**
  * @brief Changes window view to display device main menu.
  */
 void MainWindow::displayMainMenu() {
