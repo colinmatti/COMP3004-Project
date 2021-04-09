@@ -214,10 +214,14 @@ void MainWindow::on_clearButton_clicked(){
  * @brief Deletes a single treatment history
  */
 void MainWindow::on_deleteButton_clicked(){
-    if (currentView->type() != "HistoryView") { return; }
-//    history = currentView->getTherapy();
+    if (currentView->getName() != "History") { return; }
 
-//    device.removeFromHistory(history);
+    MenuView* menuView = dynamic_cast<MenuView*>(currentView);
+    View* history = menuView->children->at(currentSelectionIndex.row());
+    HistoryView* historyView = dynamic_cast<HistoryView*>(history);
+
+    device.removeFromHistory(historyView);
+    menuVisibility();
 }
 
 /**
