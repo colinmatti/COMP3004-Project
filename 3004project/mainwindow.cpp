@@ -249,7 +249,6 @@ void MainWindow::menuVisibility() {
     ui->therapyLabel->setVisible(false);
     ui->batteryLabel->setVisible(true);
     ui->warningLabel->setVisible(true);
-    ui->addButton->setVisible(false);
 }
 
 /**
@@ -263,7 +262,6 @@ void MainWindow::offVisibility() {
     ui->therapyLabel->setVisible(false);
     ui->batteryLabel->setVisible(false);
     ui->warningLabel->setVisible(false);
-    ui->addButton->setVisible(false);
 }
 
 /**
@@ -276,5 +274,4 @@ void MainWindow::treatmentVisibility() {
     ui->timer->setVisible(true);
     ui->listView->setVisible(false);
     ui->warningLabel->setText(NO_ERROR);
-    ui->addButton->setVisible(true);
 }
