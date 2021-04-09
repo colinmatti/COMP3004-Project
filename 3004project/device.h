@@ -34,9 +34,11 @@ public:
     void clearHistory();
     View* mainMenu();
     int batteryLevel();
+    int getCurrentMaxPower();
 
 private:
     int powerLevel;
+    int currentMaxPower;
     bool poweredOn;
     bool onSkin;
     Battery *battery;

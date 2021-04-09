@@ -207,9 +207,8 @@ void MainWindow::on_addButton_clicked() {
  */
 void MainWindow::treatmentEnded(){
     if (addHistory) {
-        int powerValue = ui->powerLabel->text().toInt();
-        int secondsLeft = int(ui->timer->value());
-        device.addToHistory(currentView->getTherapy(), powerValue, secondsLeft);
+        int duration = currentView->getTherapy()->getTimer()-int(ui->timer->value());
+        device.addToHistory(currentView->getTherapy(), device.getCurrentMaxPower(), duration);
         addHistory = false;
     }
     timer->stop();

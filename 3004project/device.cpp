@@ -1,6 +1,6 @@
 #include "device.h"
 
-Device::Device() : powerLevel(1), poweredOn(true), battery(new Battery()) {
+Device::Device() : powerLevel(1), currentMaxPower(1), poweredOn(true), battery(new Battery()) {
     // Instantiate all preset therapies.
     programs = new QList<Program*>();
     frequencies = new QList<Frequency*>();
@@ -61,6 +61,9 @@ int Device::increasePower() {
         return MAXPOWERLEVEL;
     }
     powerLevel += 1;
+    if (powerLevel > currentMaxPower){
+        currentMaxPower = powerLevel;
+    }
     return powerLevel;
 }
 
@@ -77,7 +80,14 @@ int Device::decreasePower() {
 }
 int Device::resetPower() {
     powerLevel = MINPOWERLEVEL;
+    currentMaxPower = MINPOWERLEVEL;
     return powerLevel;
+}
+/**
+ * @brief Returns the current treatment's max power level.
+ */
+int Device::getCurrentMaxPower(){
+    return currentMaxPower;
 }
 
 /**
