@@ -1,21 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    model(new QStringListModel()),
+    timer(new QTimer()),
+    ui(new Ui::MainWindow) {
+
     ui->setupUi(this);
-    model = new QStringListModel();
     ui->warningLabel->setWordWrap(true);
     ui->batteryLabel->setWordWrap(true);
-    addHistory = false;
 
-    // Fetch view graph from device.
-    currentView = device.mainMenu();
-
-    // Instantiate timer.
-    timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(on_timerStart()));
 
-    powerOffDevice();
+    offVisibility();
 }
 
 MainWindow::~MainWindow() {
@@ -24,30 +22,33 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+
+// ========================================
+//
+// SLOTS
+//
+// ========================================
+
+
+/**
+ * @brief Attempt to add active therapy to history if therapy ongoing.
+ */
+void MainWindow::on_addButton_clicked() {
+    bool willAddToHistory = device.maybeAddTreatmentToHistory();
+    if (!willAddToHistory) { ui->warningLabel->setText(WARNING_NO_TREATMENT_RUNNING); }
+}
+
 /**
  * @brief When the OK button is clicked, navigate to the next view.
  */
 void MainWindow::on_okButton_clicked() {
-    // If the device is powered OFF, do nothing.
-    if (!device.isPoweredOn()) { return; }
-
-    // If the device is currently administering a treatment, do nothing.
-    if (currentView->type() == "TreatmentView") { return; }
-
-    MenuView* menuView = dynamic_cast<MenuView*>(currentView);
-    currentView = menuView->children->at(currentSelectionIndex.row());
-
-    if (currentView->type() == "TreatmentView" && device.isOnSkin()) {
-        treatmentVisibility();
-        countdown = currentView->getTherapy()->getTimer();
-        ui->therapyLabel->setText("Frequency: " + QString::number(currentView->getTherapy()->getFrequency()) + "Hz");
-        ui->powerLabel->setText(QString::number(device.resetPower()));
-        timer->start(1000);
-    } else if (currentView->type() == "TreatmentView" && !device.isOnSkin()){
+    View* currentView = device.navigateDown(currentSelectionIndex.row());
+    if (currentView == NULL) {
         ui->warningLabel->setText(ERROR_NO_SKIN);
-        currentView = currentView->getParent();
-    } else if (currentView->type() == "MenuView") {
-        menuVisibility();
+    } else if (currentView->getType() == "TreatmentView") {
+        treatmentVisibility(currentView);
+    } else if (currentView->getType() == "MenuView") {
+        menuVisibility(currentView);
     }
 }
 
@@ -55,58 +56,36 @@ void MainWindow::on_okButton_clicked() {
  * @brief When the power button is pressed, turn on or off the device.
  */
 void MainWindow::on_powerButton_clicked() {
-    !device.isPoweredOn() ? powerOnDevice() : powerOffDevice();
-}
-
-/**
- * @brief Updates the view and device to reflect device being powered ON.
- */
-void MainWindow::powerOnDevice() {
-    displayMainMenu();
-    device.power();
-}
-
-/**
- * @brief Updates the view and device to reflect device being powered OFF.
- */
-void MainWindow::powerOffDevice() {
-    offVisibility();
-    device.power();
-    treatmentEnded();
+    // If the device is now ON, turn on main menu visibility.
+    if (device.power()) { menuVisibility(device.getMainMenu()); }
+    // Otherwise, toggle OFF visibility.
+    else { offVisibility(); }
 }
 
 /**
  * @brief Navigate down in menu options if on MenuView.
  */
 void MainWindow::on_downButton_clicked() {
-    // If we are not currently on a MenuView, do nothing.
-    if (currentView->type() != "MenuView") { return; }
-
+    if (!device.isPoweredOn()) { return; }
     // If we are currently at index 0, wrap around to end of the option list.
     int index = (currentSelectionIndex.row() + 1) % model->stringList().size();
-    currentSelectionIndex = model->index(index);
-    ui->listView->setCurrentIndex(currentSelectionIndex);
+    navigateMenu(index);
 }
 
 /**
  * @brief Navigate up in menu options if on MenuView.
  */
 void MainWindow::on_upButton_clicked() {
-    // If we are not currently on a MenuView, do nothing.
-    if (currentView->type() != "MenuView") { return; }
-
+    if (!device.isPoweredOn()) { return; }
     // If we are currently at index n, wrap around to beginning of the option list.
     int index = (currentSelectionIndex.row() + model->stringList().size() - 1) % model->stringList().size();
-    currentSelectionIndex = model->index(index);
-    ui->listView->setCurrentIndex(currentSelectionIndex);
+    navigateMenu(index);
 }
 
 /**
  * @brief Increases the device's power level by one.
  */
 void MainWindow::on_rightButton_clicked() {
-    if (!device.isPoweredOn()) { return; }
-
     QString power = QString::number(device.increasePower());
     ui->powerLabel->setText(power);
 }
@@ -115,8 +94,6 @@ void MainWindow::on_rightButton_clicked() {
  * @brief Decreases the device's power level by one.
  */
 void MainWindow::on_leftButton_clicked() {
-    if (!device.isPoweredOn()) { return; }
-
     QString power = QString::number(device.decreasePower());
     ui->powerLabel->setText(power);
 }
@@ -126,30 +103,14 @@ void MainWindow::on_leftButton_clicked() {
  * If previous screen does not exist, do nothing.
  */
 void MainWindow::on_goBackButton_clicked() {
-    if (currentView->type() == "TreatmentView" && ui->warningLabel->text() != WARNING_TREATMENT_RUNNING) {
-        ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
-        return;
-    }
-    treatmentEnded();
-    View* parent = currentView->getParent();
-
-    // If the parent does not exist, do nothing.
-    if (parent == nullptr) { return; }
-    currentView = parent;
-    menuVisibility();
+    navigateBackScreens(currentView->getParent());
 }
 
 /**
  * @brief Returns view to reflect being on the main menu of the device.
  */
 void MainWindow::on_menuButton_clicked() {
-    if (!device.isPoweredOn()) { return; }
-    if (currentView->type() == "TreatmentView" && ui->warningLabel->text() != WARNING_TREATMENT_RUNNING) {
-        ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
-        return;
-    }
-    treatmentEnded();
-    displayMainMenu();
+    navigateBackScreens(device.getMainMenu());
 }
 
 /**
@@ -157,111 +118,113 @@ void MainWindow::on_menuButton_clicked() {
  */
 void MainWindow::on_timerStart() {
     if (countdown < 0) {
-        // Return to menu screen after treatment ends
-        currentView = currentView->getParent();
+        device.stopTreatment();
         treatmentEnded();
-        menuVisibility();
+        menuVisibility(currentView->getParent());
     } else {
-        ui->timer->display(countdown);
-        countdown--;
+        ui->timer->display(countdown--);
+        device.updateTimer();
     }
 }
 
 /**
- * @brief Checks if the device is on the skin or off (currently simulated on admin console)
- * @param checked:int (if 2, it means it's checked, so there's no error, else, there's an error "no skin")
+ * @brief Checks if the device is on the skin or off (currently simulated on admin console).
+ * @param checked: When checked == 2, else error.
  */
 void MainWindow::on_onSkin_stateChanged(int checked) {
-    if (checked == 2){
-        device.applyOnSkin();
-        if (currentView->type() == "TreatmentView") {
-            ui->warningLabel->setText(NO_ERROR);
-            timer->start();
-        }
-        cout <<  "SKIN DETECTED" << endl;
+    // Toggle device applied to skin.
+    device.applyOnSkin();
+
+    // If we're not currently in a treatment, return.
+    if (!device.isTreatmentRunning()) { return; }
+
+    if (checked == 2) {
+        ui->warningLabel->setText(NO_ERROR);
+        timer->start();
     } else {
-        device.applyOnSkin();
-        if (currentView->type() == "TreatmentView") {
-            ui->warningLabel->setText(ERROR_NO_SKIN);
-            timer->stop();
-        }
-        cout << "SKIN NOT DETECTED" << endl;
+        ui->warningLabel->setText(ERROR_NO_SKIN);
+        timer->stop();
     }
 }
 
 /**
- * @brief Adds a therapy to treatment history if currently on treatment
- * screen and therapy has concluded.
+ * @brief Clears the entire history.
  */
-void MainWindow::on_addButton_clicked() {
-    // If the device is not currently running a treatment, do nothing.
-    if (currentView->type() != "TreatmentView") {
-        ui->warningLabel->setText(WARNING_NO_TREATMENT_RUNNING);
-        return;
+void MainWindow::on_clearButton_clicked() {
+    // If we're not on the history view, do nothing.
+    if (currentView->getName() != "History") { return; }
+
+    device.clearHistory();
+    menuVisibility(currentView);
+}
+
+/**
+ * @brief Deletes a single treatment history.
+ */
+void MainWindow::on_deleteButton_clicked() {
+    // If we're not on the history view, do nothing.
+    if (currentView->getName() != "History") { return; }
+
+    // Fetch therapy history to delete and pass to device to delete.
+    View* history = currentView->getChildren()->at(currentSelectionIndex.row());
+    HistoryView* historyView = dynamic_cast<HistoryView*>(history);
+    device.removeFromHistory(historyView);
+
+    menuVisibility(currentView);
+}
+
+
+// ========================================
+//
+// PRIVATE HELPER FUNCTIONS
+//
+// ========================================
+
+
+void MainWindow::navigateBackScreens(View* destination) {
+    if (!device.isPoweredOn()) { return; }
+    if (destination == nullptr) { return; }
+
+    if (!device.isTreatmentRunning()) {
+        menuVisibility(destination);
+    } else {
+        bool treatmentStopped = device.stopTreatment();
+        if (treatmentStopped) {
+            menuVisibility(destination);
+            treatmentEnded();
+        } else {
+            ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
+        }
     }
-    addHistory = true;
 }
 
 /**
  * @brief Notifies that treatment has ended or has been interrupted
  * and to add if required and stop timer.
  */
-void MainWindow::treatmentEnded(){
-    if (addHistory) {
-        int duration = currentView->getTherapy()->getTimer()-int(ui->timer->value());
-        device.addToHistory(currentView->getTherapy(), device.getCurrentMaxPower(), duration);
-        addHistory = false;
-    }
+void MainWindow::treatmentEnded() {
     timer->stop();
+    device.maybeAddTreatmentToHistory();
 }
 
 /**
- * @brief Clears the entire history
+ * @brief Updates menu view to navigate to specified option index.
+ * @param index: the index to navigate to in the menu.
  */
-void MainWindow::on_clearButton_clicked(){
-    if (currentView->getName() != "History") { return; }
+void MainWindow::navigateMenu(int index) {
+    if (currentView->getType() != "MenuView") { return; }
 
-    device.clearHistory();
-    menuVisibility();
-}
-
-/**
- * @brief Deletes a single treatment history
- */
-void MainWindow::on_deleteButton_clicked(){
-    if (currentView->getName() != "History") { return; }
-
-    MenuView* menuView = dynamic_cast<MenuView*>(currentView);
-    View* history = menuView->children->at(currentSelectionIndex.row());
-    HistoryView* historyView = dynamic_cast<HistoryView*>(history);
-
-    device.removeFromHistory(historyView);
-    menuVisibility();
-}
-
-/**
- * @brief Changes window view to display device main menu.
- */
-void MainWindow::displayMainMenu() {
-    // Fetch view graph from device.
-    currentView = device.mainMenu();
-
-    // Construct menu model for current menu view.
-    model = new QStringListModel(currentView->constructMenu(), NULL);
-    ui->listView->setModel(model);
-
-    // Reset menu option index to 0.
-    currentSelectionIndex = model->index(0);
+    currentSelectionIndex = model->index(index);
     ui->listView->setCurrentIndex(currentSelectionIndex);
-
-    menuVisibility();
 }
 
 /**
  * @brief Toggles UI to set components visible or invisible for a menu.
  */
-void MainWindow::menuVisibility() {
+void MainWindow::menuVisibility(View* menu) {
+    currentView = menu;
     model->setStringList(currentView->constructMenu());
+    ui->listView->setModel(model);
     currentSelectionIndex = model->index(0);
     ui->listView->setCurrentIndex(currentSelectionIndex);
     ui->warningLabel->setText(NO_ERROR);
@@ -292,11 +255,17 @@ void MainWindow::offVisibility() {
 /**
  * @brief Toggles UI to set components visible or invisible for a treatment.
  */
-void MainWindow::treatmentVisibility() {
+void MainWindow::treatmentVisibility(View* treatmentView) {
+    currentView = treatmentView;
     ui->powerLabel->setVisible(true);
     ui->powerLevelLabel->setVisible(true);
     ui->therapyLabel->setVisible(true);
     ui->timer->setVisible(true);
     ui->listView->setVisible(false);
     ui->warningLabel->setText(NO_ERROR);
+
+    countdown = currentView->getTherapy()->getTimer();
+    ui->therapyLabel->setText("Frequency: " + QString::number(currentView->getTherapy()->getFrequency()) + "Hz");
+    ui->powerLabel->setText(QString::number(device.getPowerLevel()));
+    timer->start(1000);
 }

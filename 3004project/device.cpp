@@ -1,34 +1,40 @@
 #include "device.h"
 
-Device::Device() : powerLevel(1), currentMaxPower(1), poweredOn(true), battery(new Battery()) {
+Device::Device() :
+    battery(new Battery()),
+    powerLevel(1),
+    poweredOn(false),
+    treatmentRunning(false),
+    attemptedQuitTreatment(false) {
+
     // Instantiate all preset therapies.
     programs = new QList<Program*>();
     frequencies = new QList<Frequency*>();
 
     // Create and append programs.
-    Program* throat = new Program(QString("Throat"), 10, 600, 30);
+    Program* throat = new Program(QString("Throat"), 10, 600);
     programs->append(throat);
 
-    Program* nausea = new Program(QString("Nausea"), 15, 240, 10);
+    Program* nausea = new Program(QString("Nausea"), 15, 240);
     programs->append(nausea);
 
-    Program* chlamydia = new Program(QString("Chlamydia"), 25, 1200, 80);
+    Program* chlamydia = new Program(QString("Chlamydia"), 25, 1200);
     programs->append(chlamydia);
 
-    Program* diarrhea = new Program(QString("Diarrhea"), 5, 120, 65);
+    Program* diarrhea = new Program(QString("Diarrhea"), 5, 120);
     programs->append(diarrhea);
 
     // Create and append frequencies.
-    Frequency* five = new Frequency(5, 300, 50);
+    Frequency* five = new Frequency(5, 50);
     frequencies->append(five);
 
-    Frequency* ten = new Frequency(10, 300, 50);
+    Frequency* ten = new Frequency(10, 50);
     frequencies->append(ten);
 
-    Frequency* fifteen = new Frequency(15, 300, 50);
+    Frequency* fifteen = new Frequency(15, 50);
     frequencies->append(fifteen);
 
-    Frequency* twenty = new Frequency(20, 300, 50);
+    Frequency* twenty = new Frequency(20, 50);
     frequencies->append(twenty);
 
     // Instantiate empty therapy history.
@@ -50,20 +56,59 @@ Device::~Device() {
     delete treatmentHistory;
 }
 
-View* Device::mainMenu() { return display->mainMenu; }
+/**
+ * @brief Applies device to skin if off skin, otherwise removes from skin.
+ * @return True if the device is now on skin, False otherwise.
+ */
+bool Device::applyOnSkin() {
+    isOnSkin = !isOnSkin;
+    return isOnSkin;
+}
+
+bool Device::maybeAddTreatmentToHistory() {
+    if (activeTherapy == nullptr) {
+        shouldAddTreatmentToHistory = false;
+        return shouldAddTreatmentToHistory;
+    }
+
+    if (treatmentRunning) {
+        shouldAddTreatmentToHistory = true;
+        return shouldAddTreatmentToHistory;
+    }
+
+    if (shouldAddTreatmentToHistory) {
+        addToHistory();
+        shouldAddTreatmentToHistory = false;
+    }
+
+    activeTherapy = nullptr;
+}
+
+void Device::updateTimer() {
+    activeTherapy->increaseTime();
+}
+
+View* Device::navigateDown(int index) {
+    if (!poweredOn) { return NULL; }
+    View* newView = display->navigateDown(index);
+
+    if (newView == NULL) { return newView; }
+
+    if (newView->getType() == "TreatmentView") {
+        startTreatment(newView->getTherapy());
+        if (treatmentRunning) { return newView; }
+        else { return NULL; }
+    }
+}
 
 /**
  * @brief Increases the power level of the treatment by one, unless power is at max.
  * @return The current power level.
  */
 int Device::increasePower() {
-    if (powerLevel == MAXPOWERLEVEL){
-        return MAXPOWERLEVEL;
-    }
-    powerLevel += 1;
-    if (powerLevel > currentMaxPower){
-        currentMaxPower = powerLevel;
-    }
+    if (!treatmentRunning) { return powerLevel; }
+    if (++powerLevel > MAXPOWERLEVEL) { powerLevel = MAXPOWERLEVEL; }
+    activeTherapy->increasePowerLevel();
     return powerLevel;
 }
 
@@ -72,32 +117,18 @@ int Device::increasePower() {
  * @return The current power level.
  */
 int Device::decreasePower() {
-    if (powerLevel == MINPOWERLEVEL){
-        return MINPOWERLEVEL;
-    }
-    powerLevel -= 1;
+    if (!treatmentRunning) { return powerLevel; }
+    if (--powerLevel < MINPOWERLEVEL) { powerLevel = MINPOWERLEVEL; }
     return powerLevel;
-}
-int Device::resetPower() {
-    powerLevel = MINPOWERLEVEL;
-    currentMaxPower = MINPOWERLEVEL;
-    return powerLevel;
-}
-/**
- * @brief Returns the current treatment's max power level.
- */
-int Device::getCurrentMaxPower(){
-    return currentMaxPower;
 }
 
 /**
  * @brief Adds a given therapy to treatment history.
  * @param The therapy to be added to treatment history.
  */
-void Device::addToHistory(Therapy* therapy, int powerLevel, int duration) {
-    PreviousTreatment* newTreatment = new PreviousTreatment(therapy, powerLevel, duration);
-    treatmentHistory->append(newTreatment);
-    display->addHistoryToNavigation(newTreatment);
+void Device::addToHistory() {
+    treatmentHistory->append(activeTherapy);
+    display->addHistoryToNavigation(activeTherapy);
 }
 
 /**
@@ -109,38 +140,47 @@ void Device::removeFromHistory(HistoryView* historyView) {
     display->removeHistoryFromNavigation(historyView);
 }
 
+/**
+ * @brief Clears all previous treatments from therapy history.
+ */
 void Device::clearHistory() {
     display->clearHistoryNavigation();
     treatmentHistory->clear();
 }
 
 /**
- * @brief Gets whether the device is currently powered on.
- * @return True if powered on, False otherwise.
- */
-bool Device::isPoweredOn() { return poweredOn; }
-
-/**
- * @brief Gets whether the device is currently on the skin.
- * @return True if on skin, False otherwise.
- */
-bool Device::isOnSkin() { return onSkin; }
-
-/**
  * @brief Powers on the device if powered off, otherwise powers on.
  */
-void Device::power() {
+bool Device::power() {
     poweredOn = !poweredOn;
-    powerLevel = 1;
+    powerLevel = MINPOWERLEVEL;
+    return poweredOn;
 }
 
 /**
- * @brief Applies device to skin if off skin, otherwise removes from skin.
+ * @brief Attempts to start a treatment.
+ * @return True if the treatment was started, False otherwise.
  */
-void Device::applyOnSkin() { onSkin = !onSkin; }
+bool Device::startTreatment(Therapy* therapy) {
+    if (!isOnSkin) { return false; }
+
+    activeTherapy = new PreviousTreatment(therapy, MINPOWERLEVEL, 0);
+    treatmentRunning = true;
+    return true;
+}
 
 /**
- * @brief Gets the battery level.
- * @return integer value of the battery's level.
+ * @brief Attempts to stop a treatment.
+ * @return True if the treatment was stopped, False otherwise.
  */
-int Device::batteryLevel() { battery->getBatteryLevel(); }
+bool Device::stopTreatment() {
+    if (!attemptedQuitTreatment) {
+        attemptedQuitTreatment = true;
+        return false;
+    }
+
+    treatmentRunning = false;
+    attemptedQuitTreatment = false;
+    powerLevel = MINPOWERLEVEL;
+    return true;
+}

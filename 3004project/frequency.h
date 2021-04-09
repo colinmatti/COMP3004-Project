@@ -5,9 +5,10 @@
 
 class Frequency : public Therapy {
 public:
-    Frequency(float f, int p, int t) : Therapy(f, p, t) {};
-    QString getName() { return QString::number(frequency); };
-    QString getType() { return "Frequency"; };
+    Frequency(float f, int t) : Therapy(f, t) {};
+
+    QString getName() { return QString("%1 Hz").arg(QString::number(frequency)); }
+    QString getType() { return "Frequency"; }
 };
 
 #endif // FREQUENCY_H

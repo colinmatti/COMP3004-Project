@@ -4,13 +4,11 @@
 #include "battery.h"
 #include "display.h"
 #include "frequency.h"
-#include "previoustreatment.h"
+#include "previousTreatment.h"
 #include "program.h"
 #include "therapy.h"
 #include "view.h"
 
-#include <array>
-#include <iostream>
 #include <QList>
 #include <QStringList>
 
@@ -22,30 +20,45 @@ public:
     Device();
     ~Device();
 
-    bool isPoweredOn();
-    bool isOnSkin();
-    void power();
-    void applyOnSkin();
-    int increasePower();
-    int decreasePower();
-    int resetPower();
-    void addToHistory(Therapy* therapy, int powerLevel, int duration);
-    void removeFromHistory(HistoryView* historyView);
+    void addToHistory();
     void clearHistory();
-    View* mainMenu();
-    int batteryLevel();
-    int getCurrentMaxPower();
+    void removeFromHistory(HistoryView* historyView);
+
+    bool applyOnSkin();
+
+    int decreasePower();
+    int increasePower();
+    int getPowerLevel() { return powerLevel; }
+
+    bool power();
+
+    bool startTreatment(Therapy* therapy);
+    bool stopTreatment();
+    bool maybeAddTreatmentToHistory();
+    bool isTreatmentRunning() { return treatmentRunning; }
+    void updateTimer();
+
+    View* navigateDown(int index);
+
+    int getBatteryLevel() { return battery->getBatteryLevel(); }
+    View* getMainMenu() { return display->getMainMenu(); }
 
 private:
-    int powerLevel;
-    int currentMaxPower;
-    bool poweredOn;
-    bool onSkin;
-    Battery *battery;
     Display *display;
-    QList<Program*> *programs;
+    Battery *battery;
+
+    bool isOnSkin;
+    int powerLevel;
+    bool poweredOn;
+
+    bool treatmentRunning;
+    bool attemptedQuitTreatment;
+    PreviousTreatment* activeTherapy;
+
+    bool shouldAddTreatmentToHistory;
+
     QList<Frequency*> *frequencies;
-    QStringList runTreatment(QString request);
+    QList<Program*> *programs;
     QList<PreviousTreatment*> *treatmentHistory;
 };
 

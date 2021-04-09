@@ -1,23 +1,26 @@
 #ifndef HISTORYVIEW_H
 #define HISTORYVIEW_H
 
-#include "previoustreatment.h"
-#include "view.h"
+#include "previousTreatment.h"
+#include "treatmentView.h"
 
 #include <cmath>
 
-class HistoryView : public View {
+class HistoryView : public TreatmentView {
 public:
-    HistoryView(QString n, View* p, PreviousTreatment* t) : View(n, p), previousTreatment(t) {};
+    HistoryView(QString n, View* p, PreviousTreatment* t) : TreatmentView(n, p, t->getTherapy()), previousTreatment(t) {};
     ~HistoryView() {};
 
-    PreviousTreatment* previousTreatment;
+    QStringList constructMenu() { return QStringList(); }
 
-    QStringList constructMenu() { return QStringList(); };
-    QString type() { return "TreatmentView"; };
-    QString getName();
-    Therapy* getTherapy() { return previousTreatment->therapy; }
     PreviousTreatment* getPreviousTreatment() { return previousTreatment; }
+
+    QString getType() { return "TreatmentView"; }
+    QString getName() { return name; }
+    Therapy* getTherapy() { return previousTreatment->getTherapy(); }
+
+private:
+    PreviousTreatment* previousTreatment;
 };
 
 #endif // HISTORYVIEW_H

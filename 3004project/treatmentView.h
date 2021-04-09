@@ -5,15 +5,17 @@
 
 class TreatmentView : public View {
 public:
-    TreatmentView(QString n, View* p, Therapy* t) : View(n, p), therapy(t) {};
+    TreatmentView(QString n, View* p, Therapy* t) : View(n, p), therapy(t) {}
     ~TreatmentView() {};
 
-    Therapy* therapy;
+    QStringList constructMenu() { return QStringList(); }
 
-    QStringList constructMenu() { return QStringList(); };
-    QString type() { return "TreatmentView"; };
-    QString getName() { return name; };
-    Therapy* getTherapy() { return therapy; };
+    QString getType() { return "TreatmentView"; }
+    QString getName() { return therapy->getName(); }
+    Therapy* getTherapy() { return therapy; }
+
+private:
+    Therapy* therapy;
 };
 
 #endif // TREATMENTVIEW_H
