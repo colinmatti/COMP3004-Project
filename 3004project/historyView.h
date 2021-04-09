@@ -14,7 +14,7 @@ public:
     PreviousTreatment* previousTreatment;
 
     QStringList constructMenu() { return QStringList(); };
-    QString type() { return "HistoryView"; };
+    QString type() { return "TreatmentView"; };
     QString getName();
     Therapy* getTherapy() { return previousTreatment->therapy; }
     PreviousTreatment* getPreviousTreatment() { return previousTreatment; }

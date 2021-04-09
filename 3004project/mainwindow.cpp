@@ -48,8 +48,6 @@ void MainWindow::on_okButton_clicked() {
         currentView = currentView->getParent();
     } else if (currentView->type() == "MenuView") {
         menuVisibility();
-    } else if (currentView->type() == "HistoryView") {
-        currentView = currentView->getParent();
     }
 }
 
