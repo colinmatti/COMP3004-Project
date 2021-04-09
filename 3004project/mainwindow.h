@@ -47,6 +47,7 @@ private:
     QStringListModel* model; // check
     QTimer *timer; // check
     Ui::MainWindow *ui;
+    int index;
 
     void navigateBackScreens(View* destination);
     void navigateMenu(int index);

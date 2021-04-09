@@ -3,6 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
+
     model(new QStringListModel()),
     timer(new QTimer()),
     ui(new Ui::MainWindow) {
@@ -66,20 +67,16 @@ void MainWindow::on_powerButton_clicked() {
  * @brief Navigate down in menu options if on MenuView.
  */
 void MainWindow::on_downButton_clicked() {
-    if (!device.isPoweredOn()) { return; }
-    // If we are currently at index 0, wrap around to end of the option list.
-    int index = (currentSelectionIndex.row() + 1) % model->stringList().size();
-    navigateMenu(index);
+    currentSelectionIndex = model->index((currentSelectionIndex.row() + 1) % model->stringList().size());
+    ui->listView->setCurrentIndex(currentSelectionIndex);
 }
 
 /**
  * @brief Navigate up in menu options if on MenuView.
  */
 void MainWindow::on_upButton_clicked() {
-    if (!device.isPoweredOn()) { return; }
-    // If we are currently at index n, wrap around to beginning of the option list.
-    int index = (currentSelectionIndex.row() + model->stringList().size() - 1) % model->stringList().size();
-    navigateMenu(index);
+    currentSelectionIndex = model->index((currentSelectionIndex.row() + model->stringList().size() - 1) % model->stringList().size());
+    ui->listView->setCurrentIndex(currentSelectionIndex);
 }
 
 /**
