@@ -213,6 +213,30 @@ void MainWindow::treatmentEnded(){
 }
 
 /**
+ * @brief Clears the entire history
+ */
+void MainWindow::on_clearButton_clicked(){
+    if (currentView->getName() != "History") { return; }
+
+    device.clearHistory();
+    menuVisibility();
+}
+
+/**
+ * @brief Deletes a single treatment history
+ */
+void MainWindow::on_deleteButton_clicked(){
+    if (currentView->getName() != "History") { return; }
+
+    MenuView* menuView = dynamic_cast<MenuView*>(currentView);
+    View* history = menuView->children->at(currentSelectionIndex.row());
+    HistoryView* historyView = dynamic_cast<HistoryView*>(history);
+
+    device.removeFromHistory(historyView);
+    menuVisibility();
+}
+
+/**
  * @brief Changes window view to display device main menu.
  */
 void MainWindow::displayMainMenu() {

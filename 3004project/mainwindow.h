@@ -41,6 +41,10 @@ private slots:
     void on_onSkin_stateChanged(int checked);
     void on_addButton_clicked();
 
+    void on_clearButton_clicked();
+
+    void on_deleteButton_clicked();
+
 private:
     int countdown;
     Device device;
