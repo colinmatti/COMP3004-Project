@@ -85,6 +85,7 @@ QPushButton:disabled {
 }
 
 #therapyLabel,#powerLevelLabel,#powerLabel{
+	color: black;
 	background-color: white;
 }
 

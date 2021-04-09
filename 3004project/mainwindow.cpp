@@ -264,8 +264,9 @@ void MainWindow::menuVisibility() {
     model->setStringList(currentView->constructMenu());
     currentSelectionIndex = model->index(0);
     ui->listView->setCurrentIndex(currentSelectionIndex);
+
     ui->warningLabel->setText(NO_ERROR);
-    ui->batteryLabel->setText("FULL BATTERY");
+    ui->batteryLabel->setText(QString::number(device.batteryLevel()));
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);
