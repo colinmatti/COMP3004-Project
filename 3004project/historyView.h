@@ -4,6 +4,8 @@
 #include "previoustreatment.h"
 #include "view.h"
 
+#include <cmath>
+
 class HistoryView : public View {
 public:
     HistoryView(QString n, View* p, PreviousTreatment* t) : View(n, p), previousTreatment(t) {};
@@ -13,7 +15,7 @@ public:
 
     QStringList constructMenu() { return QStringList(); };
     QString type() { return "HistoryView"; };
-    QString getName() { return name; };
+    QString getName();
     Therapy* getTherapy() { return previousTreatment->therapy; }
     PreviousTreatment* getPreviousTreatment() { return previousTreatment; }
 };
