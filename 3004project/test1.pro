@@ -21,6 +21,7 @@ HEADERS += \
     device.h \
     display.h \
     frequency.h \
+    historyView.h \
     mainwindow.h \
     menuView.h \
     previoustreatment.h \

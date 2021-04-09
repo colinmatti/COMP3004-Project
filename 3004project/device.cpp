@@ -87,7 +87,21 @@ int Device::resetPower() {
 void Device::addToHistory(Therapy* therapy) {
     PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
     treatmentHistory->append(newTreatment);
-    display->addHistoryToNavigation(therapy);
+    display->addHistoryToNavigation(newTreatment);
+}
+
+/**
+ * @brief Removes specified previousTreatment from therapy history.
+ * @param previousTreatment: The treatment to be removed from history.
+ */
+void Device::removeFromHistory(HistoryView* historyView) {
+    treatmentHistory->removeOne(historyView->getPreviousTreatment());
+    display->removeHistoryFromNavigation(historyView);
+}
+
+void Device::clearHistory() {
+    display->clearHistoryNavigation();
+    treatmentHistory->clear();
 }
 
 /**
@@ -114,3 +128,9 @@ void Device::power() {
  * @brief Applies device to skin if off skin, otherwise removes from skin.
  */
 void Device::applyOnSkin() { onSkin = !onSkin; }
+
+/**
+ * @brief Gets the battery level.
+ * @return integer value of the battery's level.
+ */
+int Device::batteryLevel() { battery->getBatteryLevel(); }

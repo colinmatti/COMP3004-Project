@@ -30,7 +30,10 @@ public:
     int decreasePower();
     int resetPower();
     void addToHistory(Therapy* therapy);
+    void removeFromHistory(HistoryView* historyView);
+    void clearHistory();
     View* mainMenu();
+    int batteryLevel();
 
 private:
     int powerLevel;

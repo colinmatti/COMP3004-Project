@@ -1,6 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include "historyView.h"
 #include "menuView.h"
 #include "treatmentView.h"
 #include "frequency.h"
@@ -16,7 +17,9 @@ public:
     MenuView* mainMenu;
     MenuView* historyMenu;
 
-    void addHistoryToNavigation(Therapy* therapy);
+    void addHistoryToNavigation(PreviousTreatment* previousTreatment);
+    void removeHistoryFromNavigation(HistoryView* historyView);
+    void clearHistoryNavigation();
 };
 
 #endif // DISPLAY_H
