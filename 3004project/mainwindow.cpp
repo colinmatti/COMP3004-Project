@@ -221,14 +221,15 @@ void MainWindow::navigateMenu(int index) {
 /**
  * @brief Toggles UI to set components visible or invisible for a menu.
  */
-void MainWindow::menuVisibility(View* menu) {
-    currentView = menu;
-    model->setStringList(currentView->constructMenu());
+void MainWindow::menuVisibility(View* menu) {    
+    model->setStringList(menu->constructMenu());
     ui->listView->setModel(model);
     currentSelectionIndex = model->index(0);
     ui->listView->setCurrentIndex(currentSelectionIndex);
-    ui->warningLabel->setText(NO_ERROR);
-    ui->batteryLabel->setText("FULL BATTERY");
+    ui->warningLabel->setText(device.getActiveError());
+
+    // 📌 TO DO: Create a way to make sure to update battery as it depletes, and show it in main window, for now, it'll "change" for every menu change
+    ui->batteryLabel->setText(QString::number(device.getBatteryLevel()));
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);
