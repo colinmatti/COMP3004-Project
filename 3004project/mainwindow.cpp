@@ -48,8 +48,6 @@ void MainWindow::on_okButton_clicked() {
         currentView = currentView->getParent();
     } else if (currentView->type() == "MenuView") {
         menuVisibility();
-    } else if (currentView->type() == "HistoryView") {
-        currentView = currentView->getParent();
     }
 }
 
@@ -201,12 +199,41 @@ void MainWindow::on_addButton_clicked() {
     addHistory = true;
 }
 
+/**
+ * @brief Notifies that treatment has ended or has been interrupted
+ * and to add if required and stop timer.
+ */
 void MainWindow::treatmentEnded(){
     if (addHistory) {
-        device.addToHistory(currentView->getTherapy());
+        int duration = currentView->getTherapy()->getTimer()-int(ui->timer->value());
+        device.addToHistory(currentView->getTherapy(), device.getCurrentMaxPower(), duration);
         addHistory = false;
     }
     timer->stop();
+}
+
+/**
+ * @brief Clears the entire history
+ */
+void MainWindow::on_clearButton_clicked(){
+    if (currentView->getName() != "History") { return; }
+
+    device.clearHistory();
+    menuVisibility();
+}
+
+/**
+ * @brief Deletes a single treatment history
+ */
+void MainWindow::on_deleteButton_clicked(){
+    if (currentView->getName() != "History") { return; }
+
+    MenuView* menuView = dynamic_cast<MenuView*>(currentView);
+    View* history = menuView->children->at(currentSelectionIndex.row());
+    HistoryView* historyView = dynamic_cast<HistoryView*>(history);
+
+    device.removeFromHistory(historyView);
+    menuVisibility();
 }
 
 /**

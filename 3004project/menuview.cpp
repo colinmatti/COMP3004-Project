@@ -7,6 +7,6 @@
  */
 QStringList MenuView::constructMenu() {
     QStringList menu = QStringList();
-    for (View* option : *children) { menu.append(option->name); }
+    for (View* option : *children) { menu.append(option->getName()); }
     return menu;
 }
