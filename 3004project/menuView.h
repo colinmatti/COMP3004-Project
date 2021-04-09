@@ -14,7 +14,7 @@ public:
 
     QStringList constructMenu();
     QString type() { return "MenuView"; };
-    QString getName() { return NULL; };
+    QString getName() { return name; };
     Therapy* getTherapy() { return NULL; };
 };
 
