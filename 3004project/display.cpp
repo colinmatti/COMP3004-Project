@@ -44,3 +44,7 @@ void Display::addHistoryToNavigation(PreviousTreatment* previousTreatment) {
 void Display::removeHistoryFromNavigation(HistoryView* historyView) {
     historyMenu->children->removeOne(historyView);
 }
+
+void Display::clearHistoryNavigation() {
+    historyMenu->children->clear();
+}

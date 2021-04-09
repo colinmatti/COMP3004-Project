@@ -19,6 +19,7 @@ public:
 
     void addHistoryToNavigation(PreviousTreatment* previousTreatment);
     void removeHistoryFromNavigation(HistoryView* historyView);
+    void clearHistoryNavigation();
 };
 
 #endif // DISPLAY_H
