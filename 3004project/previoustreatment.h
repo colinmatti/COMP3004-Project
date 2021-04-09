@@ -7,7 +7,7 @@
 
 class PreviousTreatment {
 public:
-    PreviousTreatment(Therapy* t, int p = 0, int d = 0) :
+    PreviousTreatment(Therapy* t, int p = 1, int d = 0) :
         date(QDate::currentDate()),
         time(QTime::currentTime()),
         therapy(t),
