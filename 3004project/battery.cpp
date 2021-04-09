@@ -4,9 +4,7 @@
  * @brief Determines whether the current battery level of the device is low.
  * @return boolean
  */
-bool Battery::isLow() {
-    return batteryLevel <= 10;
-}
+bool Battery::isLow() { return batteryLevel <= 10; }
 
 /**
  * @brief Decreases the battery level by the the device's current powerlevel and the time elapsed for the treatment.
@@ -27,7 +25,5 @@ void Battery::decreaseLevel(int currPwrLvl, int timePassed) {
  * @brief Returns the current battery level.
  * @return integer batteryLevel.
  */
-int Battery::getBatteryLevel() {
-    return batteryLevel;
-}
+int Battery::getBatteryLevel() { return batteryLevel; }
 
