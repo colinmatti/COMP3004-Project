@@ -195,7 +195,10 @@ void MainWindow::on_onSkin_stateChanged(int checked) {
  */
 void MainWindow::on_addButton_clicked() {
     // If the device is not currently running a treatment, do nothing.
-    if (currentView->type() != "TreatmentView") { return; }
+    if (currentView->type() != "TreatmentView") {
+        ui->warningLabel->setText(WARNING_NO_TREATMENT_RUNNING);
+        return;
+    }
     addHistory = true;
 }
 
