@@ -84,8 +84,8 @@ int Device::resetPower() {
  * @brief Adds a given therapy to treatment history.
  * @param The therapy to be added to treatment history.
  */
-void Device::addToHistory(Therapy* therapy) {
-    PreviousTreatment* newTreatment = new PreviousTreatment(therapy);
+void Device::addToHistory(Therapy* therapy, int powerLevel, int duration) {
+    PreviousTreatment* newTreatment = new PreviousTreatment(therapy, powerLevel, duration);
     treatmentHistory->append(newTreatment);
     display->addHistoryToNavigation(newTreatment);
 }

@@ -201,9 +201,15 @@ void MainWindow::on_addButton_clicked() {
     addHistory = true;
 }
 
+/**
+ * @brief Notifies that treatment has ended or has been interrupted
+ * and to add if required and stop timer.
+ */
 void MainWindow::treatmentEnded(){
     if (addHistory) {
-        device.addToHistory(currentView->getTherapy());
+        int powerValue = ui->powerLabel->text().toInt();
+        int secondsLeft = int(ui->timer->value());
+        device.addToHistory(currentView->getTherapy(), powerValue, secondsLeft);
         addHistory = false;
     }
     timer->stop();
