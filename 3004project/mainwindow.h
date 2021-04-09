@@ -5,6 +5,7 @@
 #define ERROR_NO_SKIN "***ERROR: No skin detected***"
 #define WARNING_LOW_BATT "***WARNING: Battery is low***"
 #define WARNING_TREATMENT_RUNNING "***WARNING: treatment is currently running***"
+#define WARNING_NO_TREATMENT_RUNNING "***WARNING: no treatment is currently running***"
 
 #include "device.h"
 
