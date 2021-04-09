@@ -12,6 +12,7 @@ SOURCES += \
     battery.cpp \
     device.cpp \
     display.cpp \
+    historyView.cpp \
     main.cpp \
     mainwindow.cpp \
     menuview.cpp
