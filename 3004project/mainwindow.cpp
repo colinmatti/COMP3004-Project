@@ -144,14 +144,14 @@ void MainWindow::on_onSkin_stateChanged(int checked) {
     // Toggle device applied to skin.
     device.applyOnSkin();
 
-    // If we're not currently in a treatment, return.
+    // If device is NOT running a treatment, do nothing
     if (!device.isTreatmentRunning()) { return; }
 
     if (checked == 2) {
-        ui->warningLabel->setText(NO_ERROR);
+        ui->warningLabel->setText(device.getActiveError());
         timer->start();
     } else {
-        ui->warningLabel->setText(ERROR_NO_SKIN);
+        ui->warningLabel->setText(device.getActiveError());
         timer->stop();
     }
 }
