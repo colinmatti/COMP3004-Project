@@ -253,16 +253,17 @@ void MainWindow::offVisibility() {
  * @brief Toggles UI to set components visible or invisible for a treatment.
  */
 void MainWindow::treatmentVisibility(View* treatmentView) {
-    currentView = treatmentView;
     ui->powerLabel->setVisible(true);
     ui->powerLevelLabel->setVisible(true);
     ui->therapyLabel->setVisible(true);
     ui->timer->setVisible(true);
     ui->listView->setVisible(false);
-    ui->warningLabel->setText(NO_ERROR);
+    ui->warningLabel->setText(device.getActiveError());
 
-    countdown = currentView->getTherapy()->getTimer();
-    ui->therapyLabel->setText("Frequency: " + QString::number(currentView->getTherapy()->getFrequency()) + "Hz");
+    countdown = treatmentView->getTherapy()->getTimer();
+
+    ui->therapyLabel->setText("Frequency: " + QString::number(treatmentView->getTherapy()->getFrequency()) + "Hz");
     ui->powerLabel->setText(QString::number(device.getPowerLevel()));
+
     timer->start(1000);
 }
