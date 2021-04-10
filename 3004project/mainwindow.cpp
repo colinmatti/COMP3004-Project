@@ -262,7 +262,7 @@ void MainWindow::treatmentVisibility(View* treatmentView) {
 
     countdown = treatmentView->getTherapy()->getTimer();
 
-    ui->therapyLabel->setText("Frequency: " + QString::number(countdown) + "Hz");
+    ui->therapyLabel->setText("Frequency: " + QString::number(treatmentView->getTherapy()->getFrequency()) + "Hz");
     ui->powerLabel->setText(QString::number(device.getPowerLevel()));
 
     timer->start(1000);
