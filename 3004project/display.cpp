@@ -74,3 +74,12 @@ View* Display::navigateDown(int index) {
     currentView = destination;
     return currentView;
 }
+
+View* Display::navigateUp() {
+    View* destination = currentView->getParent();
+
+    if (destination == NULL) { return NULL; }
+
+    currentView = destination;
+    return currentView;
+}

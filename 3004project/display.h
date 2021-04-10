@@ -17,13 +17,13 @@ public:
     void removeHistoryFromNavigation(HistoryView* historyView);
 
     View* navigateDown(int index);
+    View* navigateUp();
 
     MenuView* getMainMenu() { return mainMenu; }
 
 private:
     MenuView* historyMenu;
     MenuView* mainMenu;
-
     View* currentView;
 };
 

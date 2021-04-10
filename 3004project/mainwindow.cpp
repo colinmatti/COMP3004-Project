@@ -54,6 +54,33 @@ void MainWindow::on_okButton_clicked() {
 }
 
 /**
+ * @brief Return to the previous screen when back button is pressed.
+ * If previous screen does not exist, do nothing.
+ */
+void MainWindow::on_goBackButton_clicked() {
+    View* currentView = device.navigateUp();
+
+    if (currentView == NULL) {
+        ui->warningLabel->setText(device.getActiveError());
+    } else if (currentView->getType() == "MenuView") {
+        menuVisibility(currentView);
+    }
+}
+
+/**
+ * @brief Returns view to reflect being on the main menu of the device.
+ */
+void MainWindow::on_menuButton_clicked() {
+    View* currentView = device.navigateToMenu();
+
+    if (currentView == NULL) {
+        ui->warningLabel->setText(device.getActiveError());
+    } else if (currentView->getType() == "MenuView") {
+        menuVisibility(currentView);
+    }
+}
+
+/**
  * @brief When the power button is pressed, turn on or off the device.
  */
 void MainWindow::on_powerButton_clicked() {
@@ -93,21 +120,6 @@ void MainWindow::on_rightButton_clicked() {
 void MainWindow::on_leftButton_clicked() {
     QString power = QString::number(device.decreasePower());
     ui->powerLabel->setText(power);
-}
-
-/**
- * @brief Return to the previous screen when back button is pressed.
- * If previous screen does not exist, do nothing.
- */
-void MainWindow::on_goBackButton_clicked() {
-    navigateBackScreens(currentView->getParent());
-}
-
-/**
- * @brief Returns view to reflect being on the main menu of the device.
- */
-void MainWindow::on_menuButton_clicked() {
-    navigateBackScreens(device.getMainMenu());
 }
 
 /**
@@ -174,24 +186,6 @@ void MainWindow::on_deleteButton_clicked() {
 // PRIVATE HELPER FUNCTIONS
 //
 // ========================================
-
-
-void MainWindow::navigateBackScreens(View* destination) {
-    if (!device.isPoweredOn()) { return; }
-    if (destination == nullptr) { return; }
-
-    if (!device.isTreatmentRunning()) {
-        menuVisibility(destination);
-    } else {
-        bool treatmentStopped = device.stopTreatment();
-        if (treatmentStopped) {
-            menuVisibility(destination);
-            treatmentEnded();
-        } else {
-            ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
-        }
-    }
-}
 
 /**
  * @brief Notifies that treatment has ended or has been interrupted
