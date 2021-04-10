@@ -9,7 +9,7 @@ public:
     Battery(double b = 11) : batteryLevel(b) {};
 
     double decreaseBatteryLevel(int currPwrLvl);
-    double getBatteryLevel() { return batteryLevel; } // NOT CURRENTLY USED
+    double getBatteryLevel() { return batteryLevel; }
     bool isLow() { return batteryLevel <= 10; }
 
 private:
