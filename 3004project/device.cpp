@@ -161,8 +161,7 @@ void Device::removeFromHistory(HistoryView* historyView) {
  * @return current view object.
  */
 View* Device::clearHistory() {
-    if (display->getCurrentView()->getName() == "TreatmentView") {
-        display->clearHistoryNavigation();
+    if (display->clearHistoryNavigation()) {
         treatmentHistory->clear();
     }
     return display->getCurrentView();

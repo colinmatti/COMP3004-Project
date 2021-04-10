@@ -13,7 +13,7 @@ public:
     Display(QList<Frequency*>* frequencies, QList<Program*>* programs);
 
     void addHistoryToNavigation(PreviousTreatment* previousTreatment);
-    void clearHistoryNavigation();
+    bool clearHistoryNavigation();
     void removeHistoryFromNavigation(HistoryView* historyView);
 
     View* navigateDown(int index);
