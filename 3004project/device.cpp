@@ -68,20 +68,13 @@ bool Device::applyOnSkin() {
 bool Device::maybeAddTreatmentToHistory() {
     if (activeTherapy == nullptr) {
         shouldAddTreatmentToHistory = false;
-        return shouldAddTreatmentToHistory;
     }
 
     if (treatmentRunning) {
         shouldAddTreatmentToHistory = true;
-        return shouldAddTreatmentToHistory;
     }
 
-    if (shouldAddTreatmentToHistory) {
-        addToHistory();
-        shouldAddTreatmentToHistory = false;
-    }
-
-    activeTherapy = nullptr;
+    return shouldAddTreatmentToHistory;
 }
 
 void Device::updateTimer() {
@@ -174,13 +167,19 @@ bool Device::startTreatment(Therapy* therapy) {
  * @return True if the treatment was stopped, False otherwise.
  */
 bool Device::stopTreatment() {
-    if (!attemptedQuitTreatment) {
+    // Only if the treatment is still running
+    if (activeTherapy->getDurationInSeconds() < activeTherapy->getTherapy()->getTimer() && !attemptedQuitTreatment) {
         attemptedQuitTreatment = true;
         return false;
     }
 
+    if (shouldAddTreatmentToHistory) {
+        addToHistory();
+        shouldAddTreatmentToHistory = false;
+    }
     treatmentRunning = false;
     attemptedQuitTreatment = false;
     powerLevel = MINPOWERLEVEL;
+    activeTherapy = nullptr;
     return true;
 }
