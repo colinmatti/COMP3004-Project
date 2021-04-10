@@ -6,7 +6,7 @@
 
 class Battery {
 public:
-    Battery(double b = 11) : batteryLevel(b) {};
+    Battery(double b = MAXBATTERYLEVEL) : batteryLevel(b) {};
 
     double decreaseBatteryLevel(int currPwrLvl);
     double getBatteryLevel() { return batteryLevel; }
