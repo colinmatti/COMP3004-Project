@@ -97,7 +97,7 @@ void Device::updateTimer() {
  * @brief Decreases the battery level for one second passed if a therapy is ongoing.
  * @return the updated battery level if decrease successful, otherwise -1.
  */
-double Device::updateBattery() {
+float Device::updateBattery() {
     // If there's no active therapy, do nothing.
     if (!treatmentRunning) { return -1; }
 
