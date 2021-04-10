@@ -42,7 +42,6 @@ public:
     bool startTreatment(Therapy* therapy);
     bool stopTreatment();
     bool maybeAddTreatmentToHistory();
-    bool isTreatmentRunning() { return treatmentRunning; }
     void updateTimer();
 
     View* navigateDown(int index);

@@ -34,16 +34,21 @@ MainWindow::~MainWindow() {
  * @brief Attempt to add active therapy to history if therapy ongoing.
  */
 void MainWindow::on_addButton_clicked() {
+    // Attempt to add the ongoing treatment to history.
     bool willAddToHistory = device.maybeAddTreatmentToHistory();
-    if (!willAddToHistory) { ui->warningLabel->setText(WARNING_NO_TREATMENT_RUNNING); }
+
+    // If adding to history failed, show warning.
+    if (!willAddToHistory) { ui->warningLabel->setText(device.getActiveError()); }
 }
 
 /**
- * @brief When the OK button is clicked, navigate to the next view.
+ * @brief Attempt to navigate down the menu when OK button clicked.
  */
 void MainWindow::on_okButton_clicked() {
+    // Attempt to navigate down the menu.
     View* currentView = device.navigateDown(currentSelectionIndex.row());
 
+    // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "TreatmentView") {
@@ -54,30 +59,31 @@ void MainWindow::on_okButton_clicked() {
 }
 
 /**
- * @brief Return to the previous screen when back button is pressed.
- * If previous screen does not exist, do nothing.
+ * @brief Attempt to navigate up the menu when BACK button clicked.
  */
 void MainWindow::on_goBackButton_clicked() {
+    // Attempt to navigate up the menu.
     View* currentView = device.navigateUp();
 
+    // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "MenuView") {
-        timer->stop();
         menuVisibility(currentView);
     }
 }
 
 /**
- * @brief Returns view to reflect being on the main menu of the device.
+ * @brief Attempt to navigate to the main menu when MENU button clicked.
  */
 void MainWindow::on_menuButton_clicked() {
+    // Attempt to navigate to the main menu.
     View* currentView = device.navigateToMenu();
 
+    // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "MenuView") {
-        timer->stop();
         menuVisibility(currentView);
     }
 }
@@ -88,23 +94,28 @@ void MainWindow::on_menuButton_clicked() {
 void MainWindow::on_powerButton_clicked() {
     // If the device is now ON, turn on main menu visibility.
     if (device.power()) { menuVisibility(device.getMainMenu()); }
+
     // Otherwise, toggle OFF visibility.
     else { offVisibility(); }
 }
 
 /**
- * @brief Navigate down in menu options if on MenuView.
+ * @brief Navigate down in menu options.
  */
 void MainWindow::on_downButton_clicked() {
-    currentSelectionIndex = model->index((currentSelectionIndex.row() + 1) % model->stringList().size());
+    int newIndex = (currentSelectionIndex.row() + 1) % model->stringList().size();
+
+    currentSelectionIndex = model->index(newIndex);
     ui->listView->setCurrentIndex(currentSelectionIndex);
 }
 
 /**
- * @brief Navigate up in menu options if on MenuView.
+ * @brief Navigate up in menu options.
  */
 void MainWindow::on_upButton_clicked() {
-    currentSelectionIndex = model->index((currentSelectionIndex.row() + model->stringList().size() - 1) % model->stringList().size());
+    int newIndex = (currentSelectionIndex.row() + model->stringList().size() - 1) % model->stringList().size();
+
+    currentSelectionIndex = model->index(newIndex);
     ui->listView->setCurrentIndex(currentSelectionIndex);
 }
 
@@ -128,11 +139,14 @@ void MainWindow::on_leftButton_clicked() {
  * @brief Display and decrease countdown until countdown reaches zero.
  */
 void MainWindow::on_timerStart() {
+    // If countdown reaches 0, stop the treatment and retreat to menu.
     if (countdown < 0) {
-        timer->stop();
         device.stopTreatment();
         menuVisibility(device.getCurrentView());
-    } else {
+    }
+
+    // Otherwise, decrement counter.
+    else {
         ui->timer->display(countdown--);
         device.updateTimer();
     }
@@ -144,18 +158,17 @@ void MainWindow::on_timerStart() {
  */
 void MainWindow::on_onSkin_stateChanged(int checked) {
     // Toggle device applied to skin.
-    device.applyOnSkin();
+    bool treatmentRunning = device.applyOnSkin();
 
     // If device is NOT running a treatment, do nothing
-    if (!device.isTreatmentRunning()) { return; }
+    if (!treatmentRunning) { return; }
 
-    if (checked == 2) {
-        ui->warningLabel->setText(device.getActiveError());
-        timer->start();
-    } else {
-        ui->warningLabel->setText(device.getActiveError());
-        timer->stop();
-    }
+    ui->warningLabel->setText(device.getActiveError());
+
+    // If the treatment is running and the device is ON skin, resume timer.
+    if (checked == 2) { timer->start(); }
+    // If the treatment is running and the device is OFF skin, pause timer.
+    else { timer->stop(); }
 }
 
 /**
@@ -187,7 +200,8 @@ void MainWindow::on_deleteButton_clicked() {
 /**
  * @brief Toggles UI to set components visible or invisible for a menu.
  */
-void MainWindow::menuVisibility(View* menu) {    
+void MainWindow::menuVisibility(View* menu) {
+    timer->stop();
     model->setStringList(menu->constructMenu());
     ui->listView->setModel(model);
     currentSelectionIndex = model->index(0);

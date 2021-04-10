@@ -59,11 +59,17 @@ Device::~Device() {
 
 /**
  * @brief Applies device to skin if off skin, otherwise removes from skin.
- * @return True if the device is now on skin, False otherwise.
+ * @return True if the treatment is running, False otherwise.
  */
 bool Device::applyOnSkin() {
     isOnSkin = !isOnSkin;
-    return isOnSkin;
+
+    // If the device is now ON the skin, remove any active errors.
+    if (isOnSkin && treatmentRunning) { activeError = NO_ERROR; }
+    // If the device is now OFF the skin, warn that treatment is running.
+    else if (!isOnSkin && treatmentRunning) { activeError = WARNING_TREATMENT_RUNNING; }
+
+    return treatmentRunning;
 }
 
 bool Device::maybeAddTreatmentToHistory() {
@@ -230,9 +236,11 @@ bool Device::stopTreatment() {
         addToHistory();
         shouldAddTreatmentToHistory = false;
     }
+
     treatmentRunning = false;
     attemptedQuitTreatment = false;
     powerLevel = MINPOWERLEVEL;
     activeTherapy = nullptr;
+    activeError = NO_ERROR;
     return true;
 }
