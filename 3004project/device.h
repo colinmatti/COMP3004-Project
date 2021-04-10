@@ -4,13 +4,14 @@
 #include "battery.h"
 #include "display.h"
 #include "frequency.h"
-#include "previousTreatment.h"
+#include "activeTreatment.h"
 #include "program.h"
 #include "therapy.h"
 #include "view.h"
 
 #include <QList>
 #include <QStringList>
+#include <QTimer>
 
 #define MINPOWERLEVEL 1
 #define MAXPOWERLEVEL 100
@@ -40,7 +41,8 @@ public:
     bool startTreatment(Therapy* therapy);
     bool stopTreatment();
     bool addTreatmentToHistory();
-    void updateTimer();
+
+    int updateTimer();
     float updateBattery();
 
     View* navigateDown(int index);
@@ -48,6 +50,7 @@ public:
     View* navigateToMenu();
     View* getCurrentView();
 
+    QTimer* getTimer() { return timer; }
     QString getActiveError() { return activeError; }
     int getBatteryLevel() { return battery->getBatteryLevel(); }
 
@@ -55,13 +58,16 @@ private:
     Display *display;
     Battery *battery;
 
+
     bool isOnSkin;
     int powerLevel;
     bool poweredOn;
 
     bool treatmentRunning;
     bool attemptedQuitTreatment;
-    PreviousTreatment* activeTherapy;
+    ActiveTreatment* activeTherapy;
+
+    QTimer *timer;
 
     bool shouldAddTreatmentToHistory;
 
@@ -70,7 +76,7 @@ private:
 
     QList<Frequency*> *frequencies;
     QList<Program*> *programs;
-    QList<PreviousTreatment*> *treatmentHistory;
+    QList<ActiveTreatment*> *treatmentHistory;
 
     void addToHistory();
 };

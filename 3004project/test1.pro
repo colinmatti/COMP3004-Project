@@ -17,6 +17,7 @@ SOURCES += \
     menuview.cpp
 
 HEADERS += \
+    activeTreatment.h \
     battery.h \
     device.h \
     display.h \
@@ -24,7 +25,6 @@ HEADERS += \
     historyView.h \
     mainwindow.h \
     menuView.h \
-    previousTreatment.h \
     program.h \
     therapy.h \
     treatmentView.h \

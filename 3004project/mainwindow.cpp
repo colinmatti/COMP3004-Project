@@ -3,22 +3,20 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    model(new QStringListModel()),
-    timer(new QTimer()),
-    ui(new Ui::MainWindow) {
+    ui(new Ui::MainWindow),
+    model(new QStringListModel()) {
 
     ui->setupUi(this);
     ui->warningLabel->setWordWrap(true);
     ui->batteryLabel->setWordWrap(true);
 
-    connect(timer, SIGNAL(timeout()), this, SLOT(on_timerStart()));
+    connect(device.getTimer(), SIGNAL(timeout()), this, SLOT(on_timerStart()));
 
     offVisibility();
 }
 
 MainWindow::~MainWindow() {
     delete model;
-    delete timer;
     delete ui;
 }
 
@@ -143,43 +141,22 @@ void MainWindow::on_leftButton_clicked() {
  * @brief Display and decrease countdown until countdown reaches zero.
  */
 void MainWindow::on_timerStart() {
-    // If countdown reaches 0, stop the treatment and retreat to menu.
-    if (countdown < 0) {
-        device.stopTreatment();
-        menuVisibility(device.getCurrentView());
-    }
+    int timeRemaining = device.updateTimer();
 
-    // Otherwise, decrement counter.
-    else {
-        ui->timer->display(countdown--);
-        device.updateTimer();
+    // Updates the battery and formats the float value to round up to nearest whole number.
+    double batteryLevel = device.updateBattery();
+    ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 
-        // Update the battery level every second.
-        float batteryLevel = device.updateBattery();
-        // Formats the float value to round up to nearest whole number.
-        ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
-
-        ui->warningLabel->setText(device.getActiveError());
-    }
+    ui->timer->display(timeRemaining);
+    ui->warningLabel->setText(device.getActiveError());
 }
 
 /**
  * @brief Checks if the device is on the skin or off (currently simulated on admin console).
- * @param checked: When checked == 2, else error.
  */
-void MainWindow::on_onSkin_stateChanged(int checked) {
-    // Toggle device applied to skin.
-    bool treatmentRunning = device.applyOnSkin();
-
-    // If device is NOT running a treatment, do nothing
-    if (!treatmentRunning) { return; }
-
+void MainWindow::on_onSkin_stateChanged() {
+    device.applyOnSkin();
     ui->warningLabel->setText(device.getActiveError());
-
-    // If the treatment is running and the device is ON skin, resume timer.
-    if (checked == 2) { timer->start(); }
-    // If the treatment is running and the device is OFF skin, pause timer.
-    else { timer->stop(); }
 }
 
 /**
@@ -212,7 +189,6 @@ void MainWindow::on_deleteButton_clicked() {
  * @brief Toggles UI to set components visible or invisible for a menu.
  */
 void MainWindow::menuVisibility(View* menu) {
-    timer->stop();
     model->setStringList(menu->constructMenu());
     ui->listView->setModel(model);
     currentSelectionIndex = model->index(0);
@@ -254,10 +230,7 @@ void MainWindow::treatmentVisibility(View* treatmentView) {
     ui->listView->setVisible(false);
     ui->warningLabel->setText(device.getActiveError());
 
-    countdown = treatmentView->getTherapy()->getTimer();
-
+    ui->timer->display(treatmentView->getTherapy()->getTimer());
     ui->therapyLabel->setText("Frequency: " + QString::number(treatmentView->getTherapy()->getFrequency()) + "Hz");
     ui->powerLabel->setText(QString::number(device.getPowerLevel()));
-
-    timer->start(1000);
 }

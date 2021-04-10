@@ -1,8 +1,9 @@
 #ifndef BATTERY_H
 #define BATTERY_H
 
-#define MINBATTERYLEVEL = 0
-#define MAXBATTERYLEVEL = 100
+#define MINBATTERYLEVEL 0
+#define MAXBATTERYLEVEL 100
+#define LOWBATTERYLEVEL 10
 
 class Battery {
 public:
@@ -10,7 +11,7 @@ public:
 
     float decreaseBatteryLevel(int currPwrLvl);
     float getBatteryLevel() { return batteryLevel; }
-    bool isLow() { return batteryLevel <= 10; }
+    bool isLow() { return batteryLevel <= LOWBATTERYLEVEL; }
 
 private:
     float batteryLevel;

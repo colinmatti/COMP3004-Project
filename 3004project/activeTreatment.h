@@ -1,13 +1,13 @@
-#ifndef PREVIOUSTREATMENT_H
-#define PREVIOUSTREATMENT_H
+#ifndef ACTIVETREATMENT_H
+#define ACTIVETREATMENT_H
 
 #include "therapy.h"
 
 #include <QDate>
 
-class PreviousTreatment {
+class ActiveTreatment {
 public:
-    PreviousTreatment(Therapy* t, int p = 1, int d = 0) :
+    ActiveTreatment(Therapy* t, int p = 1, int d = 0) :
         date(QDate::currentDate()),
         durationInSeconds(d),
         maxPowerLevel(p),
@@ -24,6 +24,7 @@ public:
     void increaseTime() { durationInSeconds++; }
 
     bool isOngoing() { return (durationInSeconds < therapy->getTimer()); }
+    int timeRemaining() {return therapy->getTimer() - durationInSeconds; }
 
 private:
     QDate date;
@@ -33,4 +34,4 @@ private:
     Therapy* therapy;
 };
 
-#endif // PREVIOUSTREATMENT_H
+#endif // ACTIVETREATMENT_H
