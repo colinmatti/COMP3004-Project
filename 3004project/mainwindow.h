@@ -42,10 +42,6 @@ private:
     QTimer *timer; // check
     Ui::MainWindow *ui;
 
-    void navigateBackScreens(View* destination);
-    void navigateMenu(int index);
-    void treatmentEnded(); // check
-
     void menuVisibility(View* menu);
     void offVisibility();
     void treatmentVisibility(View* treatmentView);
