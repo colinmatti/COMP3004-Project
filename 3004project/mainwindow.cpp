@@ -3,7 +3,6 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-
     model(new QStringListModel()),
     timer(new QTimer()),
     ui(new Ui::MainWindow) {
