@@ -151,9 +151,12 @@ void Device::addToHistory() {
  * @brief Removes specified previousTreatment from therapy history.
  * @param previousTreatment: The treatment to be removed from history.
  */
-void Device::removeFromHistory(HistoryView* historyView) {
-    treatmentHistory->removeOne(historyView->getPreviousTreatment());
-    display->removeHistoryFromNavigation(historyView);
+View* Device::removeFromHistory(int index) {
+    HistoryView* newView = display->removeHistoryFromNavigation(index);
+    if (newView != NULL){
+        treatmentHistory->removeOne(newView->getPreviousTreatment());
+    }
+    return getCurrentView();
 }
 
 /**
