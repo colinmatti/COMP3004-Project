@@ -54,6 +54,33 @@ void MainWindow::on_okButton_clicked() {
 }
 
 /**
+ * @brief Return to the previous screen when back button is pressed.
+ * If previous screen does not exist, do nothing.
+ */
+void MainWindow::on_goBackButton_clicked() {
+    View* currentView = device.navigateUp();
+
+    if (currentView == NULL) {
+        ui->warningLabel->setText(device.getActiveError());
+    } else if (currentView->getType() == "MenuView") {
+        menuVisibility(currentView);
+    }
+}
+
+/**
+ * @brief Returns view to reflect being on the main menu of the device.
+ */
+void MainWindow::on_menuButton_clicked() {
+    View* currentView = device.navigateToMenu();
+
+    if (currentView == NULL) {
+        ui->warningLabel->setText(device.getActiveError());
+    } else if (currentView->getType() == "MenuView") {
+        menuVisibility(currentView);
+    }
+}
+
+/**
  * @brief When the power button is pressed, turn on or off the device.
  */
 void MainWindow::on_powerButton_clicked() {
@@ -96,26 +123,13 @@ void MainWindow::on_leftButton_clicked() {
 }
 
 /**
- * @brief Return to the previous screen when back button is pressed.
- * If previous screen does not exist, do nothing.
- */
-void MainWindow::on_goBackButton_clicked() {
-    navigateBackScreens(currentView->getParent());
-}
-
-/**
- * @brief Returns view to reflect being on the main menu of the device.
- */
-void MainWindow::on_menuButton_clicked() {
-    navigateBackScreens(device.getMainMenu());
-}
-
-/**
  * @brief Display and decrease countdown until countdown reaches zero.
  */
 void MainWindow::on_timerStart() {
     if (countdown < 0) {
-        treatmentEnded();
+        timer->stop();
+        device.stopTreatment();
+        menuVisibility(device.getCurrentView());
     } else {
         ui->timer->display(countdown--);
         device.updateTimer();
@@ -175,44 +189,6 @@ void MainWindow::on_deleteButton_clicked() {
 //
 // ========================================
 
-
-void MainWindow::navigateBackScreens(View* destination) {
-    if (!device.isPoweredOn()) { return; }
-    if (destination == nullptr) { return; }
-
-    if (!device.isTreatmentRunning()) {
-        menuVisibility(destination);
-    } else {
-        bool treatmentStopped = device.stopTreatment();
-        if (treatmentStopped) {
-            menuVisibility(destination);
-            treatmentEnded();
-        } else {
-            ui->warningLabel->setText(WARNING_TREATMENT_RUNNING);
-        }
-    }
-}
-
-/**
- * @brief Notifies that treatment has ended or has been interrupted
- * and to add if required and stop timer.
- */
-void MainWindow::treatmentEnded() {
-    timer->stop();
-    device.stopTreatment();
-    menuVisibility(device.getMainMenu());
-}
-
-/**
- * @brief Updates menu view to navigate to specified option index.
- * @param index: the index to navigate to in the menu.
- */
-void MainWindow::navigateMenu(int index) {
-    if (currentView->getType() != "MenuView") { return; }
-
-    currentSelectionIndex = model->index(index);
-    ui->listView->setCurrentIndex(currentSelectionIndex);
-}
 
 /**
  * @brief Toggles UI to set components visible or invisible for a menu.

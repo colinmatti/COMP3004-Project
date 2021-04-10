@@ -101,6 +101,23 @@ View* Device::navigateDown(int index) {
 }
 
 /**
+ * @brief Attempt to navigate up through the display menu.
+ * @return the new view if successfully navigated, otherwise NULL.
+ */
+View* Device::navigateUp() {
+    if (!poweredOn) { return NULL; }
+
+    stopTreatment();
+    if (treatmentRunning) { return NULL; }
+
+    return display->navigateUp();
+}
+
+View* Device::getCurrentView() {
+    return display->getCurrentView();
+}
+
+/**
  * @brief Increases the power level of the treatment by one, unless power is at max.
  * @return The current power level.
  */
@@ -178,6 +195,7 @@ bool Device::startTreatment(Therapy* therapy) {
 bool Device::stopTreatment() {
     // Only if the treatment is still running
     if (activeTherapy->getDurationInSeconds() < activeTherapy->getTherapy()->getTimer() && !attemptedQuitTreatment) {
+        activeError = WARNING_TREATMENT_RUNNING;
         attemptedQuitTreatment = true;
         return false;
     }
