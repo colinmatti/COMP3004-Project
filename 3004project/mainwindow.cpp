@@ -43,8 +43,9 @@ void MainWindow::on_addButton_clicked() {
  */
 void MainWindow::on_okButton_clicked() {
     View* currentView = device.navigateDown(currentSelectionIndex.row());
+
     if (currentView == NULL) {
-        ui->warningLabel->setText(ERROR_NO_SKIN);
+        ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "TreatmentView") {
         treatmentVisibility(currentView);
     } else if (currentView->getType() == "MenuView") {

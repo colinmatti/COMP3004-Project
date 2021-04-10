@@ -15,6 +15,12 @@
 #define MINPOWERLEVEL 1
 #define MAXPOWERLEVEL 100
 
+#define NO_ERROR "***No error detected***"
+#define ERROR_NO_SKIN "***ERROR: No skin detected***"
+#define WARNING_LOW_BATT "***WARNING: Battery is low***"
+#define WARNING_TREATMENT_RUNNING "***WARNING: treatment is currently running***"
+#define WARNING_NO_TREATMENT_RUNNING "***WARNING: no treatment is currently running***"
+
 class Device {
 public:
     Device();
@@ -40,6 +46,8 @@ public:
 
     View* navigateDown(int index);
 
+    QString getActiveError() { return activeError; }
+
     int getBatteryLevel() { return battery->getBatteryLevel(); }
     View* getMainMenu() { return display->getMainMenu(); }
 
@@ -56,6 +64,8 @@ private:
     PreviousTreatment* activeTherapy;
 
     bool shouldAddTreatmentToHistory;
+
+    QString activeError;
 
     QList<Frequency*> *frequencies;
     QList<Program*> *programs;

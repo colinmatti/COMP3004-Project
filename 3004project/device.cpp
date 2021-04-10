@@ -5,7 +5,8 @@ Device::Device() :
     powerLevel(1),
     poweredOn(false),
     treatmentRunning(false),
-    attemptedQuitTreatment(false) {
+    attemptedQuitTreatment(false),
+    activeError(NO_ERROR) {
 
     // Instantiate all preset therapies.
     programs = new QList<Program*>();
@@ -81,6 +82,11 @@ void Device::updateTimer() {
     activeTherapy->increaseTime();
 }
 
+/**
+ * @brief Attempt to navigate down through the display menu.
+ * @param index: the menu index to navigate down into.
+ * @return the new view if successfully navigated, otherwise NULL.
+ */
 View* Device::navigateDown(int index) {
     if (!poweredOn) { return NULL; }
     View* newView = display->navigateDown(index);
@@ -155,7 +161,10 @@ bool Device::power() {
  * @return True if the treatment was started, False otherwise.
  */
 bool Device::startTreatment(Therapy* therapy) {
-    if (!isOnSkin) { return false; }
+    if (!isOnSkin) {
+        activeError = ERROR_NO_SKIN;
+        return false;
+    }
 
     activeTherapy = new PreviousTreatment(therapy, MINPOWERLEVEL, 0);
     treatmentRunning = true;
