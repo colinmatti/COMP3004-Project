@@ -155,7 +155,7 @@ void MainWindow::on_timerStart() {
         device.updateTimer();
 
         // Update the battery level every second.
-        double batteryLevel = device.updateBattery();
+        float batteryLevel = device.updateBattery();
         // Formats the float value to round up to nearest whole number.
         ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 
