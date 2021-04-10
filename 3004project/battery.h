@@ -10,7 +10,7 @@ public:
 
     double decreaseBatteryLevel(int currPwrLvl);
     double getBatteryLevel() { return batteryLevel; } // NOT CURRENTLY USED
-    bool isLow() { return batteryLevel <= 10; } //  NOT CURRENTLY USED
+    bool isLow() { return batteryLevel <= 10; }
 
 private:
     float batteryLevel;
