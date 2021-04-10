@@ -27,7 +27,7 @@ public:
     ~Device();
 
     void addToHistory();
-    void clearHistory();
+    View* clearHistory();
     void removeFromHistory(HistoryView* historyView);
 
     bool applyOnSkin();

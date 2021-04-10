@@ -161,10 +161,7 @@ void MainWindow::on_onSkin_stateChanged(int checked) {
  */
 void MainWindow::on_clearButton_clicked() {
     // If we're not on the history view, do nothing.
-    if (currentView->getName() != "History") { return; }
-
-    device.clearHistory();
-    menuVisibility(currentView);
+    menuVisibility(device.clearHistory());
 }
 
 /**
