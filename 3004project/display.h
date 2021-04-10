@@ -14,7 +14,7 @@ public:
 
     void addHistoryToNavigation(PreviousTreatment* previousTreatment);
     void clearHistoryNavigation();
-    void removeHistoryFromNavigation(HistoryView* historyView);
+    View* removeHistoryFromNavigation(HistoryView* historyView);
 
     View* navigateDown(int index);
     View* navigateUp();

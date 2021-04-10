@@ -152,13 +152,13 @@ void Device::addToHistory() {
  * @param previousTreatment: The treatment to be removed from history.
  */
 View* Device::removeFromHistory(int index) {
-    if (getCurrentView()->getName() == "History"){
-        HistoryView* historyView = dynamic_cast<HistoryView*>(getCurrentView()->getChildren()->at(index));
+    HistoryView* historyView = dynamic_cast<HistoryView*>(getCurrentView()->getChildren()->at(index));
+
+    View* newView = display->removeHistoryFromNavigation(historyView);
+    if (newView != NULL){
         treatmentHistory->removeOne(historyView->getPreviousTreatment());
-        display->removeHistoryFromNavigation(historyView);
-        return display->getCurrentView();
     }
-    return NULL;
+    return newView;
 }
 
 /**
