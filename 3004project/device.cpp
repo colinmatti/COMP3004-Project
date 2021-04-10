@@ -91,13 +91,27 @@ View* Device::navigateDown(int index) {
     if (!poweredOn) { return NULL; }
     View* newView = display->navigateDown(index);
 
-    if (newView == NULL) { return newView; }
+    if (newView == NULL) { return NULL; }
 
     if (newView->getType() == "TreatmentView") {
         startTreatment(newView->getTherapy());
         if (treatmentRunning) { return newView; }
-        else { return NULL; }
+        else {
+            display->navigateUp();
+            return NULL;
+        }
     }
+
+    return newView;
+}
+
+View* Device::navigateToMenu() {
+    if (!poweredOn) { return NULL; }
+
+    stopTreatment();
+    if (treatmentRunning) { return NULL; }
+
+    return display->navigateToMenu();
 }
 
 /**
@@ -155,8 +169,10 @@ View* Device::removeFromHistory(int index) {
     HistoryView* newView = display->removeHistoryFromNavigation(index);
     if (newView != NULL){
         treatmentHistory->removeOne(newView->getPreviousTreatment());
+        return getCurrentView();
+    } else {
+        return NULL;
     }
-    return getCurrentView();
 }
 
 /**
@@ -166,8 +182,10 @@ View* Device::removeFromHistory(int index) {
 View* Device::clearHistory() {
     if (display->clearHistoryNavigation()) {
         treatmentHistory->clear();
+        return display->getCurrentView();
+    } else {
+        return NULL;
     }
-    return display->getCurrentView();
 }
 
 /**
@@ -200,6 +218,8 @@ bool Device::startTreatment(Therapy* therapy) {
  */
 bool Device::stopTreatment() {
     // Only if the treatment is still running
+    if (!treatmentRunning) { return false; }
+
     if (activeTherapy->getDurationInSeconds() < activeTherapy->getTherapy()->getTimer() && !attemptedQuitTreatment) {
         activeError = WARNING_TREATMENT_RUNNING;
         attemptedQuitTreatment = true;

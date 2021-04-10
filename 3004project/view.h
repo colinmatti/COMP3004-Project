@@ -14,7 +14,7 @@ public:
 
     QList<View*>* getChildren() { return children; }
     View* getChildAt(int index) {
-        if (children->length() <= index) { return NULL; }
+        if (children->length() <= index || index == -1) { return NULL; }
         return children->at(index);
     }
 

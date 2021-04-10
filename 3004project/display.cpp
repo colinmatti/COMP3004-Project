@@ -55,7 +55,7 @@ void Display::addHistoryToNavigation(PreviousTreatment* previousTreatment) {
  * @brief Clears all history views from histories menu.
  */
 bool Display::clearHistoryNavigation() {
-    if (currentView->getName() == "TreatmentView") {
+    if (currentView->getName() == "History") {
         historyMenu->clearChildren();
         return true;
     }
@@ -68,11 +68,12 @@ bool Display::clearHistoryNavigation() {
  */
 HistoryView* Display::removeHistoryFromNavigation(int index) {
     if (currentView->getName() == "History") {
-        historyMenu->removeChild(currentView->getChildAt(index));
-        return dynamic_cast<HistoryView*>(currentView->getChildAt(index));
+        View* node = currentView->getChildAt(index);
+        if (node == NULL) { return NULL; }
+        historyMenu->removeChild(node);
+        return dynamic_cast<HistoryView*>(node);
     }
     return NULL;
-
 }
 
 View* Display::navigateDown(int index) {
@@ -90,5 +91,10 @@ View* Display::navigateUp() {
     if (destination == NULL) { return NULL; }
 
     currentView = destination;
+    return currentView;
+}
+
+View* Display::navigateToMenu() {
+    currentView = mainMenu;
     return currentView;
 }

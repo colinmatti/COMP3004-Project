@@ -19,6 +19,7 @@ public:
 
     View* navigateDown(int index);
     View* navigateUp();
+    View* navigateToMenu();
 
     View* getCurrentView() { return currentView; }
     MenuView* getMainMenu() { return mainMenu; }

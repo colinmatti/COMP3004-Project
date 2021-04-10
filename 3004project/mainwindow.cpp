@@ -63,6 +63,7 @@ void MainWindow::on_goBackButton_clicked() {
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "MenuView") {
+        timer->stop();
         menuVisibility(currentView);
     }
 }
@@ -76,6 +77,7 @@ void MainWindow::on_menuButton_clicked() {
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "MenuView") {
+        timer->stop();
         menuVisibility(currentView);
     }
 }
@@ -160,8 +162,9 @@ void MainWindow::on_onSkin_stateChanged(int checked) {
  * @brief Clears the entire history.
  */
 void MainWindow::on_clearButton_clicked() {
-    // If we're not on the history view, do nothing.
-    menuVisibility(device.clearHistory());
+    View* currentView = device.clearHistory();
+    if (currentView == NULL) { return; }
+    menuVisibility(currentView);
 }
 
 /**
@@ -169,6 +172,7 @@ void MainWindow::on_clearButton_clicked() {
  */
 void MainWindow::on_deleteButton_clicked() {
     View* currentView = device.removeFromHistory(currentSelectionIndex.row());
+    if (currentView == NULL) { return; }
     menuVisibility(currentView);
 }
 
