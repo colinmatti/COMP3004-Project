@@ -62,9 +62,9 @@ void Display::clearHistoryNavigation() {
  * @brief Removes view containing given previous treatment from history navigation.
  * @param previousTreatment: the previous treatment to be removed from the graph.
  */
-View* Display::removeHistoryFromNavigation(HistoryView* historyView) {
+View* Display::removeHistoryFromNavigation(int index) {
     if (currentView->getName() == "History") {
-        historyMenu->removeChild(historyView);
+        historyMenu->removeChild(currentView->getChildAt(index));
         return currentView;
     }
     return NULL;

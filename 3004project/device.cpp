@@ -154,7 +154,7 @@ void Device::addToHistory() {
 View* Device::removeFromHistory(int index) {
     HistoryView* historyView = dynamic_cast<HistoryView*>(getCurrentView()->getChildren()->at(index));
 
-    View* newView = display->removeHistoryFromNavigation(historyView);
+    View* newView = display->removeHistoryFromNavigation(index);
     if (newView != NULL){
         treatmentHistory->removeOne(historyView->getPreviousTreatment());
     }
