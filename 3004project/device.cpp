@@ -161,10 +161,13 @@ View* Device::removeFromHistory(int index) {
 
 /**
  * @brief Clears all previous treatments from therapy history.
+ * @return current view object.
  */
-void Device::clearHistory() {
-    display->clearHistoryNavigation();
-    treatmentHistory->clear();
+View* Device::clearHistory() {
+    if (display->clearHistoryNavigation()) {
+        treatmentHistory->clear();
+    }
+    return display->getCurrentView();
 }
 
 /**

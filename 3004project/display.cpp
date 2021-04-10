@@ -54,8 +54,12 @@ void Display::addHistoryToNavigation(PreviousTreatment* previousTreatment) {
 /**
  * @brief Clears all history views from histories menu.
  */
-void Display::clearHistoryNavigation() {
-    historyMenu->clearChildren();
+bool Display::clearHistoryNavigation() {
+    if (currentView->getName() == "TreatmentView") {
+        historyMenu->clearChildren();
+        return true;
+    }
+    return false;
 }
 
 /**
