@@ -45,6 +45,9 @@ public:
     void updateTimer();
 
     View* navigateDown(int index);
+    View* navigateUp();
+    View* navigateToMenu();
+    View* getCurrentView();
 
     QString getActiveError() { return activeError; }
 

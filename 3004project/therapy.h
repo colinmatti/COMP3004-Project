@@ -12,7 +12,7 @@ public:
     virtual QString getType() = 0;
 
 protected:
-    Therapy(int f, int t): frequency(f), timer(t){};
+    Therapy(int f, int t): frequency(f), timer(t) {};
 
     float frequency;
     int timer;
