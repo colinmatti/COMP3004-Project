@@ -41,7 +41,7 @@ public:
     bool stopTreatment();
     bool addTreatmentToHistory();
     void updateTimer();
-    double updateBattery();
+    float updateBattery();
 
     View* navigateDown(int index);
     View* navigateUp();
