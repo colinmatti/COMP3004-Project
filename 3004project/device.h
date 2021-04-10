@@ -26,8 +26,6 @@ public:
     Device();
     ~Device();
 
-    void addToHistory();
-
     View* removeFromHistory(int index);
     View* clearHistory();
 
@@ -50,9 +48,7 @@ public:
     View* getCurrentView();
 
     QString getActiveError() { return activeError; }
-
     int getBatteryLevel() { return battery->getBatteryLevel(); }
-    View* getMainMenu() { return display->getMainMenu(); }
 
 private:
     Display *display;
@@ -73,6 +69,8 @@ private:
     QList<Frequency*> *frequencies;
     QList<Program*> *programs;
     QList<PreviousTreatment*> *treatmentHistory;
+
+    void addToHistory();
 };
 
 #endif // DEVICE_H

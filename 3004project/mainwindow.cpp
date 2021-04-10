@@ -93,7 +93,7 @@ void MainWindow::on_menuButton_clicked() {
  */
 void MainWindow::on_powerButton_clicked() {
     // If the device is now ON, turn on main menu visibility.
-    if (device.power()) { menuVisibility(device.getMainMenu()); }
+    if (device.power()) { menuVisibility(device.navigateToMenu()); }
 
     // Otherwise, toggle OFF visibility.
     else { offVisibility(); }
@@ -103,6 +103,8 @@ void MainWindow::on_powerButton_clicked() {
  * @brief Navigate down in menu options.
  */
 void MainWindow::on_downButton_clicked() {
+    if (currentSelectionIndex.row() < 0) { return; }
+
     int newIndex = (currentSelectionIndex.row() + 1) % model->stringList().size();
 
     currentSelectionIndex = model->index(newIndex);
@@ -113,6 +115,8 @@ void MainWindow::on_downButton_clicked() {
  * @brief Navigate up in menu options.
  */
 void MainWindow::on_upButton_clicked() {
+    if (currentSelectionIndex.row() < 0) { return; }
+
     int newIndex = (currentSelectionIndex.row() + model->stringList().size() - 1) % model->stringList().size();
 
     currentSelectionIndex = model->index(newIndex);

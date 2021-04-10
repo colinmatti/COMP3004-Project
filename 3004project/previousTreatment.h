@@ -20,8 +20,10 @@ public:
     QTime getTime() { return time; }
     Therapy* getTherapy() { return therapy; }
 
-    void increasePowerLevel() { maxPowerLevel++; }
+    void increasePowerLevel(int powerLevel) { maxPowerLevel = (powerLevel > maxPowerLevel) ? powerLevel : maxPowerLevel; }
     void increaseTime() { durationInSeconds++; }
+
+    bool isOngoing() { return (durationInSeconds < therapy->getTimer()); }
 
 private:
     QDate date;

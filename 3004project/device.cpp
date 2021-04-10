@@ -72,19 +72,23 @@ bool Device::applyOnSkin() {
     return treatmentRunning;
 }
 
-bool Device::maybeAddTreatmentToHistory() {
-    if (activeTherapy == nullptr) {
-        shouldAddTreatmentToHistory = false;
-    }
-
-    if (treatmentRunning) {
-        shouldAddTreatmentToHistory = true;
-    }
-
+/**
+ * @brief Plan to add treatment to history if a therapy is ongoing.
+ * @return True if we will add treatment to history, False otherwise.
+ */
+bool Device::addTreatmentToHistory() {
+    if (treatmentRunning) { shouldAddTreatmentToHistory = true; }
+    else { activeError = WARNING_NO_TREATMENT_RUNNING; }
     return shouldAddTreatmentToHistory;
 }
 
+/**
+ * @brief Increase elapsed therapy time by 1 if a therapy is ongoing.
+ */
 void Device::updateTimer() {
+    // If there's no active therapy, do nothing.
+    if (!treatmentRunning) { return; }
+
     activeTherapy->increaseTime();
 }
 
@@ -94,15 +98,20 @@ void Device::updateTimer() {
  * @return the new view if successfully navigated, otherwise NULL.
  */
 View* Device::navigateDown(int index) {
+    // If the device is powered OFF, do nothing.
     if (!poweredOn) { return NULL; }
+
+    // Attempt to navigate down through the display menu.
     View* newView = display->navigateDown(index);
 
     if (newView == NULL) { return NULL; }
 
+    // If we navigate to a treatment, attempt to start a treatment.
     if (newView->getType() == "TreatmentView") {
         startTreatment(newView->getTherapy());
-        if (treatmentRunning) { return newView; }
-        else {
+
+        // If the treatment failed to start, navigate back to menu.
+        if (!treatmentRunning) {
             display->navigateUp();
             return NULL;
         }
@@ -111,9 +120,15 @@ View* Device::navigateDown(int index) {
     return newView;
 }
 
+/**
+ * @brief Attempt to navigate to the main menu.
+ * @return the main menu view if successfully navigated, otherwise NULL.
+ */
 View* Device::navigateToMenu() {
+    // If the device is powered OFF, do nothing.
     if (!poweredOn) { return NULL; }
 
+    // Attempt to stop any running treatments.
     stopTreatment();
     if (treatmentRunning) { return NULL; }
 
@@ -125,95 +140,128 @@ View* Device::navigateToMenu() {
  * @return the new view if successfully navigated, otherwise NULL.
  */
 View* Device::navigateUp() {
+    // If the device is powered OFF, do nothing.
     if (!poweredOn) { return NULL; }
 
+    // Attempt to stop any running treatments.
     stopTreatment();
     if (treatmentRunning) { return NULL; }
 
     return display->navigateUp();
 }
 
+/**
+ * @brief Get the current display view of the device.
+ * @return the current view.
+ */
 View* Device::getCurrentView() {
     return display->getCurrentView();
 }
 
 /**
- * @brief Increases the power level of the treatment by one, unless power is at max.
- * @return The current power level.
+ * @brief Increases the power level of the treatment by one, unless power is at MAX.
+ * @return the current power level.
  */
 int Device::increasePower() {
+    // If there's no treatment running, do nothing
     if (!treatmentRunning) { return powerLevel; }
+
+    // Increment the power level. If it exceeds the MAXPOWERLEVEL, set it to the max.
     if (++powerLevel > MAXPOWERLEVEL) { powerLevel = MAXPOWERLEVEL; }
-    activeTherapy->increasePowerLevel();
+
+    // Update the max power level of the active therapy.
+    activeTherapy->increasePowerLevel(powerLevel);
+
     return powerLevel;
 }
 
 /**
- * @brief Decreases the power level of the treatment by one, unless power is at min.
- * @return The current power level.
+ * @brief Decreases the power level of the treatment by one, unless power is at MIN.
+ * @return the current power level.
  */
 int Device::decreasePower() {
+    // If there's no treatment running, do nothing
     if (!treatmentRunning) { return powerLevel; }
+
+    // Decrement the power level. If it exceeds the MINPOWERLEVEL, set it to the min.
     if (--powerLevel < MINPOWERLEVEL) { powerLevel = MINPOWERLEVEL; }
+
     return powerLevel;
 }
 
 /**
- * @brief Adds a given therapy to treatment history.
- * @param The therapy to be added to treatment history.
+ * @brief Adds the active therapy to treatment history.
  */
 void Device::addToHistory() {
     treatmentHistory->append(activeTherapy);
     display->addHistoryToNavigation(activeTherapy);
+
+    shouldAddTreatmentToHistory = false;
+    activeTherapy = nullptr;
 }
 
 /**
- * @brief Removes specified previousTreatment from therapy history.
- * @param previousTreatment: The treatment to be removed from history.
+ * @brief Removes previousTreatment at specified index from therapy history.
+ * @param index: the index of the therapy in the display to remove from history.
+ * @return the updated view without specified history if successful, otherwise NULL.
  */
 View* Device::removeFromHistory(int index) {
-    HistoryView* newView = display->removeHistoryFromNavigation(index);
-    if (newView != NULL){
-        treatmentHistory->removeOne(newView->getPreviousTreatment());
-        return getCurrentView();
-    } else {
-        return NULL;
-    }
+    // Attempt to remove previous treatment from history navigation.
+    HistoryView* removedHistoryView = display->removeHistoryFromNavigation(index);
+
+    if (removedHistoryView == NULL) { return NULL; }
+
+    // Remove previous treatment from treatment history if successful.
+    treatmentHistory->removeOne(removedHistoryView->getPreviousTreatment());
+    return getCurrentView();
 }
 
 /**
  * @brief Clears all previous treatments from therapy history.
- * @return current view object.
+ * @return the updated view without histories if successful, otherwise NULL.
  */
 View* Device::clearHistory() {
-    if (display->clearHistoryNavigation()) {
-        treatmentHistory->clear();
-        return display->getCurrentView();
-    } else {
-        return NULL;
-    }
+    // Attempt to clear history navigation.
+    bool clearedHistory = display->clearHistoryNavigation();
+
+    if (!clearedHistory) { return NULL; }
+
+    // Clear treatment history if successful.
+    treatmentHistory->clear();
+    return display->getCurrentView();
 }
 
 /**
- * @brief Powers on the device if powered off, otherwise powers on.
+ * @brief Powers ON the device if currently OFF, otherwise powers OFF.
  */
 bool Device::power() {
     poweredOn = !poweredOn;
-    powerLevel = MINPOWERLEVEL;
+
+    // Stop any active treatments.
+    stopTreatment();
+
+    display->navigateToMenu();
     return poweredOn;
 }
 
 /**
  * @brief Attempts to start a treatment.
+ * @param therapy: the therapy treatment we wish to start.
  * @return True if the treatment was started, False otherwise.
  */
 bool Device::startTreatment(Therapy* therapy) {
+    // If the treatment is already running, do nothing.
+    if (treatmentRunning) { return false; }
+
+    // If device is not on skin, update error and return False.
     if (!isOnSkin) {
         activeError = ERROR_NO_SKIN;
         return false;
     }
 
+    // Create an active therapy.
     activeTherapy = new PreviousTreatment(therapy, MINPOWERLEVEL, 0);
+
     treatmentRunning = true;
     return true;
 }
@@ -223,24 +271,23 @@ bool Device::startTreatment(Therapy* therapy) {
  * @return True if the treatment was stopped, False otherwise.
  */
 bool Device::stopTreatment() {
-    // Only if the treatment is still running
-    if (!treatmentRunning) { return false; }
+    // If the treatment is already not running, do nothing.
+    if (!treatmentRunning) { return true; }
 
-    if (activeTherapy->getDurationInSeconds() < activeTherapy->getTherapy()->getTimer() && !attemptedQuitTreatment) {
+    // If the timer is still going and the user has not yet attempted to quit therapy.
+    if (activeTherapy->isOngoing() && !attemptedQuitTreatment && poweredOn) {
         activeError = WARNING_TREATMENT_RUNNING;
         attemptedQuitTreatment = true;
         return false;
     }
 
-    if (shouldAddTreatmentToHistory) {
-        addToHistory();
-        shouldAddTreatmentToHistory = false;
-    }
+    // Add treatment to history if user previously asked to.
+    if (shouldAddTreatmentToHistory) { addToHistory(); }
 
     treatmentRunning = false;
     attemptedQuitTreatment = false;
     powerLevel = MINPOWERLEVEL;
-    activeTherapy = nullptr;
     activeError = NO_ERROR;
+
     return true;
 }

@@ -53,30 +53,41 @@ void Display::addHistoryToNavigation(PreviousTreatment* previousTreatment) {
 
 /**
  * @brief Clears all history views from histories menu.
+ * @return True if successfully cleared histories menu, False otherwise.
  */
 bool Display::clearHistoryNavigation() {
-    if (currentView->getName() == "History") {
-        historyMenu->clearChildren();
-        return true;
-    }
-    return false;
+    // If not currently on histories menu, abort.
+    if (currentView->getName() != "History") { return false; }
+
+    historyMenu->clearChildren();
+    return true;
 }
 
 /**
  * @brief Removes view containing given previous treatment from history navigation.
- * @param previousTreatment: the previous treatment to be removed from the graph.
+ * @param index: the index of the previous treatment to be removed from the graph.
+ * @return the history view removed from the navigation.
  */
 HistoryView* Display::removeHistoryFromNavigation(int index) {
-    if (currentView->getName() == "History") {
-        View* node = currentView->getChildAt(index);
-        if (node == NULL) { return NULL; }
-        historyMenu->removeChild(node);
-        return dynamic_cast<HistoryView*>(node);
-    }
-    return NULL;
+    // If not currently on histories menu, abort.
+    if (currentView->getName() != "History") { return NULL; }
+
+    // Find history view we're attempting to remove.
+    View* historyView = currentView->getChildAt(index);
+    if (historyView == NULL) { return NULL; }
+
+    // If the history view is found, remove from navigation and return as a history view.
+    historyMenu->removeChild(historyView);
+    return dynamic_cast<HistoryView*>(historyView);
 }
 
+/**
+ * @brief Attempts to navigate down in navigation menu.
+ * @param index: the menu index to navigate down into.
+ * @return the new view if successful, otherwise NULL.
+ */
 View* Display::navigateDown(int index) {
+    // Find view we're attempting to move to.
     View* destination = currentView->getChildAt(index);
 
     if (destination == NULL) { return NULL; }
@@ -85,7 +96,12 @@ View* Display::navigateDown(int index) {
     return currentView;
 }
 
+/**
+ * @brief Attempts to navigate up in navigation menu.
+ * @return the new view if successful, otherwise NULL.
+ */
 View* Display::navigateUp() {
+    // Find view we're attempting to move to.
     View* destination = currentView->getParent();
 
     if (destination == NULL) { return NULL; }
@@ -94,6 +110,10 @@ View* Display::navigateUp() {
     return currentView;
 }
 
+/**
+ * @brief Navigate to the main menu.
+ * @return the main menu view.
+ */
 View* Display::navigateToMenu() {
     currentView = mainMenu;
     return currentView;
