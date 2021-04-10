@@ -6,10 +6,10 @@
 
 class Battery {
 public:
-    Battery(double b = MAXBATTERYLEVEL) : batteryLevel(b) {};
+    Battery(float b = MAXBATTERYLEVEL) : batteryLevel(b) {};
 
-    double decreaseBatteryLevel(int currPwrLvl);
-    double getBatteryLevel() { return batteryLevel; }
+    float decreaseBatteryLevel(int currPwrLvl);
+    float getBatteryLevel() { return batteryLevel; }
     bool isLow() { return batteryLevel <= 10; }
 
 private:
