@@ -28,7 +28,7 @@ public:
 
     void addToHistory();
     void clearHistory();
-    void removeFromHistory(HistoryView* historyView);
+    View* removeFromHistory(int index);
 
     bool applyOnSkin();
 

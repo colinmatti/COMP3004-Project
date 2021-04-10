@@ -171,14 +171,7 @@ void MainWindow::on_clearButton_clicked() {
  * @brief Deletes a single treatment history.
  */
 void MainWindow::on_deleteButton_clicked() {
-    // If we're not on the history view, do nothing.
-    if (currentView->getName() != "History") { return; }
-
-    // Fetch therapy history to delete and pass to device to delete.
-    View* history = currentView->getChildren()->at(currentSelectionIndex.row());
-    HistoryView* historyView = dynamic_cast<HistoryView*>(history);
-    device.removeFromHistory(historyView);
-
+    View* currentView = device.removeFromHistory(currentSelectionIndex.row());
     menuVisibility(currentView);
 }
 
