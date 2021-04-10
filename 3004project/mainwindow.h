@@ -3,7 +3,6 @@
 
 #include "device.h"
 
-#include <cmath>
 #include <QApplication>
 #include <QMainWindow>
 #include <QStringListModel>
