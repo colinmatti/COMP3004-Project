@@ -167,7 +167,8 @@ bool Device::startTreatment(Therapy* therapy) {
  * @return True if the treatment was stopped, False otherwise.
  */
 bool Device::stopTreatment() {
-    if (!attemptedQuitTreatment) {
+    // Only if the treatment is still running
+    if (activeTherapy->getDurationInSeconds() < activeTherapy->getTherapy()->getTimer() && !attemptedQuitTreatment) {
         attemptedQuitTreatment = true;
         return false;
     }

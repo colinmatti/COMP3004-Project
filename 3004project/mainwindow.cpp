@@ -118,9 +118,7 @@ void MainWindow::on_menuButton_clicked() {
  */
 void MainWindow::on_timerStart() {
     if (countdown < 0) {
-        device.stopTreatment();
         treatmentEnded();
-        menuVisibility(currentView->getParent());
     } else {
         ui->timer->display(countdown--);
         device.updateTimer();
@@ -204,7 +202,8 @@ void MainWindow::navigateBackScreens(View* destination) {
  */
 void MainWindow::treatmentEnded() {
     timer->stop();
-    device.maybeAddTreatmentToHistory();
+    device.stopTreatment();
+    menuVisibility(device.getMainMenu());
 }
 
 /**
