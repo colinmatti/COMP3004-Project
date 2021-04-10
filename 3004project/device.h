@@ -39,8 +39,9 @@ public:
 
     bool startTreatment(Therapy* therapy);
     bool stopTreatment();
-    bool maybeAddTreatmentToHistory();
+    bool addTreatmentToHistory();
     void updateTimer();
+    double updateBattery();
 
     View* navigateDown(int index);
     View* navigateUp();
@@ -65,6 +66,7 @@ private:
     bool shouldAddTreatmentToHistory;
 
     QString activeError;
+    bool notifiedLowBattery;
 
     QList<Frequency*> *frequencies;
     QList<Program*> *programs;

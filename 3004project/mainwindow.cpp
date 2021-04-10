@@ -35,7 +35,7 @@ MainWindow::~MainWindow() {
  */
 void MainWindow::on_addButton_clicked() {
     // Attempt to add the ongoing treatment to history.
-    bool willAddToHistory = device.maybeAddTreatmentToHistory();
+    bool willAddToHistory = device.addTreatmentToHistory();
 
     // If adding to history failed, show warning.
     if (!willAddToHistory) { ui->warningLabel->setText(device.getActiveError()); }
@@ -153,6 +153,13 @@ void MainWindow::on_timerStart() {
     else {
         ui->timer->display(countdown--);
         device.updateTimer();
+
+        // Update the battery level every second.
+        double batteryLevel = device.updateBattery();
+        // Formats the float value to round up to nearest whole number.
+        ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
+
+        ui->warningLabel->setText(device.getActiveError());
     }
 }
 
@@ -212,7 +219,6 @@ void MainWindow::menuVisibility(View* menu) {
     ui->listView->setCurrentIndex(currentSelectionIndex);
     ui->warningLabel->setText(device.getActiveError());
 
-    // 📌 TO DO: Create a way to make sure to update battery as it depletes, and show it in main window, for now, it'll "change" for every menu change
     ui->batteryLabel->setText(QString::number(device.getBatteryLevel()));
 
     ui->listView->setVisible(true);

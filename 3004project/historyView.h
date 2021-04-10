@@ -4,8 +4,6 @@
 #include "previousTreatment.h"
 #include "treatmentView.h"
 
-#include <cmath>
-
 class HistoryView : public TreatmentView {
 public:
     HistoryView(QString n, View* p, PreviousTreatment* t) : TreatmentView(n, p, t->getTherapy()), previousTreatment(t) {};

@@ -6,14 +6,14 @@
 
 class Battery {
 public:
-    Battery(int b = 100) : batteryLevel(b) {};
+    Battery(double b = 11) : batteryLevel(b) {};
 
-    void decreaseBatteryLevel(int currPwrLvl, int timePassed); // NOT CURRENTLY USED
-    int getBatteryLevel() { return batteryLevel; } // NOT CURRENTLY USED
+    double decreaseBatteryLevel(int currPwrLvl);
+    double getBatteryLevel() { return batteryLevel; } // NOT CURRENTLY USED
     bool isLow() { return batteryLevel <= 10; } //  NOT CURRENTLY USED
 
 private:
-    int batteryLevel;
+    float batteryLevel;
 };
 
 #endif // BATTERY_H
