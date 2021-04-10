@@ -63,6 +63,7 @@ Device::~Device() {
  */
 bool Device::applyOnSkin() {
     isOnSkin = !isOnSkin;
+    activeError = isOnSkin? NO_ERROR : ERROR_NO_SKIN;
     return isOnSkin;
 }
 
