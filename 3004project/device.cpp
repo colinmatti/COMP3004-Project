@@ -156,7 +156,7 @@ View* Device::removeFromHistory(int index) {
     if (newView != NULL){
         treatmentHistory->removeOne(newView->getPreviousTreatment());
     }
-    return newView;
+    return getCurrentView();
 }
 
 /**
