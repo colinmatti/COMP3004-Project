@@ -97,8 +97,6 @@ View* Display::navigateDown() {
     if (destination == NULL) { return NULL; }
 
     currentView = destination;
-
-    //currentIndex = 0;
     model->setStringList(currentView->constructMenu());
 
     return currentView;
@@ -114,12 +112,7 @@ View* Display::navigateUp() {
 
     if (destination == NULL) { return NULL; }
 
-    currentIndex = 0;
-    model->index(currentIndex);
-
     currentView = destination;
-
-    currentIndex = 0;
     model->setStringList(currentView->constructMenu());
 
     return currentView;
@@ -155,6 +148,5 @@ View* Display::navigateToMenu() {
     currentView = mainMenu;
     currentIndex = 0;
     model->setStringList(currentView->constructMenu());
-    //return model->index(currentIndex);
     return currentView;
 }
