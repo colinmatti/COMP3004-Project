@@ -37,10 +37,8 @@ private:
     Device device;
 
     Ui::MainWindow *ui;
-    QModelIndex currentSelectionIndex; // check
-    QStringListModel* model; // check
 
-    void menuVisibility(View* menu);
+    void menuVisibility();
     void offVisibility();
     void treatmentVisibility(View* treatmentView);
 };

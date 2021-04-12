@@ -1,6 +1,6 @@
 #include "display.h"
 
-Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
+Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) : model(new QStringListModel()) {
     // Create main menu node.
     mainMenu = new MenuView("Main Menu", NULL);
 
@@ -26,6 +26,7 @@ Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
     mainMenu->getChildren()->append(historyMenu);
 
     currentView = mainMenu;
+    model->setStringList(mainMenu->constructMenu());
 }
 
 /**
@@ -49,6 +50,7 @@ void Display::addHistoryToNavigation(ActiveTreatment* previousTreatment) {
     // Construct history view and add to display graph.
     HistoryView* historyView = new HistoryView(historyName, historyMenu, previousTreatment);
     historyMenu->addChild(historyView);
+    model->setStringList(historyMenu->constructMenu());
 }
 
 /**
@@ -60,6 +62,7 @@ bool Display::clearHistoryNavigation() {
     if (currentView->getName() != "History") { return false; }
 
     historyMenu->clearChildren();
+    model->setStringList(historyMenu->constructMenu());
     return true;
 }
 
@@ -68,16 +71,17 @@ bool Display::clearHistoryNavigation() {
  * @param index: the index of the previous treatment to be removed from the graph.
  * @return the history view removed from the navigation.
  */
-HistoryView* Display::removeHistoryFromNavigation(int index) {
+HistoryView* Display::removeHistoryFromNavigation() {
     // If not currently on histories menu, abort.
     if (currentView->getName() != "History") { return NULL; }
 
     // Find history view we're attempting to remove.
-    View* historyView = currentView->getChildAt(index);
+    View* historyView = currentView->getChildAt(currentIndex);
     if (historyView == NULL) { return NULL; }
 
     // If the history view is found, remove from navigation and return as a history view.
     historyMenu->removeChild(historyView);
+    model->setStringList(historyMenu->constructMenu());
     return dynamic_cast<HistoryView*>(historyView);
 }
 
@@ -86,13 +90,17 @@ HistoryView* Display::removeHistoryFromNavigation(int index) {
  * @param index: the menu index to navigate down into.
  * @return the new view if successful, otherwise NULL.
  */
-View* Display::navigateDown(int index) {
+View* Display::navigateDown() {
     // Find view we're attempting to move to.
-    View* destination = currentView->getChildAt(index);
+    View* destination = currentView->getChildAt(currentIndex);
 
     if (destination == NULL) { return NULL; }
 
     currentView = destination;
+
+    //currentIndex = 0;
+    model->setStringList(currentView->constructMenu());
+
     return currentView;
 }
 
@@ -106,8 +114,37 @@ View* Display::navigateUp() {
 
     if (destination == NULL) { return NULL; }
 
+    currentIndex = 0;
+    model->index(currentIndex);
+
     currentView = destination;
+
+    currentIndex = 0;
+    model->setStringList(currentView->constructMenu());
+
     return currentView;
+}
+
+QModelIndex Display::decreaseIndex(){
+    if (model->stringList().size() <= 0) {
+        currentIndex = -1;
+        return model->index(currentIndex);
+    }
+    currentIndex = (currentIndex + 1) % model->stringList().size();
+    return model->index(currentIndex);
+}
+
+QModelIndex Display::increaseIndex(){
+    if (model->stringList().size() <= 0) {
+        currentIndex = -1;
+        return model->index(currentIndex);
+    }
+    currentIndex = (currentIndex + model->stringList().size() - 1) % model->stringList().size();
+    return model->index(currentIndex);
+}
+QModelIndex Display::resetIndex(){
+    currentIndex = 0;
+    return model->index(currentIndex);
 }
 
 /**
@@ -116,5 +153,8 @@ View* Display::navigateUp() {
  */
 View* Display::navigateToMenu() {
     currentView = mainMenu;
+    currentIndex = 0;
+    model->setStringList(currentView->constructMenu());
+    //return model->index(currentIndex);
     return currentView;
 }

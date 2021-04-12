@@ -27,7 +27,7 @@ public:
     Device();
     ~Device();
 
-    View* removeFromHistory(int index);
+    View* removeFromHistory();
     View* clearHistory();
 
     bool applyOnSkin();
@@ -45,10 +45,16 @@ public:
     int updateTimer();
     float updateBattery();
 
-    View* navigateDown(int index);
+    View* navigateDown();
     View* navigateUp();
     View* navigateToMenu();
     View* getCurrentView();
+
+    QModelIndex decreaseIndex();
+    QModelIndex increaseIndex();
+    QModelIndex resetIndex();
+
+    QStringListModel* getModel() { return display->getModel(); }
 
     QTimer* getTimer() { return timer; }
     QString getActiveError() { return activeError; }
