@@ -6,7 +6,8 @@ Device::Device() :
     poweredOn(false),
     treatmentRunning(false),
     attemptedQuitTreatment(false),
-    activeError(NO_ERROR) {
+    activeError(NO_ERROR),
+    notifiedLowBattery(false) {
 
     // Instantiate all preset therapies.
     programs = new QList<Program*>();
@@ -90,6 +91,25 @@ void Device::updateTimer() {
     if (!treatmentRunning) { return; }
 
     activeTherapy->increaseTime();
+}
+
+/**
+ * @brief Decreases the battery level for one second passed if a therapy is ongoing.
+ * @return the updated battery level if decrease successful, otherwise -1.
+ */
+float Device::updateBattery() {
+    // If there's no active therapy, do nothing.
+    if (!treatmentRunning) { return -1; }
+
+    float batteryLevel = battery->decreaseBatteryLevel(powerLevel);
+
+    // If the battery is low and we have not yet notified the user, notify the user.
+    if (battery->isLow() && !notifiedLowBattery) {
+        activeError = WARNING_LOW_BATT;
+        notifiedLowBattery = true;
+    }
+
+    return batteryLevel;
 }
 
 /**
