@@ -68,7 +68,6 @@ bool Display::clearHistoryNavigation() {
 
 /**
  * @brief Removes view containing given previous treatment from history navigation.
- * @param index: the index of the previous treatment to be removed from the graph.
  * @return the history view removed from the navigation.
  */
 HistoryView* Display::removeHistoryFromNavigation() {
@@ -87,7 +86,6 @@ HistoryView* Display::removeHistoryFromNavigation() {
 
 /**
  * @brief Attempts to navigate down in navigation menu.
- * @param index: the menu index to navigate down into.
  * @return the new view if successful, otherwise NULL.
  */
 View* Display::navigateDown() {
@@ -118,6 +116,10 @@ View* Display::navigateUp() {
     return currentView;
 }
 
+/**
+ * @brief Attempts to decrease index from listview.
+ * @return the QModelIndex value.
+ */
 QModelIndex Display::decreaseIndex(){
     if (model->stringList().size() <= 0) {
         currentIndex = -1;
@@ -127,6 +129,10 @@ QModelIndex Display::decreaseIndex(){
     return model->index(currentIndex);
 }
 
+/**
+ * @brief Attempts to increase index from listview.
+ * @return the QModelIndex value.
+ */
 QModelIndex Display::increaseIndex(){
     if (model->stringList().size() <= 0) {
         currentIndex = -1;
@@ -135,6 +141,11 @@ QModelIndex Display::increaseIndex(){
     currentIndex = (currentIndex + model->stringList().size() - 1) % model->stringList().size();
     return model->index(currentIndex);
 }
+
+/**
+ * @brief Resets the index of listview (default=0).
+ * @return the QModelIndex value.
+ */
 QModelIndex Display::resetIndex(){
     currentIndex = 0;
     return model->index(currentIndex);

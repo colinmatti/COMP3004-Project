@@ -125,7 +125,6 @@ float Device::updateBattery() {
 
 /**
  * @brief Attempt to navigate down through the display menu.
- * @param index: the menu index to navigate down into.
  * @return the new view if successfully navigated, otherwise NULL.
  */
 View* Device::navigateDown() {
@@ -181,12 +180,26 @@ View* Device::navigateUp() {
     return display->navigateUp();
 }
 
+/**
+ * @brief Attempts to increase index from listview.
+ * @return the QModelIndex value.
+ */
 QModelIndex Device::decreaseIndex() {
     return display->decreaseIndex();
 }
+
+/**
+ * @brief Attempts to decrease index from listview.
+ * @return the QModelIndex value.
+ */
 QModelIndex Device::increaseIndex() {
     return display->increaseIndex();
 }
+
+/**
+ * @brief Resets the index of listview.
+ * @return the QModelIndex value.
+ */
 QModelIndex Device::resetIndex() {
     return display->resetIndex();
 }
@@ -243,7 +256,6 @@ void Device::addToHistory() {
 
 /**
  * @brief Removes previousTreatment at specified index from therapy history.
- * @param index: the index of the therapy in the display to remove from history.
  * @return the updated view without specified history if successful, otherwise NULL.
  */
 View* Device::removeFromHistory() {
