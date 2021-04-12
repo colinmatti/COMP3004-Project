@@ -5,21 +5,29 @@
 #include "menuView.h"
 #include "treatmentView.h"
 #include "frequency.h"
-#include "previoustreatment.h"
+#include "previousTreatment.h"
 #include "program.h"
-
-using namespace std;
 
 class Display {
 public:
     Display(QList<Frequency*>* frequencies, QList<Program*>* programs);
-    // TODO: destructor.
-    MenuView* mainMenu;
-    MenuView* historyMenu;
 
     void addHistoryToNavigation(PreviousTreatment* previousTreatment);
-    void removeHistoryFromNavigation(HistoryView* historyView);
-    void clearHistoryNavigation();
+
+    HistoryView* removeHistoryFromNavigation(int index);
+    bool clearHistoryNavigation();
+
+    View* navigateDown(int index);
+    View* navigateUp();
+    View* navigateToMenu();
+
+    View* getCurrentView() { return currentView; }
+    MenuView* getMainMenu() { return mainMenu; }
+
+private:
+    MenuView* historyMenu;
+    MenuView* mainMenu;
+    View* currentView;
 };
 
 #endif // DISPLAY_H

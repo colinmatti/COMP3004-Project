@@ -7,15 +7,18 @@
 
 class MenuView : public View {
 public:
-    MenuView(QString n, View* p) : View(n, p) { children = new QList<View*>(); }
+    MenuView(QString n, View* p) : View(n, p) {}
     ~MenuView() {};
 
-    QList<View*>* children;
-
     QStringList constructMenu();
-    QString type() { return "MenuView"; };
-    QString getName() { return name; };
-    Therapy* getTherapy() { return NULL; };
+
+    void addChild(View* child) { children->append(child); }
+    void clearChildren() { children->clear(); }
+    void removeChild(View* child) { children->removeOne(child); }
+
+    QString getType() { return "MenuView"; }
+    QString getName() { return name; }
+    Therapy* getTherapy() { return NULL; }
 };
 
 #endif // MENUVIEW_H

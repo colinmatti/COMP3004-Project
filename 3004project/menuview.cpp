@@ -7,11 +7,6 @@
  */
 QStringList MenuView::constructMenu() {
     QStringList menu = QStringList();
-    for (View* option : *children) {
-        menu.append(option->getName());
-    }
-    if (children->length() == 0){
-        menu.append("No history yet.");
-    }
+    for (View* option : *children) { menu.append(option->getName()); }
     return menu;
 }

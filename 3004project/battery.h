@@ -1,23 +1,19 @@
 #ifndef BATTERY_H
 #define BATTERY_H
 
-#include <iostream>
-
 #define MINBATTERYLEVEL = 0
 #define MAXBATTERYLEVEL = 100
 
-using namespace std;
-
 class Battery {
 public:
-    Battery(int b = 100) : batteryLevel(b) {};
+    Battery(float b = MAXBATTERYLEVEL) : batteryLevel(b) {};
 
-    bool isLow();
-    void decreaseLevel(int currPwrLvl, int timePassed);
-    int getBatteryLevel();
+    float decreaseBatteryLevel(int currPwrLvl);
+    float getBatteryLevel() { return batteryLevel; }
+    bool isLow() { return batteryLevel <= 10; }
 
 private:
-    int batteryLevel;
+    float batteryLevel;
 };
 
 #endif // BATTERY_H
