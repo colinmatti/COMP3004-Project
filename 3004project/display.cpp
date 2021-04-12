@@ -32,7 +32,7 @@ Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) {
  * @brief Adds given previous treatment to navigation graph.
  * @param therapy: the therapy to be added to the navigation graph.
  */
-void Display::addHistoryToNavigation(PreviousTreatment* previousTreatment) {
+void Display::addHistoryToNavigation(ActiveTreatment* previousTreatment) {
     // Gather data to construct history view name.
     QString weekday = previousTreatment->getDate().toString();
     QString time = previousTreatment->getTime().toString();

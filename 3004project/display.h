@@ -5,14 +5,14 @@
 #include "menuView.h"
 #include "treatmentView.h"
 #include "frequency.h"
-#include "previousTreatment.h"
+#include "activeTreatment.h"
 #include "program.h"
 
 class Display {
 public:
     Display(QList<Frequency*>* frequencies, QList<Program*>* programs);
 
-    void addHistoryToNavigation(PreviousTreatment* previousTreatment);
+    void addHistoryToNavigation(ActiveTreatment* previousTreatment);
 
     HistoryView* removeHistoryFromNavigation(int index);
     bool clearHistoryNavigation();

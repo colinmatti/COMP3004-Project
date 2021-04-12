@@ -6,6 +6,7 @@ Device::Device() :
     poweredOn(false),
     treatmentRunning(false),
     attemptedQuitTreatment(false),
+    timer(new QTimer()),
     activeError(NO_ERROR),
     notifiedLowBattery(false) {
 
@@ -40,7 +41,7 @@ Device::Device() :
     frequencies->append(twenty);
 
     // Instantiate empty therapy history.
-    treatmentHistory = new QList<PreviousTreatment*>();
+    treatmentHistory = new QList<ActiveTreatment*>();
 
     // Instantiate the display.
     display = new Display(frequencies, programs);
@@ -66,11 +67,18 @@ bool Device::applyOnSkin() {
     isOnSkin = !isOnSkin;
 
     // If the device is now ON the skin, remove any active errors.
-    if (isOnSkin && treatmentRunning) { activeError = NO_ERROR; }
-    // If the device is now OFF the skin, warn that treatment is running.
-    else if (!isOnSkin && treatmentRunning) { activeError = WARNING_TREATMENT_RUNNING; }
+    if (isOnSkin && treatmentRunning) {
+        timer->start();
+        activeError = NO_ERROR;
+    }
 
-    return treatmentRunning;
+    // If the device is now OFF the skin, warn that treatment is running.
+    else if (!isOnSkin && treatmentRunning) {
+        timer->stop();
+        activeError = WARNING_TREATMENT_RUNNING;
+    }
+
+    return isOnSkin;
 }
 
 /**
@@ -86,11 +94,14 @@ bool Device::addTreatmentToHistory() {
 /**
  * @brief Increase elapsed therapy time by 1 if a therapy is ongoing.
  */
-void Device::updateTimer() {
+int Device::updateTimer() {
     // If there's no active therapy, do nothing.
-    if (!treatmentRunning) { return; }
+    if (!treatmentRunning) { return -1; }
 
     activeTherapy->increaseTime();
+
+    if (!activeTherapy->isOngoing()) { stopTreatment(); }
+    return activeTherapy->timeRemaining();
 }
 
 /**
@@ -280,8 +291,9 @@ bool Device::startTreatment(Therapy* therapy) {
     }
 
     // Create an active therapy.
-    activeTherapy = new PreviousTreatment(therapy, MINPOWERLEVEL, 0);
+    activeTherapy = new ActiveTreatment(therapy, MINPOWERLEVEL, 0);
 
+    timer->start(1000);
     treatmentRunning = true;
     return true;
 }
@@ -304,6 +316,7 @@ bool Device::stopTreatment() {
     // Add treatment to history if user previously asked to.
     if (shouldAddTreatmentToHistory) { addToHistory(); }
 
+    timer->stop();
     treatmentRunning = false;
     attemptedQuitTreatment = false;
     powerLevel = MINPOWERLEVEL;

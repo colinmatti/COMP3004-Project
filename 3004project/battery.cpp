@@ -5,10 +5,10 @@
  * @param currPwrLvl: the power level of the device.
  * @param timePassed: the time elapsed in a therapy treatment.
  */
-double Battery::decreaseBatteryLevel(int powerLevel) {
+float Battery::decreaseBatteryLevel(int powerLevel) {
     batteryLevel -= (float) powerLevel / 700;
 
     // If we're decreasing the battery lower than 0%, make the battery 0%.
-    if (batteryLevel < 0) { batteryLevel = 0; }
+    if (batteryLevel < MINBATTERYLEVEL) { batteryLevel = MINBATTERYLEVEL; }
     return batteryLevel;
 }
