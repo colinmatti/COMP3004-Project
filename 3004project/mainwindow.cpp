@@ -3,8 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    model(new QStringListModel()) {
+    ui(new Ui::MainWindow) {
 
     ui->setupUi(this);
     ui->warningLabel->setWordWrap(true);
@@ -16,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
-    delete model;
     delete ui;
 }
 
@@ -44,15 +42,16 @@ void MainWindow::on_addButton_clicked() {
  */
 void MainWindow::on_okButton_clicked() {
     // Attempt to navigate down the menu.
-    View* currentView = device.navigateDown(currentSelectionIndex.row());
+    View* currentView = device.navigateDown();
 
     // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
+        ui->listView->setCurrentIndex(device.resetIndex());
     } else if (currentView->getType() == "TreatmentView") {
         treatmentVisibility(currentView);
     } else if (currentView->getType() == "MenuView") {
-        menuVisibility(currentView);
+        menuVisibility();
     }
 }
 
@@ -67,7 +66,7 @@ void MainWindow::on_goBackButton_clicked() {
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "MenuView") {
-        menuVisibility(currentView);
+        menuVisibility();
     }
 }
 
@@ -82,7 +81,7 @@ void MainWindow::on_menuButton_clicked() {
     if (currentView == NULL) {
         ui->warningLabel->setText(device.getActiveError());
     } else if (currentView->getType() == "MenuView") {
-        menuVisibility(currentView);
+        menuVisibility();
     }
 }
 
@@ -91,7 +90,10 @@ void MainWindow::on_menuButton_clicked() {
  */
 void MainWindow::on_powerButton_clicked() {
     // If the device is now ON, turn on main menu visibility.
-    if (device.power()) { menuVisibility(device.navigateToMenu()); }
+    if (device.power()) {
+        device.navigateToMenu();
+        menuVisibility();
+    }
 
     // Otherwise, toggle OFF visibility.
     else { offVisibility(); }
@@ -101,24 +103,14 @@ void MainWindow::on_powerButton_clicked() {
  * @brief Navigate down in menu options.
  */
 void MainWindow::on_downButton_clicked() {
-    if (currentSelectionIndex.row() < 0) { return; }
-
-    int newIndex = (currentSelectionIndex.row() + 1) % model->stringList().size();
-
-    currentSelectionIndex = model->index(newIndex);
-    ui->listView->setCurrentIndex(currentSelectionIndex);
+    ui->listView->setCurrentIndex(device.decreaseIndex());
 }
 
 /**
  * @brief Navigate up in menu options.
  */
 void MainWindow::on_upButton_clicked() {
-    if (currentSelectionIndex.row() < 0) { return; }
-
-    int newIndex = (currentSelectionIndex.row() + model->stringList().size() - 1) % model->stringList().size();
-
-    currentSelectionIndex = model->index(newIndex);
-    ui->listView->setCurrentIndex(currentSelectionIndex);
+    ui->listView->setCurrentIndex(device.increaseIndex());
 }
 
 /**
@@ -165,16 +157,16 @@ void MainWindow::on_onSkin_stateChanged() {
 void MainWindow::on_clearButton_clicked() {
     View* currentView = device.clearHistory();
     if (currentView == NULL) { return; }
-    menuVisibility(currentView);
+    menuVisibility();
 }
 
 /**
  * @brief Deletes a single treatment history.
  */
 void MainWindow::on_deleteButton_clicked() {
-    View* currentView = device.removeFromHistory(currentSelectionIndex.row());
+    View* currentView = device.removeFromHistory();
     if (currentView == NULL) { return; }
-    menuVisibility(currentView);
+    menuVisibility();
 }
 
 
@@ -188,11 +180,10 @@ void MainWindow::on_deleteButton_clicked() {
 /**
  * @brief Toggles UI to set components visible or invisible for a menu.
  */
-void MainWindow::menuVisibility(View* menu) {
-    model->setStringList(menu->constructMenu());
-    ui->listView->setModel(model);
-    currentSelectionIndex = model->index(0);
-    ui->listView->setCurrentIndex(currentSelectionIndex);
+void MainWindow::menuVisibility() {
+    ui->listView->setModel(device.getModel());
+    ui->listView->setCurrentIndex(device.resetIndex());
+
     ui->warningLabel->setText(device.getActiveError());
 
     ui->batteryLabel->setText(QString::number(device.getBatteryLevel()));

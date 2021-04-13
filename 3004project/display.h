@@ -7,6 +7,7 @@
 #include "frequency.h"
 #include "activeTreatment.h"
 #include "program.h"
+#include <QStringListModel>
 
 class Display {
 public:
@@ -14,13 +15,19 @@ public:
 
     void addHistoryToNavigation(ActiveTreatment* previousTreatment);
 
-    HistoryView* removeHistoryFromNavigation(int index);
+    HistoryView* removeHistoryFromNavigation();
     bool clearHistoryNavigation();
 
-    View* navigateDown(int index);
+    View* navigateDown();
     View* navigateUp();
     View* navigateToMenu();
 
+    QModelIndex decreaseIndex();
+    QModelIndex increaseIndex();
+    QModelIndex resetIndex();
+    QStringListModel* getModel() { return model; }
+
+    int getCurrentIndex() {return currentIndex; }
     View* getCurrentView() { return currentView; }
     MenuView* getMainMenu() { return mainMenu; }
 
@@ -28,6 +35,8 @@ private:
     MenuView* historyMenu;
     MenuView* mainMenu;
     View* currentView;
+    int currentIndex;
+    QStringListModel* model;
 };
 
 #endif // DISPLAY_H

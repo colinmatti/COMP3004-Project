@@ -87,7 +87,7 @@ bool Device::applyOnSkin() {
  */
 bool Device::addTreatmentToHistory() {
     if (treatmentRunning) { shouldAddTreatmentToHistory = true; }
-    else { activeError = WARNING_NO_TREATMENT_RUNNING; }
+    else if (poweredOn) { activeError = WARNING_NO_TREATMENT_RUNNING; }
     return shouldAddTreatmentToHistory;
 }
 
@@ -125,15 +125,14 @@ float Device::updateBattery() {
 
 /**
  * @brief Attempt to navigate down through the display menu.
- * @param index: the menu index to navigate down into.
  * @return the new view if successfully navigated, otherwise NULL.
  */
-View* Device::navigateDown(int index) {
+View* Device::navigateDown() {
     // If the device is powered OFF, do nothing.
     if (!poweredOn) { return NULL; }
 
     // Attempt to navigate down through the display menu.
-    View* newView = display->navigateDown(index);
+    View* newView = display->navigateDown();
 
     if (newView == NULL) { return NULL; }
 
@@ -233,12 +232,11 @@ void Device::addToHistory() {
 
 /**
  * @brief Removes previousTreatment at specified index from therapy history.
- * @param index: the index of the therapy in the display to remove from history.
  * @return the updated view without specified history if successful, otherwise NULL.
  */
-View* Device::removeFromHistory(int index) {
+View* Device::removeFromHistory() {
     // Attempt to remove previous treatment from history navigation.
-    HistoryView* removedHistoryView = display->removeHistoryFromNavigation(index);
+    HistoryView* removedHistoryView = display->removeHistoryFromNavigation();
 
     if (removedHistoryView == NULL) { return NULL; }
 
