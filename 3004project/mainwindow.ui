@@ -40,6 +40,13 @@ QPushButton:disabled {
 	font-size: 20px;
 }
 
+#chargeBatteryButton{
+	color: black;
+	border: 1px solid black;
+	background-color: white;
+	font-size: 10px;
+}
+
 #powerLabel{
 	color: #485ca8;
 }
@@ -87,6 +94,7 @@ QPushButton:disabled {
 #therapyLabel,#powerLevelLabel,#powerLabel{
 	background-color: white;
 }
+
 
 </string>
   </property>
@@ -158,7 +166,7 @@ QPushButton:disabled {
    <widget class="QCheckBox" name="onSkin">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>430</x>
       <y>110</y>
       <width>86</width>
       <height>20</height>
@@ -171,8 +179,8 @@ QPushButton:disabled {
    <widget class="QLabel" name="adminLabel">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>40</y>
+      <x>420</x>
+      <y>30</y>
       <width>241</width>
       <height>51</height>
      </rect>
@@ -278,7 +286,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>440</x>
-      <y>220</y>
+      <y>240</y>
       <width>231</width>
       <height>71</height>
      </rect>
@@ -291,7 +299,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>170</y>
+      <y>190</y>
       <width>241</width>
       <height>31</height>
      </rect>
@@ -304,7 +312,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>330</y>
+      <y>350</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -317,7 +325,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>570</x>
-      <y>330</y>
+      <y>350</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -385,6 +393,19 @@ QPushButton:disabled {
      <string>FOR HISTORY ONLY</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="chargeBatteryButton">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>390</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CHARGE BATTERY</string>
+    </property>
+   </widget>
    <zorder>frame</zorder>
    <zorder>gridLayoutWidget</zorder>
    <zorder>onSkin</zorder>
@@ -397,6 +418,7 @@ QPushButton:disabled {
    <zorder>gridLayoutWidget_2</zorder>
    <zorder>powerButton</zorder>
    <zorder>deviceLabel</zorder>
+   <zorder>chargeBatteryButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -404,7 +426,7 @@ QPushButton:disabled {
      <x>0</x>
      <y>0</y>
      <width>727</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -136,7 +136,7 @@ void MainWindow::on_timerStart() {
     int timeRemaining = device.updateTimer();
 
     // Updates the battery and formats the float value to round up to nearest whole number.
-    double batteryLevel = device.updateBattery();
+    float batteryLevel = device.updateBattery();
     ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 
     ui->timer->display(timeRemaining);
@@ -169,6 +169,17 @@ void MainWindow::on_deleteButton_clicked() {
     menuVisibility();
 }
 
+/**
+ * @brief Charges the battery to 100%
+ */
+void MainWindow::on_chargeBatteryButton_clicked()
+{
+    device.chargeBattery();
+
+    float batteryLevel = device.updateBattery();
+    ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
+}
+
 
 // ========================================
 //
@@ -186,7 +197,7 @@ void MainWindow::menuVisibility() {
 
     ui->warningLabel->setText(device.getActiveError());
 
-    ui->batteryLabel->setText(QString::number(device.getBatteryLevel()));
+    ui->batteryLabel->setText(QString::number(device.getBatteryLevel(), 'f', 0));
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);
@@ -225,3 +236,4 @@ void MainWindow::treatmentVisibility(View* treatmentView) {
     ui->therapyLabel->setText("Frequency: " + QString::number(treatmentView->getTherapy()->getFrequency()) + "Hz");
     ui->powerLabel->setText(QString::number(device.getPowerLevel()));
 }
+

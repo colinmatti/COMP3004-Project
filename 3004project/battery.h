@@ -10,9 +10,9 @@ public:
     Battery(float b = MAXBATTERYLEVEL) : batteryLevel(b) {};
 
     float decreaseBatteryLevel(int currPwrLvl);
-    float getBatteryLevel() { return batteryLevel; }
-    bool isLow() { return batteryLevel <= LOWBATTERYLEVEL; }
-
+    int   getBatteryLevel() { return batteryLevel; }
+    bool  isLow() { return batteryLevel <= LOWBATTERYLEVEL; }
+    void  chargeBattery(){ batteryLevel=MAXBATTERYLEVEL; }
 private:
     float batteryLevel;
 };

@@ -33,6 +33,8 @@ private slots:
     void on_timerStart();
     void on_upButton_clicked();
 
+    void on_chargeBatteryButton_clicked();
+
 private:
     Device device;
 

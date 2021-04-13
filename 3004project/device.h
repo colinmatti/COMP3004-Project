@@ -42,7 +42,7 @@ public:
     bool stopTreatment();
     bool addTreatmentToHistory();
 
-    int updateTimer();
+    int   updateTimer();
     float updateBattery();
 
     View* navigateDown();
@@ -58,15 +58,16 @@ public:
 
     QTimer* getTimer() { return timer; }
     QString getActiveError() { return activeError; }
-    int getBatteryLevel() { return battery->getBatteryLevel(); }
+    int     getBatteryLevel() { return battery->getBatteryLevel(); }
+    void    chargeBattery(){ battery->chargeBattery(); }
+
 
 private:
     Display *display;
     Battery *battery;
 
-
     bool isOnSkin;
-    int powerLevel;
+    int  powerLevel;
     bool poweredOn;
 
     bool treatmentRunning;
