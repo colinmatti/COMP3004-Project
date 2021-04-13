@@ -50,9 +50,9 @@ public:
     View* navigateToMenu();
     View* getCurrentView();
 
-    QModelIndex decreaseIndex();
-    QModelIndex increaseIndex();
-    QModelIndex resetIndex();
+    QModelIndex decreaseIndex() { return display->decreaseIndex(); };
+    QModelIndex increaseIndex() { return display->increaseIndex(); };
+    QModelIndex resetIndex() { return display->resetIndex(); };
 
     QStringListModel* getModel() { return display->getModel(); }
 

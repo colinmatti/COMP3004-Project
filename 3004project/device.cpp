@@ -181,30 +181,6 @@ View* Device::navigateUp() {
 }
 
 /**
- * @brief Attempts to increase index from listview.
- * @return the QModelIndex value.
- */
-QModelIndex Device::decreaseIndex() {
-    return display->decreaseIndex();
-}
-
-/**
- * @brief Attempts to decrease index from listview.
- * @return the QModelIndex value.
- */
-QModelIndex Device::increaseIndex() {
-    return display->increaseIndex();
-}
-
-/**
- * @brief Resets the index of listview.
- * @return the QModelIndex value.
- */
-QModelIndex Device::resetIndex() {
-    return display->resetIndex();
-}
-
-/**
  * @brief Get the current display view of the device.
  * @return the current view.
  */
