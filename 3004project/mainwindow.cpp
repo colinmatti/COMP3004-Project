@@ -95,6 +95,7 @@ void MainWindow::on_powerButton_clicked() {
  */
 void MainWindow::on_downButton_clicked() {
     ui->listView->setCurrentIndex(device.decreaseIndex());
+    ui->warningLabel->setText(device.getActiveError());
 }
 
 /**
@@ -102,6 +103,7 @@ void MainWindow::on_downButton_clicked() {
  */
 void MainWindow::on_upButton_clicked() {
     ui->listView->setCurrentIndex(device.increaseIndex());
+    ui->warningLabel->setText(device.getActiveError());
 }
 
 /**

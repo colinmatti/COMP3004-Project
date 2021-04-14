@@ -14,6 +14,6 @@ float Battery::decreaseBatteryLevel(int powerLevel) {
 }
 
 float Battery::chargeBattery(){
-    batteryLevel=MAXBATTERYLEVEL;
+    batteryLevel = MAXBATTERYLEVEL;
     return batteryLevel;
 }
