@@ -7,7 +7,7 @@ Device::Device() :
     treatmentRunning(false),
     attemptedQuitTreatment(false),
     timer(new QTimer()),
-    activeError(NO_ERROR),
+    activeMessage(MESSAGE_NO_ERROR),
     notifiedLowBattery(false) {
 
     // Instantiate all preset therapies.
@@ -65,17 +65,18 @@ Device::~Device() {
  */
 bool Device::applyOnSkin() {
     isOnSkin = !isOnSkin;
+    if(isOnSkin){ activeMessage = MESSAGE_NO_ERROR;}
 
     // If the device is now ON the skin, remove any active errors.
     if (isOnSkin && treatmentRunning) {
         timer->start();
-        activeError = NO_ERROR;
+        activeMessage = MESSAGE_NO_ERROR;
     }
 
     // If the device is now OFF the skin, warn that treatment is running.
     else if (!isOnSkin && treatmentRunning) {
         timer->stop();
-        activeError = WARNING_TREATMENT_RUNNING;
+        activeMessage = WARNING_TREATMENT_RUNNING;
     }
 
     return isOnSkin;
@@ -86,8 +87,11 @@ bool Device::applyOnSkin() {
  * @return True if we will add treatment to history, False otherwise.
  */
 bool Device::addTreatmentToHistory() {
-    if (treatmentRunning) { shouldAddTreatmentToHistory = true; }
-    else if (poweredOn) { activeError = WARNING_NO_TREATMENT_RUNNING; }
+    if (treatmentRunning){
+        shouldAddTreatmentToHistory = true;
+        activeMessage = MESSAGE_ADDED_TREATMENT;
+    }
+    else if (poweredOn) { activeMessage = WARNING_NO_TREATMENT_RUNNING; }
     return shouldAddTreatmentToHistory;
 }
 
@@ -109,11 +113,13 @@ int Device::updateTimer() {
  * @return the updated battery level if decrease successful, otherwise -1.
  */
 float Device::updateBattery() {
+    // If there's no active therapy, do nothing.
+    if (!treatmentRunning) { return -1; }
     float batteryLevel = battery->decreaseBatteryLevel(powerLevel);
 
     // If the battery is low and we have not yet notified the user, notify the user.
     if (battery->isLow() && !notifiedLowBattery) {
-        activeError = WARNING_LOW_BATT;
+        activeMessage = WARNING_LOW_BATT;
         notifiedLowBattery = true;
     }
 
@@ -125,6 +131,8 @@ float Device::updateBattery() {
  * @return the new view if successfully navigated, otherwise NULL.
  */
 View* Device::navigateDown() {
+    activeMessage = MESSAGE_NO_ERROR;
+
     // If the device is powered OFF, do nothing.
     if (!poweredOn) { return NULL; }
 
@@ -152,6 +160,8 @@ View* Device::navigateDown() {
  * @return the main menu view if successfully navigated, otherwise NULL.
  */
 View* Device::navigateToMenu() {
+    activeMessage = MESSAGE_NO_ERROR;
+
     // If the device is powered OFF, do nothing.
     if (!poweredOn) { return NULL; }
 
@@ -167,6 +177,8 @@ View* Device::navigateToMenu() {
  * @return the new view if successfully navigated, otherwise NULL.
  */
 View* Device::navigateUp() {
+    activeMessage = MESSAGE_NO_ERROR;
+
     // If the device is powered OFF, do nothing.
     if (!poweredOn) { return NULL; }
 
@@ -175,6 +187,24 @@ View* Device::navigateUp() {
     if (treatmentRunning) { return NULL; }
 
     return display->navigateUp();
+}
+
+/**
+ * @brief Decreases the index of the display menu.
+ * @return the updated index of the display menu.
+ */
+QModelIndex Device::decreaseIndex() {
+    activeMessage = MESSAGE_NO_ERROR;
+    return display->decreaseIndex();
+}
+
+/**
+ * @brief Increases the index of the display menu.
+ * @return the updated index of the display menu.
+ */
+QModelIndex Device::increaseIndex() {
+    activeMessage = MESSAGE_NO_ERROR;
+    return display->increaseIndex();
 }
 
 /**
@@ -281,7 +311,7 @@ bool Device::startTreatment(Therapy* therapy) {
 
     // If device is not on skin, update error and return False.
     if (!isOnSkin) {
-        activeError = ERROR_NO_SKIN;
+        activeMessage = ERROR_NO_SKIN;
         return false;
     }
 
@@ -303,7 +333,7 @@ bool Device::stopTreatment() {
 
     // If the timer is still going and the user has not yet attempted to quit therapy.
     if (activeTherapy->isOngoing() && !attemptedQuitTreatment && poweredOn) {
-        activeError = WARNING_TREATMENT_RUNNING;
+        activeMessage = WARNING_TREATMENT_RUNNING;
         attemptedQuitTreatment = true;
         return false;
     }
@@ -315,7 +345,7 @@ bool Device::stopTreatment() {
     treatmentRunning = false;
     attemptedQuitTreatment = false;
     powerLevel = MINPOWERLEVEL;
-    activeError = NO_ERROR;
+    activeMessage = MESSAGE_NO_ERROR;
 
     return true;
 }

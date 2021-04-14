@@ -16,7 +16,8 @@
 #define MINPOWERLEVEL 1
 #define MAXPOWERLEVEL 100
 
-#define NO_ERROR "***No error detected***"
+#define MESSAGE_NO_ERROR "***No error detected***"
+#define MESSAGE_ADDED_TREATMENT "***Added treatment to history***"
 #define ERROR_NO_SKIN "***ERROR: No skin detected***"
 #define WARNING_LOW_BATT "***WARNING: Battery is low***"
 #define WARNING_TREATMENT_RUNNING "***WARNING: treatment is currently running***"
@@ -50,14 +51,14 @@ public:
     View* navigateToMenu();
     View* getCurrentView();
 
-    QModelIndex decreaseIndex() { return display->decreaseIndex(); };
-    QModelIndex increaseIndex() { return display->increaseIndex(); };
+    QModelIndex decreaseIndex();
+    QModelIndex increaseIndex();
     QModelIndex resetIndex() { return display->resetIndex(); };
 
     QStringListModel* getModel() { return display->getModel(); }
 
     QTimer* getTimer() { return timer; }
-    QString getActiveError() { return activeError; }
+    QString getActiveError() { return activeMessage; }
     float   getBatteryLevel() { return battery->getBatteryLevel(); }
     float   chargeBattery(){ return battery->chargeBattery(); }
 
@@ -78,7 +79,7 @@ private:
 
     bool shouldAddTreatmentToHistory;
 
-    QString activeError;
+    QString activeMessage;
     bool notifiedLowBattery;
 
     QList<Frequency*> *frequencies;
