@@ -12,10 +12,12 @@
 class Display {
 public:
     Display(QList<Frequency*>* frequencies, QList<Program*>* programs);
+    ~Display();
+    void cleanUp(View* view);
 
     void addHistoryToNavigation(ActiveTreatment* previousTreatment);
 
-    HistoryView* removeHistoryFromNavigation();
+    ActiveTreatment* removeHistoryFromNavigation();
     bool clearHistoryNavigation();
 
     View* navigateDown();

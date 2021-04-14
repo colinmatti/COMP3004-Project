@@ -2,6 +2,7 @@
 
 Device::Device() :
     battery(new Battery()),
+    isOnSkin(false),
     powerLevel(1),
     poweredOn(false),
     treatmentRunning(false),
@@ -54,6 +55,7 @@ Device::~Device() {
   
     delete display;
     delete battery;
+    delete timer;
     delete programs;
     delete frequencies;
     delete treatmentHistory;
@@ -134,12 +136,12 @@ View* Device::navigateDown() {
     activeMessage = MESSAGE_NO_ERROR;
 
     // If the device is powered OFF, do nothing.
-    if (!poweredOn) { return NULL; }
+    if (!poweredOn) { return nullptr; }
 
     // Attempt to navigate down through the display menu.
     View* newView = display->navigateDown();
 
-    if (newView == NULL) { return NULL; }
+    if (newView == nullptr) { return nullptr; }
 
     // If we navigate to a treatment, attempt to start a treatment.
     if (newView->getType() == "TreatmentView") {
@@ -148,7 +150,7 @@ View* Device::navigateDown() {
         // If the treatment failed to start, navigate back to menu.
         if (!treatmentRunning) {
             display->navigateUp();
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -163,11 +165,11 @@ View* Device::navigateToMenu() {
     activeMessage = MESSAGE_NO_ERROR;
 
     // If the device is powered OFF, do nothing.
-    if (!poweredOn) { return NULL; }
+    if (!poweredOn) { return nullptr; }
 
     // Attempt to stop any running treatments.
     stopTreatment();
-    if (treatmentRunning) { return NULL; }
+    if (treatmentRunning) { return nullptr; }
 
     return display->navigateToMenu();
 }
@@ -180,11 +182,11 @@ View* Device::navigateUp() {
     activeMessage = MESSAGE_NO_ERROR;
 
     // If the device is powered OFF, do nothing.
-    if (!poweredOn) { return NULL; }
+    if (!poweredOn) { return nullptr; }
 
     // Attempt to stop any running treatments.
     stopTreatment();
-    if (treatmentRunning) { return NULL; }
+    if (treatmentRunning) { return nullptr; }
 
     return display->navigateUp();
 }
@@ -263,12 +265,12 @@ void Device::addToHistory() {
  */
 View* Device::removeFromHistory() {
     // Attempt to remove previous treatment from history navigation.
-    HistoryView* removedHistoryView = display->removeHistoryFromNavigation();
+    ActiveTreatment* removedActiveTherapy = display->removeHistoryFromNavigation();
 
-    if (removedHistoryView == NULL) { return NULL; }
+    if (removedActiveTherapy == nullptr) { return nullptr; }
 
     // Remove previous treatment from treatment history if successful.
-    treatmentHistory->removeOne(removedHistoryView->getPreviousTreatment());
+    treatmentHistory->removeOne(removedActiveTherapy);
     return getCurrentView();
 }
 
@@ -280,7 +282,7 @@ View* Device::clearHistory() {
     // Attempt to clear history navigation.
     bool clearedHistory = display->clearHistoryNavigation();
 
-    if (!clearedHistory) { return NULL; }
+    if (!clearedHistory) { return nullptr; }
 
     // Clear treatment history if successful.
     treatmentHistory->clear();
@@ -340,6 +342,10 @@ bool Device::stopTreatment() {
 
     // Add treatment to history if user previously asked to.
     if (shouldAddTreatmentToHistory) { addToHistory(); }
+    else {
+        delete activeTherapy;
+        activeTherapy = nullptr;
+    }
 
     timer->stop();
     treatmentRunning = false;

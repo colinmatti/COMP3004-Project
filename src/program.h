@@ -8,9 +8,9 @@
 class Program : public Therapy {
 public:
     Program(QString n, float f, int t) : Therapy(f, t), name(n) {}
-
-    QString getName() { return name; };
-    QString getType() { return "Program"; };
+    ~Program() {}
+    QString getName() { return name; }
+    QString getType() { return "Program"; }
 
 private:
     QString name;

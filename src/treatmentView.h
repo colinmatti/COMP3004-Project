@@ -6,7 +6,7 @@
 class TreatmentView : public View {
 public:
     TreatmentView(QString n, View* p, Therapy* t) : View(n, p), therapy(t) {}
-    ~TreatmentView() {};
+    ~TreatmentView() {}
 
     QStringList constructMenu() { return QStringList(); }
 

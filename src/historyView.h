@@ -6,8 +6,8 @@
 
 class HistoryView : public TreatmentView {
 public:
-    HistoryView(QString n, View* p, ActiveTreatment* t) : TreatmentView(n, p, t->getTherapy()), previousTreatment(t) {};
-    ~HistoryView() {};
+    HistoryView(QString n, View* p, ActiveTreatment* t) : TreatmentView(n, p, t->getTherapy()), previousTreatment(t) {}
+    ~HistoryView() {}
 
     QStringList constructMenu() { return QStringList(); }
 
