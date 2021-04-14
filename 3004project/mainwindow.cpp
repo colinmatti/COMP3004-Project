@@ -172,11 +172,8 @@ void MainWindow::on_deleteButton_clicked() {
 /**
  * @brief Charges the battery to 100%
  */
-void MainWindow::on_chargeBatteryButton_clicked()
-{
-    device.chargeBattery();
-
-    float batteryLevel = device.updateBattery();
+void MainWindow::on_chargeBatteryButton_clicked() {
+    float batteryLevel = device.chargeBattery();
     ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 }
 
@@ -225,11 +222,11 @@ void MainWindow::offVisibility() {
  * @brief Toggles UI to set components visible or invisible for a treatment.
  */
 void MainWindow::treatmentVisibility(View* treatmentView) {
+    ui->listView->setVisible(false);
+    ui->timer->setVisible(true);
     ui->powerLabel->setVisible(true);
     ui->powerLevelLabel->setVisible(true);
     ui->therapyLabel->setVisible(true);
-    ui->timer->setVisible(true);
-    ui->listView->setVisible(false);
     ui->warningLabel->setText(device.getActiveError());
 
     ui->timer->display(treatmentView->getTherapy()->getTimer());

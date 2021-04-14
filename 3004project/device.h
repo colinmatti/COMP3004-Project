@@ -58,8 +58,8 @@ public:
 
     QTimer* getTimer() { return timer; }
     QString getActiveError() { return activeError; }
-    int     getBatteryLevel() { return battery->getBatteryLevel(); }
-    void    chargeBattery(){ battery->chargeBattery(); }
+    float   getBatteryLevel() { return battery->getBatteryLevel(); }
+    float   chargeBattery(){ return battery->chargeBattery(); }
 
 
 private:
