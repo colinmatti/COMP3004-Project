@@ -13,13 +13,18 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
   <property name="styleSheet">
    <string notr="true">QPushButton:pressed {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255));
 }
+
 QWidget{
      background-color: #a9b4db;
 }
+
 QPushButton {
      background-color:#485ca8; 
 	border: 1px solid #485ca8;
@@ -30,7 +35,11 @@ QPushButton {
 }
 
 QPushButton:disabled {
-    background-color: rgb(170, 170, 127)
+    background-color: rgb(170, 170, 127);
+}
+
+#menuFrame{
+	background-color: black;
 }
 
 #powerButton,  #menuButton{
@@ -38,6 +47,13 @@ QPushButton:disabled {
 	border: 1px solid #010f42;
 	color: white;
 	font-size: 20px;
+}
+
+#chargeBatteryButton{
+	color: white;
+	border: 1px solid white;
+	background-color: #498057;
+	font-size: 10px;
 }
 
 #powerLabel{
@@ -86,8 +102,8 @@ QPushButton:disabled {
 
 #therapyLabel,#powerLevelLabel,#powerLabel{
 	background-color: white;
+	color: black;
 }
-
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -104,27 +120,6 @@ QPushButton:disabled {
      <property name="sizeConstraint">
       <enum>QLayout::SetMinimumSize</enum>
      </property>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="rightButton">
-       <property name="text">
-        <string>&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="okButton">
-       <property name="text">
-        <string>OK</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="leftButton">
-       <property name="text">
-        <string>&lt;</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="upButton">
        <property name="text">
@@ -146,10 +141,31 @@ QPushButton:disabled {
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="rightButton">
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="menuButton">
        <property name="text">
         <string>MENU</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="leftButton">
+       <property name="text">
+        <string>&lt;</string>
        </property>
       </widget>
      </item>
@@ -158,7 +174,7 @@ QPushButton:disabled {
    <widget class="QCheckBox" name="onSkin">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>430</x>
       <y>110</y>
       <width>86</width>
       <height>20</height>
@@ -171,8 +187,8 @@ QPushButton:disabled {
    <widget class="QLabel" name="adminLabel">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>40</y>
+      <x>420</x>
+      <y>30</y>
       <width>241</width>
       <height>51</height>
      </rect>
@@ -194,7 +210,7 @@ QPushButton:disabled {
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="menuFrame">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -202,6 +218,12 @@ QPushButton:disabled {
       <width>271</width>
       <height>211</height>
      </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #010f42;</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -218,6 +240,9 @@ QPushButton:disabled {
        <height>111</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:white;</string>
+     </property>
     </widget>
     <widget class="QLabel" name="therapyLabel">
      <property name="geometry">
@@ -228,18 +253,11 @@ QPushButton:disabled {
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: white;</string>
+     </property>
      <property name="text">
       <string>TextLabel</string>
-     </property>
-    </widget>
-    <widget class="QListView" name="listView">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>271</width>
-       <height>211</height>
-      </rect>
      </property>
     </widget>
     <widget class="QLabel" name="powerLevelLabel">
@@ -250,6 +268,9 @@ QPushButton:disabled {
        <width>111</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: white</string>
      </property>
      <property name="text">
       <string>Power Level:</string>
@@ -264,8 +285,33 @@ QPushButton:disabled {
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: white</string>
+     </property>
      <property name="text">
       <string>1</string>
+     </property>
+    </widget>
+    <widget class="QListView" name="listView">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>271</width>
+       <height>211</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: white;</string>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="isWrapping" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
     <zorder>listView</zorder>
@@ -278,7 +324,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>440</x>
-      <y>220</y>
+      <y>240</y>
       <width>231</width>
       <height>71</height>
      </rect>
@@ -286,12 +332,15 @@ QPushButton:disabled {
     <property name="text">
      <string/>
     </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="adminLabel_2">
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>170</y>
+      <y>190</y>
       <width>241</width>
       <height>31</height>
      </rect>
@@ -304,7 +353,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>330</y>
+      <y>350</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -317,7 +366,7 @@ QPushButton:disabled {
     <property name="geometry">
      <rect>
       <x>570</x>
-      <y>330</y>
+      <y>350</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -325,12 +374,15 @@ QPushButton:disabled {
     <property name="text">
      <string/>
     </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QPushButton" name="powerButton">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>560</y>
+      <x>120</x>
+      <y>570</y>
       <width>121</width>
       <height>51</height>
      </rect>
@@ -385,7 +437,20 @@ QPushButton:disabled {
      <string>FOR HISTORY ONLY</string>
     </property>
    </widget>
-   <zorder>frame</zorder>
+   <widget class="QPushButton" name="chargeBatteryButton">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>390</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CHARGE BATTERY</string>
+    </property>
+   </widget>
+   <zorder>menuFrame</zorder>
    <zorder>gridLayoutWidget</zorder>
    <zorder>onSkin</zorder>
    <zorder>adminLabel</zorder>
@@ -397,6 +462,7 @@ QPushButton:disabled {
    <zorder>gridLayoutWidget_2</zorder>
    <zorder>powerButton</zorder>
    <zorder>deviceLabel</zorder>
+   <zorder>chargeBatteryButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

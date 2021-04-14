@@ -109,9 +109,6 @@ int Device::updateTimer() {
  * @return the updated battery level if decrease successful, otherwise -1.
  */
 float Device::updateBattery() {
-    // If there's no active therapy, do nothing.
-    if (!treatmentRunning) { return -1; }
-
     float batteryLevel = battery->decreaseBatteryLevel(powerLevel);
 
     // If the battery is low and we have not yet notified the user, notify the user.
@@ -197,7 +194,7 @@ int Device::increasePower() {
     if (!treatmentRunning) { return powerLevel; }
 
     // Increment the power level. If it exceeds the MAXPOWERLEVEL, set it to the max.
-    if (++powerLevel > MAXPOWERLEVEL) { powerLevel = MAXPOWERLEVEL; }
+    powerLevel = (++powerLevel > MAXPOWERLEVEL)? MAXPOWERLEVEL : powerLevel;
 
     // Update the max power level of the active therapy.
     activeTherapy->increasePowerLevel(powerLevel);
@@ -213,8 +210,8 @@ int Device::decreasePower() {
     // If there's no treatment running, do nothing
     if (!treatmentRunning) { return powerLevel; }
 
-    // Decrement the power level. If it exceeds the MINPOWERLEVEL, set it to the min.
-    if (--powerLevel < MINPOWERLEVEL) { powerLevel = MINPOWERLEVEL; }
+    // Increment the power level. If it exceeds the MAXPOWERLEVEL, set it to the max.
+    powerLevel = (--powerLevel < MINPOWERLEVEL)? MINPOWERLEVEL : powerLevel;
 
     return powerLevel;
 }

@@ -1,16 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow) {
-
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->warningLabel->setWordWrap(true);
-    ui->batteryLabel->setWordWrap(true);
-
     connect(device.getTimer(), SIGNAL(timeout()), this, SLOT(on_timerStart()));
-
     offVisibility();
 }
 
@@ -18,13 +11,11 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-
 // ========================================
 //
 // SLOTS
 //
 // ========================================
-
 
 /**
  * @brief Attempt to add active therapy to history if therapy ongoing.
@@ -136,7 +127,7 @@ void MainWindow::on_timerStart() {
     int timeRemaining = device.updateTimer();
 
     // Updates the battery and formats the float value to round up to nearest whole number.
-    double batteryLevel = device.updateBattery();
+    float batteryLevel = device.updateBattery();
     ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 
     ui->timer->display(timeRemaining);
@@ -169,6 +160,14 @@ void MainWindow::on_deleteButton_clicked() {
     menuVisibility();
 }
 
+/**
+ * @brief Charges the battery to 100%
+ */
+void MainWindow::on_chargeBatteryButton_clicked() {
+    float batteryLevel = device.chargeBattery();
+    ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
+}
+
 
 // ========================================
 //
@@ -186,7 +185,7 @@ void MainWindow::menuVisibility() {
 
     ui->warningLabel->setText(device.getActiveError());
 
-    ui->batteryLabel->setText(QString::number(device.getBatteryLevel()));
+    ui->batteryLabel->setText(QString::number(device.getBatteryLevel(), 'f', 0));
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);
@@ -214,14 +213,15 @@ void MainWindow::offVisibility() {
  * @brief Toggles UI to set components visible or invisible for a treatment.
  */
 void MainWindow::treatmentVisibility(View* treatmentView) {
+    ui->listView->setVisible(false);
+    ui->timer->setVisible(true);
     ui->powerLabel->setVisible(true);
     ui->powerLevelLabel->setVisible(true);
     ui->therapyLabel->setVisible(true);
-    ui->timer->setVisible(true);
-    ui->listView->setVisible(false);
     ui->warningLabel->setText(device.getActiveError());
 
     ui->timer->display(treatmentView->getTherapy()->getTimer());
     ui->therapyLabel->setText("Frequency: " + QString::number(treatmentView->getTherapy()->getFrequency()) + "Hz");
     ui->powerLabel->setText(QString::number(device.getPowerLevel()));
 }
+
