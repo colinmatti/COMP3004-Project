@@ -194,8 +194,7 @@ int Device::increasePower() {
     if (!treatmentRunning) { return powerLevel; }
 
     // Increment the power level. If it exceeds the MAXPOWERLEVEL, set it to the max.
-    int increase = powerLevel +10;
-    powerLevel = (increase > MAXPOWERLEVEL)? MAXPOWERLEVEL : increase;
+    powerLevel = (++powerLevel > MAXPOWERLEVEL)? MAXPOWERLEVEL : powerLevel;
 
     // Update the max power level of the active therapy.
     activeTherapy->increasePowerLevel(powerLevel);
@@ -212,8 +211,7 @@ int Device::decreasePower() {
     if (!treatmentRunning) { return powerLevel; }
 
     // Increment the power level. If it exceeds the MAXPOWERLEVEL, set it to the max.
-    int decrease = (powerLevel - 5)%5;
-    powerLevel = (decrease < MINPOWERLEVEL)? MINPOWERLEVEL : decrease;
+    powerLevel = (--powerLevel < MINPOWERLEVEL)? MINPOWERLEVEL : powerLevel;
 
     return powerLevel;
 }

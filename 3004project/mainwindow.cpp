@@ -1,16 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow) {
-
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->warningLabel->setWordWrap(true);
-    ui->batteryLabel->setWordWrap(true);
-
     connect(device.getTimer(), SIGNAL(timeout()), this, SLOT(on_timerStart()));
-
     offVisibility();
 }
 
@@ -18,13 +11,11 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-
 // ========================================
 //
 // SLOTS
 //
 // ========================================
-
 
 /**
  * @brief Attempt to add active therapy to history if therapy ongoing.
