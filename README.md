@@ -13,7 +13,17 @@ _(alphabetical order by last name)_
 
 ## Installation & Instructions
 
-<!-- 📌 TODO:  -->
+To run this project locally your device ...
+
+1. Git clone our git repository locally by typing into your terminal `git clone https://github.com/JAGS3004/COMP3004-Project.git`
+
+2. Find the file `denas.pro` and right click to open with QTcreator.
+
+3. QT will give the option configure the build to run our incredible DENAS simulator.
+
+4. Go through our Use Cases in our Final Project document to test out our simulator.
+
+5. Enjoy! 🎉
 
 ## Code Structure
 
