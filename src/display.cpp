@@ -1,8 +1,9 @@
 #include "display.h"
+#include <math.h>
 
 Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) : model(new QStringListModel()) {
     // Create main menu node.
-    mainMenu = new MenuView("Main Menu", NULL);
+    mainMenu = new MenuView("Main Menu", nullptr);
 
     // Create other menu nodes.
     MenuView* programsMenu = new MenuView("Programs", mainMenu);
@@ -27,6 +28,16 @@ Display::Display(QList<Frequency*>* frequencies, QList<Program*>* programs) : mo
 
     currentView = mainMenu;
     model->setStringList(mainMenu->constructMenu());
+}
+
+Display::~Display() {
+    cleanUp(mainMenu);
+    delete model;
+}
+
+void Display::cleanUp(View* view) {
+    for (View* child: *view->getChildren()){ cleanUp(child); }
+    delete view;
 }
 
 /**
@@ -63,6 +74,8 @@ bool Display::clearHistoryNavigation() {
 
     historyMenu->clearChildren();
     model->setStringList(historyMenu->constructMenu());
+    for (View* child: *historyMenu->getChildren()){ cleanUp(child); }
+
     return true;
 }
 
@@ -70,29 +83,34 @@ bool Display::clearHistoryNavigation() {
  * @brief Removes view containing given previous treatment from history navigation.
  * @return the history view removed from the navigation.
  */
-HistoryView* Display::removeHistoryFromNavigation() {
+ActiveTreatment* Display::removeHistoryFromNavigation() {
     // If not currently on histories menu, abort.
-    if (currentView->getName() != "History") { return NULL; }
+    if (currentView->getName() != "History") { return nullptr; }
 
     // Find history view we're attempting to remove.
     View* historyView = currentView->getChildAt(currentIndex);
-    if (historyView == NULL) { return NULL; }
+    if (historyView == nullptr) { return nullptr; }
 
     // If the history view is found, remove from navigation and return as a history view.
     historyMenu->removeChild(historyView);
     model->setStringList(historyMenu->constructMenu());
-    return dynamic_cast<HistoryView*>(historyView);
+
+    HistoryView* view = dynamic_cast<HistoryView*>(historyView);
+    ActiveTreatment* therapy = view->getPreviousTreatment();
+    delete historyView;
+
+    return therapy;
 }
 
 /**
  * @brief Attempts to navigate down in navigation menu.
- * @return the new view if successful, otherwise NULL.
+ * @return the new view if successful, otherwise nullptr.
  */
 View* Display::navigateDown() {
     // Find view we're attempting to move to.
     View* destination = currentView->getChildAt(currentIndex);
 
-    if (destination == NULL) { return NULL; }
+    if (destination == nullptr) { return nullptr; }
 
     currentView = destination;
     model->setStringList(currentView->constructMenu());
@@ -102,13 +120,13 @@ View* Display::navigateDown() {
 
 /**
  * @brief Attempts to navigate up in navigation menu.
- * @return the new view if successful, otherwise NULL.
+ * @return the new view if successful, otherwise nullptr.
  */
 View* Display::navigateUp() {
     // Find view we're attempting to move to.
     View* destination = currentView->getParent();
 
-    if (destination == NULL) { return NULL; }
+    if (destination == nullptr) { return nullptr; }
 
     currentView = destination;
     model->setStringList(currentView->constructMenu());

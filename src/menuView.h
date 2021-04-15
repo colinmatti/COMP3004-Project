@@ -8,7 +8,7 @@
 class MenuView : public View {
 public:
     MenuView(QString n, View* p) : View(n, p) {}
-    ~MenuView() {};
+    ~MenuView() {}
 
     QStringList constructMenu();
 
@@ -18,7 +18,7 @@ public:
 
     QString getType() { return "MenuView"; }
     QString getName() { return name; }
-    Therapy* getTherapy() { return NULL; }
+    Therapy* getTherapy() { return nullptr; }
 };
 
 #endif // MENUVIEW_H

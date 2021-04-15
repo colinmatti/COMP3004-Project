@@ -35,7 +35,7 @@ private slots:
     void on_chargeBatteryButton_clicked();
 
 private:
-    Device device;
+    Device* device;
 
     Ui::MainWindow *ui;
 

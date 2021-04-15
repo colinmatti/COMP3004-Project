@@ -8,13 +8,14 @@
 
 class View {
 public:
-    View(QString n, View* p): children(new QList<View*>()), name(n), parent(p) {};
+    View(QString n, View* p): children(new QList<View*>()), name(n), parent(p) {}
+    virtual ~View() { delete children; }
 
     virtual QStringList constructMenu() = 0;
 
     QList<View*>* getChildren() { return children; }
     View* getChildAt(int index) {
-        if (children->length() <= index || index == -1) { return NULL; }
+        if (children->length() <= index || index == -1) { return nullptr; }
         return children->at(index);
     }
 

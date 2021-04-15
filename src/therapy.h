@@ -5,6 +5,9 @@
 
 class Therapy {
 public:
+    Therapy(float f, int t): frequency(f), timer(t) {}
+    virtual ~Therapy() {}
+
     float getFrequency() { return frequency; }
     int getTimer() { return timer; }
 
@@ -12,8 +15,6 @@ public:
     virtual QString getType() = 0;
 
 protected:
-    Therapy(int f, int t): frequency(f), timer(t) {};
-
     float frequency;
     int timer;
 };

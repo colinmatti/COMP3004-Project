@@ -1,13 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), device(new Device()), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    connect(device.getTimer(), SIGNAL(timeout()), this, SLOT(on_timerStart()));
+    connect(device->getTimer(), SIGNAL(timeout()), this, SLOT(on_timerStart()));
     offVisibility();
 }
 
 MainWindow::~MainWindow() {
+    delete device;
     delete ui;
 }
 
@@ -22,9 +23,10 @@ MainWindow::~MainWindow() {
  */
 void MainWindow::on_addButton_clicked() {
     // Attempt to add the ongoing treatment to history.
-    bool willAddToHistory = device.addTreatmentToHistory();
+    bool willAddToHistory = device->addTreatmentToHistory();
 
     // If adding to history failed, show warning.
+
     if (!willAddToHistory) { ui->warningLabel->setText(device.getActiveMessage()); }
 }
 
@@ -33,7 +35,7 @@ void MainWindow::on_addButton_clicked() {
  */
 void MainWindow::on_okButton_clicked() {
     // Attempt to navigate down the menu.
-    View* currentView = device.navigateDown();
+    View* currentView = device->navigateDown();
 
     // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
@@ -51,10 +53,10 @@ void MainWindow::on_okButton_clicked() {
  */
 void MainWindow::on_goBackButton_clicked() {
     // Attempt to navigate up the menu.
-    View* currentView = device.navigateUp();
+    View* currentView = device->navigateUp();
 
     // If navigation failed, show warning. Otherwise, change view.
-    if (currentView == NULL) {
+    if (currentView == nullptr) {  
         ui->warningLabel->setText(device.getActiveMessage());
     } else if (currentView->getType() == "MenuView") {
         menuVisibility();
@@ -66,10 +68,11 @@ void MainWindow::on_goBackButton_clicked() {
  */
 void MainWindow::on_menuButton_clicked() {
     // Attempt to navigate to the main menu.
-    View* currentView = device.navigateToMenu();
+    View* currentView = device->navigateToMenu();
 
     // If navigation failed, show warning. Otherwise, change view.
-    if (currentView == NULL) {
+
+    if (currentView == nullptr) {
         ui->warningLabel->setText(device.getActiveMessage());
     } else if (currentView->getType() == "MenuView") {
         menuVisibility();
@@ -81,8 +84,8 @@ void MainWindow::on_menuButton_clicked() {
  */
 void MainWindow::on_powerButton_clicked() {
     // If the device is now ON, turn on main menu visibility.
-    if (device.power()) {
-        device.navigateToMenu();
+    if (device->power()) {
+        device->navigateToMenu();
         menuVisibility();
     }
 
@@ -96,6 +99,7 @@ void MainWindow::on_powerButton_clicked() {
 void MainWindow::on_downButton_clicked() {
     ui->listView->setCurrentIndex(device.decreaseIndex());
     ui->warningLabel->setText(device.getActiveMessage());
+
 }
 
 /**
@@ -104,13 +108,14 @@ void MainWindow::on_downButton_clicked() {
 void MainWindow::on_upButton_clicked() {
     ui->listView->setCurrentIndex(device.increaseIndex());
     ui->warningLabel->setText(device.getActiveMessage());
+
 }
 
 /**
  * @brief Increases the device's power level by one.
  */
 void MainWindow::on_rightButton_clicked() {
-    QString power = QString::number(device.increasePower());
+    QString power = QString::number(device->increasePower());
     ui->powerLabel->setText(power);
 }
 
@@ -118,7 +123,7 @@ void MainWindow::on_rightButton_clicked() {
  * @brief Decreases the device's power level by one.
  */
 void MainWindow::on_leftButton_clicked() {
-    QString power = QString::number(device.decreasePower());
+    QString power = QString::number(device->decreasePower());
     ui->powerLabel->setText(power);
 }
 
@@ -126,14 +131,15 @@ void MainWindow::on_leftButton_clicked() {
  * @brief Display and decrease countdown until countdown reaches zero.
  */
 void MainWindow::on_timerStart() {
-    int timeRemaining = device.updateTimer();
+    int timeRemaining = device->updateTimer();
 
     // Updates the battery and formats the float value to round up to nearest whole number.
-    float batteryLevel = device.updateBattery();
+    float batteryLevel = device->updateBattery();
     ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 
     ui->timer->display(timeRemaining);
     ui->warningLabel->setText(device.getActiveMessage());
+
 }
 
 /**
@@ -148,8 +154,8 @@ void MainWindow::on_onSkin_stateChanged() {
  * @brief Clears the entire history.
  */
 void MainWindow::on_clearButton_clicked() {
-    View* currentView = device.clearHistory();
-    if (currentView == NULL) { return; }
+    View* currentView = device->clearHistory();
+    if (currentView == nullptr) { return; }
     menuVisibility();
 }
 
@@ -157,8 +163,8 @@ void MainWindow::on_clearButton_clicked() {
  * @brief Deletes a single treatment history.
  */
 void MainWindow::on_deleteButton_clicked() {
-    View* currentView = device.removeFromHistory();
-    if (currentView == NULL) { return; }
+    View* currentView = device->removeFromHistory();
+    if (currentView == nullptr) { return; }
     menuVisibility();
 }
 
@@ -166,7 +172,7 @@ void MainWindow::on_deleteButton_clicked() {
  * @brief Charges the battery to 100%
  */
 void MainWindow::on_chargeBatteryButton_clicked() {
-    float batteryLevel = device.chargeBattery();
+    float batteryLevel = device->chargeBattery();
     ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 }
 
@@ -182,12 +188,12 @@ void MainWindow::on_chargeBatteryButton_clicked() {
  * @brief Toggles UI to set components visible or invisible for a menu.
  */
 void MainWindow::menuVisibility() {
-    ui->listView->setModel(device.getModel());
-    ui->listView->setCurrentIndex(device.resetIndex());
+    ui->listView->setModel(device->getModel());
+    ui->listView->setCurrentIndex(device->resetIndex());
 
     ui->warningLabel->setText(device.getActiveMessage());
 
-    ui->batteryLabel->setText(QString::number(device.getBatteryLevel(), 'f', 0));
+    ui->batteryLabel->setText(QString::number(device->getBatteryLevel(), 'f', 0));
 
     ui->listView->setVisible(true);
     ui->timer->setVisible(false);
@@ -224,6 +230,6 @@ void MainWindow::treatmentVisibility(View* treatmentView) {
 
     ui->timer->display(treatmentView->getTherapy()->getTimer());
     ui->therapyLabel->setText("Frequency: " + QString::number(treatmentView->getTherapy()->getFrequency()) + "Hz");
-    ui->powerLabel->setText(QString::number(device.getPowerLevel()));
+    ui->powerLabel->setText(QString::number(device->getPowerLevel()));
 }
 
