@@ -25,7 +25,7 @@ void MainWindow::on_addButton_clicked() {
     bool willAddToHistory = device.addTreatmentToHistory();
 
     // If adding to history failed, show warning.
-    if (!willAddToHistory) { ui->warningLabel->setText(device.getActiveError()); }
+    if (!willAddToHistory) { ui->warningLabel->setText(device.getActiveMessage()); }
 }
 
 /**
@@ -37,7 +37,7 @@ void MainWindow::on_okButton_clicked() {
 
     // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
-        ui->warningLabel->setText(device.getActiveError());
+        ui->warningLabel->setText(device.getActiveMessage());
         ui->listView->setCurrentIndex(device.resetIndex());
     } else if (currentView->getType() == "TreatmentView") {
         treatmentVisibility(currentView);
@@ -55,7 +55,7 @@ void MainWindow::on_goBackButton_clicked() {
 
     // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
-        ui->warningLabel->setText(device.getActiveError());
+        ui->warningLabel->setText(device.getActiveMessage());
     } else if (currentView->getType() == "MenuView") {
         menuVisibility();
     }
@@ -70,7 +70,7 @@ void MainWindow::on_menuButton_clicked() {
 
     // If navigation failed, show warning. Otherwise, change view.
     if (currentView == NULL) {
-        ui->warningLabel->setText(device.getActiveError());
+        ui->warningLabel->setText(device.getActiveMessage());
     } else if (currentView->getType() == "MenuView") {
         menuVisibility();
     }
@@ -95,7 +95,7 @@ void MainWindow::on_powerButton_clicked() {
  */
 void MainWindow::on_downButton_clicked() {
     ui->listView->setCurrentIndex(device.decreaseIndex());
-    ui->warningLabel->setText(device.getActiveError());
+    ui->warningLabel->setText(device.getActiveMessage());
 }
 
 /**
@@ -103,7 +103,7 @@ void MainWindow::on_downButton_clicked() {
  */
 void MainWindow::on_upButton_clicked() {
     ui->listView->setCurrentIndex(device.increaseIndex());
-    ui->warningLabel->setText(device.getActiveError());
+    ui->warningLabel->setText(device.getActiveMessage());
 }
 
 /**
@@ -133,7 +133,7 @@ void MainWindow::on_timerStart() {
     ui->batteryLabel->setText(QString::number(batteryLevel, 'f', 0));
 
     ui->timer->display(timeRemaining);
-    ui->warningLabel->setText(device.getActiveError());
+    ui->warningLabel->setText(device.getActiveMessage());
 }
 
 /**
@@ -141,7 +141,7 @@ void MainWindow::on_timerStart() {
  */
 void MainWindow::on_onSkin_stateChanged() {
     device.applyOnSkin();
-    ui->warningLabel->setText(device.getActiveError());
+    ui->warningLabel->setText(device.getActiveMessage());
 }
 
 /**
@@ -185,7 +185,7 @@ void MainWindow::menuVisibility() {
     ui->listView->setModel(device.getModel());
     ui->listView->setCurrentIndex(device.resetIndex());
 
-    ui->warningLabel->setText(device.getActiveError());
+    ui->warningLabel->setText(device.getActiveMessage());
 
     ui->batteryLabel->setText(QString::number(device.getBatteryLevel(), 'f', 0));
 
@@ -220,7 +220,7 @@ void MainWindow::treatmentVisibility(View* treatmentView) {
     ui->powerLabel->setVisible(true);
     ui->powerLevelLabel->setVisible(true);
     ui->therapyLabel->setVisible(true);
-    ui->warningLabel->setText(device.getActiveError());
+    ui->warningLabel->setText(device.getActiveMessage());
 
     ui->timer->display(treatmentView->getTherapy()->getTimer());
     ui->therapyLabel->setText("Frequency: " + QString::number(treatmentView->getTherapy()->getFrequency()) + "Hz");

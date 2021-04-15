@@ -58,7 +58,7 @@ public:
     QStringListModel* getModel() { return display->getModel(); }
 
     QTimer* getTimer() { return timer; }
-    QString getActiveError() { return activeMessage; }
+    QString getActiveMessage() { return activeMessage; }
     float   getBatteryLevel() { return battery->getBatteryLevel(); }
     float   chargeBattery(){ return battery->chargeBattery(); }
 
